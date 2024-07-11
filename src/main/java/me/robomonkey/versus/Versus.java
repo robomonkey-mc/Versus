@@ -11,7 +11,7 @@ public final class Versus extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        log("Versus has been enabled!");
+        log("Versus has been enabled! YAY");
 
     }
 
