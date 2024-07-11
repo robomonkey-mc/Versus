@@ -19,6 +19,6 @@ public final class Versus extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
         log("Versus has been enabled!");
-
+        log("This was a changed introduced by a new clone.");
     }
 }
