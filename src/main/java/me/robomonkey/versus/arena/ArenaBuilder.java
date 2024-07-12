@@ -1,8 +1,10 @@
 package me.robomonkey.versus.arena;
 
+import me.robomonkey.versus.Versus;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -13,23 +15,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArenaBuilder {
-    enum Phase {
-        SET_CENTER_POSITION,
-        SET_FIRST_POSITION,
-        SET_SECOND_POSITION,
-        FINALIZE;
+
+    public void handleNextPhase(Player p) {
+        p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);
 
     }
 
-    public void selectMiddlePoint(Player p) {
-        p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);
-        TextComponent message = new TextComponent(Main.colour(Main.prefix+ChatColor.RESET+ChatColor.GOLD+" Click"));
-        TextComponent deny = new TextComponent(Main.colour(" &3&lSELECT "));
-        deny.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/arena selectMiddle"));
-        deny.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("SelectMiddle").create()));
-        message.addExtra(deny);
-        message.addExtra(Main.colour("&6to select the &4&lFIREWORK MIDDLE&r&6 point."));
-        p.spigot().sendMessage(message);
+    /**
+     * Sends a player a clickable message where the button is contained within %button%
+     * Example: "Click %button% to do X!
+     */
+    private TextComponent getClickableMessage(String message, String commandText, String hoverText){
+        String commandOnClick = "/" + commandText;
+        String[] splitMessage = message.split("%button%", 3);
+        if(splitMessage.length<2){
+            //TODO: Add default setting in this case
+        }
+        String beforeText = splitMessage[0];
+        String afterText = splitMessage[1];
+
+        TextComponent selectButton = createButton("SELECT", commandOnClick, hoverText);
+        TextComponent mainMessage = new TextComponent(Versus.color(beforeText));
+        mainMessage.addExtra(selectButton);
+        mainMessage.addExtra(Versus.color(afterText));
+        return mainMessage;
+    }
+
+    private TextComponent createButton(String buttontText, String commandOnClick, String hoverText){
+        TextComponent newButton = new TextComponent(buttontText);
+        newButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, commandOnClick));
+        newButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hoverText).create()));
+        return newButton;
     }
 
 
