@@ -15,12 +15,8 @@ public class Arena {
     private Location spectateLocation;
     private boolean enabled;
 
-    public Arena(String name, Location locationOne, Location locationTwo, Location center, Location spectate){
+    public Arena(String name){
         this.name = name;
-        this.spawnLocationOne = locationOne;
-        this.spawnLocationTwo = locationTwo;
-        this.centerLocation = center;
-        this.spectateLocation = spectate;
         this.activeDuels = new ArrayList<Duel>();
     }
 
@@ -52,6 +48,19 @@ public class Arena {
         return enabled;
     }
 
+    public void setLocationProperty(ArenaProperty property, Location value){
+        switch(property){
+            case SPAWN_LOCATION_ONE:
+                spawnLocationOne = value;
+            case SPAWN_LOCATION_TWO:
+                spawnLocationTwo = value;
+            case SPECTATE_LOCATION:
+                spectateLocation = value;
+            case CENTER_LOCATION:
+                centerLocation = value;
+        }
+    }
+
     public void addDuel(Duel activeDuel){
         this.activeDuels.add(activeDuel);
     }
@@ -59,4 +68,9 @@ public class Arena {
     public void removeDuel(Duel completedDuel){
         this.activeDuels.remove(completedDuel);
     }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
 }
