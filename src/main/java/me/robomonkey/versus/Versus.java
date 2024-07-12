@@ -22,6 +22,7 @@ public final class Versus extends JavaPlugin {
 
     public static void log(String message){
         Bukkit.getServer().getLogger().info(message);
+        System.out.println("Hello World");
     }
 
     public static String color(String message){
