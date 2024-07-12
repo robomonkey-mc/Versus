@@ -7,20 +7,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Arena {
-    private String name;
-    private List<Duel> activeDuels;
+    private final String name;
+    private final List<Duel> activeDuels;
     private Location spawnLocationOne;
     private Location spawnLocationTwo;
     private Location centerLocation;
     private Location spectateLocation;
     private boolean enabled;
 
-    public Arena(String name, Location locationOne, Location locationTwo, Location center, Location spectate){
+    /**
+     * <h1>Creates Arena.</h1>
+     * <p>Note: Arenas handle their own verification logic.</p>
+     * @param name
+     */
+    public Arena(String name) {
         this.name = name;
-        this.spawnLocationOne = locationOne;
-        this.spawnLocationTwo = locationTwo;
-        this.centerLocation = center;
-        this.spectateLocation = spectate;
         this.activeDuels = new ArrayList<Duel>();
     }
 
@@ -52,11 +53,38 @@ public class Arena {
         return enabled;
     }
 
-    public void addDuel(Duel activeDuel){
+    public void setLocationProperty(ArenaProperty property, Location value) {
+        switch (property) {
+            case SPAWN_LOCATION_ONE:
+                spawnLocationOne = value;
+            case SPAWN_LOCATION_TWO:
+                spawnLocationTwo = value;
+            case SPECTATE_LOCATION:
+                spectateLocation = value;
+            case CENTER_LOCATION:
+                centerLocation = value;
+        }
+        verifySelf();
+    }
+
+    public void addDuel(Duel activeDuel) {
         this.activeDuels.add(activeDuel);
     }
 
-    public void removeDuel(Duel completedDuel){
+    public void removeDuel(Duel completedDuel) {
         this.activeDuels.remove(completedDuel);
     }
+
+    private boolean isValid() {
+        return (spawnLocationOne != null
+                && spawnLocationTwo != null
+                && centerLocation != null
+                && spectateLocation != null);
+    }
+
+    private void verifySelf(){
+        if(!isValid()) enabled = false;
+        else enabled = true;
+    }
+
 }
