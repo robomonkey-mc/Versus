@@ -7,10 +7,18 @@ public class EditCommand extends AbstractCommand {
 
     public EditCommand(){
         super("edit", "arena.edit");
+        setPlayersOnly(true);
+        setUsage("/arena edit <arenaname>" + "\n" +
+                "Edit an existing Arena.");
     }
 
     @Override
-    public boolean callCommand(CommandSender sender, String[] args) {
-        return false;
+    public void callCommand(CommandSender sender, String[] args) {
+
+    }
+
+    @Override
+    public void callCompletionsUpdate(CommandSender sender) {
+
     }
 }

@@ -2,18 +2,22 @@ package me.robomonkey.versus.command;
 
 import me.robomonkey.versus.Versus;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class AbstractCommand {
 
+    public static String permissionErrorMessage = Versus.color("&c&lError: &4You do not have permission to use this command!");
+    public static String improperSenderErrorMessage = Versus.color("&c&lError: &4Only players can use this command!");
     String command;
+    String permission;
     private String usage;
     private Set<AbstractCommand> branches = new HashSet<>();
-    String permission;
+    boolean playersOnly = false;
+    boolean staticTabComplete = false;
     private List<String> additionalCompletions = new ArrayList<>();
-    public static String permissionErrorMessage = Versus.color("&c&lError: &4You do not have permission to use this command!");
 
     public AbstractCommand(String name, String permission) {
         this.permission = permission;
@@ -36,6 +40,10 @@ public abstract class AbstractCommand {
 
     public String getUsage() {
         return this.usage;
+    }
+
+    public boolean isPlayersOnly() {
+        return this.playersOnly;
     }
 
     public List<String> getCompletions() {
@@ -85,31 +93,45 @@ public abstract class AbstractCommand {
         additionalCompletions = completions;
     }
 
+    public void setPlayersOnly(Boolean playersOnly) {
+        this.playersOnly = playersOnly;
+    }
+
+    public boolean isStaticTabComplete() {
+        return staticTabComplete;
+    }
+
+    public void setStaticTabComplete(boolean staticTabComplete) {
+        this.staticTabComplete = staticTabComplete;
+    }
+
     public void setUsage(String usage) {
         this.usage = usage;
     }
 
     List<String> getCompletionOptions(CommandSender sender) {
-        List<String> allowedBranchCompletions = getBranches().stream()
+        List<String> allowedCompletions = getBranches().stream()
                 .filter(branch -> sender.hasPermission(branch.getPermission()))
                 .map(branch -> branch.getCommand())
                 .collect(Collectors.toList());
-        if (sender.hasPermission(this.getPermission())) allowedBranchCompletions.addAll(additionalCompletions);
-        return allowedBranchCompletions;
+        if (sender.hasPermission(this.getPermission())) allowedCompletions.addAll(additionalCompletions);
+        return allowedCompletions;
     }
 
     List<String> dispatchTabCompleter(CommandSender sender, String[] args) {
+        callCompletionsUpdate(sender);
         List<String> completions = getCompletionOptions(sender);
         if (args.length == 1) {
+            if(staticTabComplete) return completions;
             for (String s : args) {
                 if (s.toLowerCase().startsWith(args[0].toLowerCase())) completions.add(s);
             }
             return completions;
         }
-        if (args.length > 1) {
+        AbstractCommand potentialBranch = getBranchFromName(args[0]);
+        if (args.length > 1 && potentialBranch != null) {
             String[] rest = Arrays.copyOfRange(args, 1, args.length);
-            AbstractCommand selectedChild = getBranchFromName(args[0]);
-            List<String> childCompletions = selectedChild.dispatchTabCompleter(sender, rest);
+            List<String> childCompletions = potentialBranch.dispatchTabCompleter(sender, rest);
             return childCompletions;
         }
         List<String> emptyList = new ArrayList<>();
@@ -119,11 +141,16 @@ public abstract class AbstractCommand {
     public void dispatchCommand(CommandSender sender, String[] args){
         String firstArg = (args.length > 0)? args[0]: "";
         AbstractCommand branchFromName = getBranchFromName(firstArg);
-        if (branchFromName == null) {
-            if(sender.hasPermission(permission)) callCommand(sender, args);
-            else sender.sendMessage(permissionErrorMessage);
+        if (isLeaf() || branchFromName == null) {
+            if(isPlayersOnly() && !(sender instanceof Player)){
+                sender.sendMessage(improperSenderErrorMessage);
+            }
+            if(!sender.hasPermission(permission)){
+                sender.sendMessage(permissionErrorMessage);
+            }
+            callCommand(sender, args);
         } else {
-            branchFromName.callCommand(sender, Arrays.copyOfRange(args, 1, args.length));
+            branchFromName.dispatchCommand(sender, Arrays.copyOfRange(args, 1, args.length));
         }
     }
 
@@ -132,5 +159,12 @@ public abstract class AbstractCommand {
      <p>This only includes relevant sub arguments. Don't worry about handling permissions
      or dispatching to subcommands. That is already handled by the AbstractCommand superclass</p>
      */
-    public abstract boolean callCommand(CommandSender sender, String[] args);
+    public abstract void callCommand(CommandSender sender, String[] args);
+
+    /**
+     <h1>Notifies all commands that a tab completions update has occured.</h1>
+     <p>Upon recieving the update, child classes can run setTabCompletions() or addTabCompletion() to update
+     if necessary.</p>
+     */
+    public abstract void callCompletionsUpdate(CommandSender sender);
 }

@@ -3,6 +3,8 @@ package me.robomonkey.versus.arena.command;
 import me.robomonkey.versus.command.RootCommand;
 import org.bukkit.command.CommandSender;
 
+import java.util.List;
+
 public class RootArenaCommand extends RootCommand {
 
     public RootArenaCommand() {
@@ -15,8 +17,12 @@ public class RootArenaCommand extends RootCommand {
     }
 
     @Override
-    public boolean callCommand(CommandSender sender, String[] args) {
+    public void callCommand(CommandSender sender, String[] args) {
         sender.sendMessage(getUsage());
-        return false;
+    }
+
+    @Override
+    public void callCompletionsUpdate(CommandSender sender) {
+
     }
 }

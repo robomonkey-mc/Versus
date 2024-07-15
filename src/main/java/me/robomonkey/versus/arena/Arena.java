@@ -53,6 +53,13 @@ public class Arena {
         return enabled;
     }
 
+    private boolean isValid() {
+        return (spawnLocationOne != null
+                && spawnLocationTwo != null
+                && centerLocation != null
+                && spectateLocation != null);
+    }
+
     public void setLocationProperty(ArenaProperty property, Location value) {
         switch (property) {
             case SPAWN_LOCATION_ONE:
@@ -73,13 +80,6 @@ public class Arena {
 
     public void removeDuel(Duel completedDuel) {
         this.activeDuels.remove(completedDuel);
-    }
-
-    private boolean isValid() {
-        return (spawnLocationOne != null
-                && spawnLocationTwo != null
-                && centerLocation != null
-                && spectateLocation != null);
     }
 
     private void verifySelf(){
