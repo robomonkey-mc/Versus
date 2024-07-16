@@ -1,6 +1,6 @@
 package me.robomonkey.versus.settings;
 
-import me.robomonkey.passivemode.PassiveMode;
+import me.robomonkey.versus.Versus;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -9,9 +9,9 @@ import java.io.IOException;
 
 public class SettingsManager {
 
-    PassiveMode plugin = PassiveMode.getInstance();
+    Versus plugin = Versus.getInstance();
     FileConfiguration config;
-    String configVersion = "1.2";
+    final static String configVersion = "1.0";
     private static SettingsManager instance;
 
     public static SettingsManager getInstance(){
@@ -24,12 +24,13 @@ public class SettingsManager {
     public SettingsManager(){
         registerConfig();
     }
+
     public void registerConfig() {
         plugin.saveDefaultConfig();
         reloadConfigFromFile();
         loadSettings();
         if(!configVersion.equals(getFileConfigVersion())){
-            PassiveMode.log("Error: Config is outdated. PassiveMode will now force a config update and copy all existing options.");
+            Versus.log("Error: Config is outdated. Versus will now force a config update and copy all existing options.");
             updateConfig();
         }
     }
@@ -86,7 +87,7 @@ public class SettingsManager {
     }
 
     private void updateConfig(){
-        PassiveMode.log("Updating plugin config...");
+        Versus.log("Updating plugin config...");
         plugin.saveResource("config.yml", true);
         reloadConfigFromFile();
         Setting[] settings = Setting.values();
@@ -94,7 +95,7 @@ public class SettingsManager {
             saveSetting(setting);
         }
         saveConfigToFile();
-        PassiveMode.log("Config has been updated");
+        Versus.log("Config has been updated");
     }
 
     private void loadSetting(Setting setting) throws Exception {
@@ -103,12 +104,12 @@ public class SettingsManager {
             Object configValue = config.get(key);
             if (setting.setValue(configValue)) {
             } else {
-                PassiveMode.log("Error: The config option named '"+key+"' is not set to a proper value. For example, you may be passing in a number when text is expected, or a true/false value where a number is expected. Please check your config.yml for any improper bindings.");
+                Versus.log("Error: The config option named '"+key+"' is not set to a proper value. For example, you may be passing in a number when text is expected, or a true/false value where a number is expected. Please check your config.yml for any improper bindings.");
             }
         }
         else
         {
-            PassiveMode.log("Error: The config option: '"+key+"' is not in the config. PassiveMode will force a config update and restore default values.");
+            Versus.log("Error: The config option: '"+key+"' is not in the config. Versus will force a config update and restore default values.");
             throw new Exception("Key is not set in config.");
         }
     }

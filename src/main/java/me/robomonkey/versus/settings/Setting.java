@@ -1,15 +1,17 @@
 package me.robomonkey.versus.settings;
 
+import java.util.Arrays;
+
 public enum Setting {
 
-    CooldownEnterMessage("&6[&4PassiveMode&6]&e You will enter &6passive mode &ein &4%seconds% seconds."),
-    CooldownExitMessage("&6[&4PassiveMode&6]&e You will exit &6passive mode &ein &4%seconds% seconds."),
+    CooldownEnterMessage("&6[&4Versus&6]&e You will enter &6passive mode &ein &4%seconds% seconds."),
+    CooldownExitMessage("&6[&4Versus&6]&e You will exit &6passive mode &ein &4%seconds% seconds."),
     CooldownFailureMessage("&bYou cannot move during the &3cooldown!"),
     CooldownSpamMessage("&4You must wait until the command is finished!"),
-    PassiveEnterMessage("&6[&4PassiveMode&6]&e You have entered &6passive mode!"),
-    PassiveLeaveMessage("&6[&4PassiveMode&6]&e You have left &6passive mode!"),
-    AttackPassiveMessage("&6[&4PassiveMode&6]&e This player is in &6passive mode!"),
-    AttackWhilePassiveMessage("&6[&4PassiveMode&6]&e You cannot attack while in &6passive mode!"),
+    PassiveEnterMessage("&6[&4Versus&6]&e You have entered &6passive mode!"),
+    PassiveLeaveMessage("&6[&4Versus&6]&e You have left &6passive mode!"),
+    AttackPassiveMessage("&6[&4Versus&6]&e This player is in &6passive mode!"),
+    AttackWhilePassiveMessage("&6[&4Versus&6]&e You cannot attack while in &6passive mode!"),
     JoinWhenPassiveMessage("&a&lYou are still in &6&lpassive mode&a&l. Type &6&l/passive &a&lto leave."),
     PVPCooldownMessage("&4You cannot use /passive during pvp! Please wait %seconds% more seconds."),
     PeriodicRemindersMessage("&a&lYou are still in &6&lpassive mode&a&l. Type &6&l/passive &a&lto leave."),
@@ -26,7 +28,9 @@ public enum Setting {
     PassiveByDefault(false),
     PVPCooldown(true),
     RecievePassiveJoinMessage(true),
-    PeriodicReminders(true);
+    PeriodicReminders(true),
+    BlockedCommands(new String[]{"hello", "hello"}),
+    Hello("Hello");
 
     public Object value;
     public Class type;
