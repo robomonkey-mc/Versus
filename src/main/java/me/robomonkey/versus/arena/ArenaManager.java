@@ -14,11 +14,22 @@ public class ArenaManager {
     public Versus plugin = Versus.getInstance();
 
     public Arena getArena(String name) {
-
+        Arena matching = arenaList.stream()
+                .filter((arena) -> arena.getName().equalsIgnoreCase(name))
+                .findFirst().get();
+        return matching;
     }
 
+    /**
+     * Returns first available arena in ArenaManager.arenaList.
+     * May return Arena.empty or null if no arenas are available.
+     * @return
+     */
     public Arena getAvailableArena() {
-
+        for(Arena arena: arenaList) {
+            if(arena.isAvailable()) return arena;
+        }
+        return Arena.empty;
     }
 
     public void loadArenas() {

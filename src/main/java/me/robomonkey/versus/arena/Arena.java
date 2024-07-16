@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Arena {
+    public static Arena empty = null;
     private final String name;
     private final List<Duel> activeDuels;
     private Location spawnLocationOne;
@@ -53,6 +54,9 @@ public class Arena {
         return enabled;
     }
 
+    public boolean isAvailable() {
+        return this.getActiveDuels().size() == 0;
+    }
     private boolean isValid() {
         return (spawnLocationOne != null
                 && spawnLocationTwo != null
