@@ -4,8 +4,7 @@ import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.arena.Arena;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.util.EffectUtil;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
@@ -124,41 +123,52 @@ public class DuelManager {
     }
 
     public void stopDuel(Duel duel) {
-        this.activePlayers.remove(loser.getUniqueId());
-        this.currentArena.remove(loser.getUniqueId());
         arenaManager.removeDuel(duel);
-        a.removePlayer(loser);
-        loser.sendMessage(Main.prefix+" Don't worry about it "+ChatColor.GOLD+ChatColor.BOLD+loser.getName()+ChatColor.DARK_AQUA+ChatColor.BOLD+". Type /ccspectate to return to the spectator area.");
+        activeDuels.remove(duel);
+        
+        Player loser = duel.getLoser();
+        Player winner = duel.getWinner();
+        
+        if(winner != null) showWinningEffects(winner);
+        if(loser != null) showLosingEffects(loser);
+    }
+
+    public void showWinningEffects(Player winner) {
+        Bukkit.broadcastMessage(Main.colour(Main.prefix + " &3Congratulate&6 " + winner.getName() + "! &3They won this match against&6 " + loser.getName() + "!"));
+
+        EffectUtil.spawnFireWorks(winner.getLocation(), 1, 50);
+        winner.playSound(winner.getLocation(), Sound.MUSIC_DISC_PIGSTEP, Float.MAX_VALUE, 1F);
+        winner.sendTitle(
+                Versus.color("&6&lCONGRATULATIONS"),
+                Versus.color("&6" + winner.getName().toUpperCase() + "!"),
+                20,
+                40,
+                20);
+        winner.setInvulnerable(true);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            winner.setItemOnCursor(null);
+            winner.closeInventory();
+            restoreInventory(winner);
+            restoreExp(winner);
+            winner.stopSound(Sound.MUSIC_DISC_PIGSTEP);
+            sendToSpectate(winner, a);
+            winner.setHealth(20);
+            winner.setFoodLevel(20);
+            winner.setInvulnerable(false);
+            spawnFireWorksTimed(winner.getLocation(), 3, 20, 20L);
+            activePlayers.remove(winner.getUniqueId());
+            currentArena.remove(winner.getUniqueId());
+            deleteItems(winner.getWorld());
+            OfflinePlayer loseroff = Bukkit.getOfflinePlayer(loser.getUniqueId());
+            showSkull(winner, loseroff);
+            a.removePlayer(winner);
+        }, 200L);
+    }
+
+    public void showLosingEffects(Player loser){
+        loser.sendMessage("&c&lDon't worry about it &6&l"+loser.getName()+"&c&l. Type /ccspectate to return to the spectator area.");
         saveLoss(loser);
         loser.stopSound(Sound.MUSIC_DISC_BLOCKS);
-        Player p = Bukkit.getPlayer(a.players.get(0));
-        saveVictory(p);
-        p.setNoDamageTicks(260);
         loser.getWorld().strikeLightningEffect(loser.getLocation());
-        Bukkit.broadcastMessage(Main.colour(Main.prefix+" &3Congratulate&6 "+p.getName()+"! &3They won this match against&6 "+loser.getName()+"!"));
-        spawnFireWorks(p.getLocation(), 10, 50);
-        p.playSound(p.getLocation(), Sound.MUSIC_DISC_PIGSTEP, Float.MAX_VALUE, 1F);
-        p.sendTitle(Main.colour("&6&lCONGRATULATIONS"),ChatColor.DARK_AQUA+p.getName().toUpperCase()+"!", 20, 40, 20);
-        p.setInvulnerable(true);
-        a.winning=Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-            public void run() {
-                p.setItemOnCursor(null);
-                p.closeInventory();
-                restoreInventory(p);
-                restoreExp(p);
-                p.stopSound(Sound.MUSIC_DISC_PIGSTEP);
-                sendToSpectate(p, a);
-                p.setHealth(20);
-                p.setFoodLevel(20);
-                p.setInvulnerable(false);
-                spawnFireWorksTimed(p.getLocation(), 3, 20, 20L);
-                activePlayers.remove(p.getUniqueId());
-                currentArena.remove(p.getUniqueId());
-                deleteItems(p.getWorld());
-                OfflinePlayer loseroff = Bukkit.getOfflinePlayer(loser.getUniqueId());
-                showSkull(p, loseroff);
-                a.removePlayer(p);
-            }
-        }, 200L);
     }
 }

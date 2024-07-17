@@ -2,6 +2,7 @@ package me.robomonkey.versus.duel;
 
 import
 import me.robomonkey.versus.arena.Arena;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -38,6 +39,22 @@ public class Duel {
 
     public void setState(DuelState state){
         this.state = state;
+    }
+
+    public UUID getWinnerID() {
+        return winner;
+    }
+
+    public UUID getLoserID() {
+       return loser;
+    }
+
+    public Player getWinner() {
+        return Bukkit.getPlayer(getWinnerID());
+    }
+
+    public Player getLoser() {
+        return Bukkit.getPlayer(getLoserID());
     }
 
     public void registerVictory(Player winner, Player loser){
