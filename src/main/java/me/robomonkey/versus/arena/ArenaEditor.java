@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 public class ArenaEditor {
 
     private Arena targetArena;
+
     public ArenaEditor(Arena target){
         this.targetArena = target;
     }
@@ -16,12 +17,12 @@ public class ArenaEditor {
         p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);
         p.sendMessage(property.getExplanation());
         String clickableMessage = "&cClick &c&l%button%&c to select the &4"+property.toFriendlyString();
-        String command = property.toString();
+        String command = "/arena set " + targetArena.getName() + " " +property.toString();
         TextComponent setPropertyMessage = MessageUtil.getClickableMessage(clickableMessage, command);
         p.spigot().sendMessage(setPropertyMessage);
     }
 
-    void alterArenaProperty(ArenaProperty property, Player p) {
+    public void alterArenaProperty(ArenaProperty property, Player p) {
         targetArena.setLocationProperty(property, p.getLocation());
         p.sendMessage("You have successful set the "+property.toFriendlyString()+" to your current location.");
     }

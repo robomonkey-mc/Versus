@@ -1,6 +1,6 @@
 package me.robomonkey.versus.arena;
 
-enum ArenaProperty {
+public enum ArenaProperty {
     CENTER_LOCATION("center of the arena"),
     SPAWN_LOCATION_ONE("first spawn location"),
     SPAWN_LOCATION_TWO("second spawn location"),
@@ -39,6 +39,15 @@ enum ArenaProperty {
                         " completing a duel.";
             default:
                 return "";
+        }
+    }
+
+    public static ArenaProperty fromString(String propertyName) {
+        try {
+            ArenaProperty fromString = ArenaProperty.valueOf(propertyName);
+            return fromString;
+        } catch (IllegalArgumentException e){
+            return null;
         }
     }
 

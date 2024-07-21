@@ -30,6 +30,10 @@ public abstract class AbstractCommand {
         Arrays.stream(branches).forEach(branch -> this.branches.add(branch));
     }
 
+    public void error(CommandSender sender, String message) {
+        sender.sendMessage(Versus.color("&c&lError: &4"+message));
+    }
+
     public String getCommand() {
         return command;
     }

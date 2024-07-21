@@ -11,7 +11,8 @@ public class RootArenaCommand extends RootCommand {
         super("arena", "arena.admin");
         addBranches(new CreateCommand(),
                     new DeleteCommand(),
-                    new EditCommand()
+                    new EditCommand(),
+                    new SetCommand()
         );
         setUsage("/arena <create/delete/edit/list>");
     }
