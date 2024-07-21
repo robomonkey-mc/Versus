@@ -3,10 +3,12 @@ package me.robomonkey.versus.arena;
 import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.duel.Duel;
 import me.robomonkey.versus.duel.DuelManager;
-import org.checkerframework.checker.units.qual.A;
-
+import me.robomonkey.versus.util.JsonUtil;
+import me.robomonkey.versus.data.ArenaData;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -14,6 +16,7 @@ import java.util.stream.Collectors;
 public class ArenaManager {
 
     public ArrayList<Arena> arenaList = new ArrayList<>();
+    public File dataFile;
     public DuelManager duelManager = DuelManager.getInstance();
     public Versus plugin = Versus.getInstance();
     private static ArenaManager instance;
@@ -48,19 +51,31 @@ public class ArenaManager {
     }
 
     public void loadArenas() {
-
+        List<ArenaData> loaded = new ArrayList<>();
+        dataFile = JsonUtil.getDataFile(plugin, "arena.json");
+        try {
+            loaded = JsonUtil.readObject(loaded.getClass(), dataFile);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        loaded.stream().forEach(arena -> {
+            Arena newArena = Arena.fromArenaData(arena);
+            arenaList.add(newArena);
+        });
     }
 
     public void saveAllArenas() {
-
+        List<ArenaData> data = arenaList.stream().map(arena -> arena.toArenaData()).collect(Collectors.toList());
+        try {
+            JsonUtil.writeObject(data, dataFile, true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void deleteArena(Arena arena) {
-
-    }
-
-    public void editArena(Arena arena) {
-
+        arenaList.remove(arena);
+        saveAllArenas();
     }
 
     public void registerDuel(Arena arena, Duel duel) {

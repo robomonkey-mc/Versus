@@ -1,5 +1,6 @@
 package me.robomonkey.versus.arena;
 
+import me.robomonkey.versus.data.ArenaData;
 import me.robomonkey.versus.duel.Duel;
 import org.bukkit.Location;
 
@@ -19,6 +20,7 @@ public class Arena {
     /**
      * <h1>Creates Arena.</h1>
      * <p>Note: Arenas handle their own verification logic.</p>
+     *
      * @param name
      */
     public Arena(String name) {
@@ -57,6 +59,7 @@ public class Arena {
     public boolean isAvailable() {
         return this.getActiveDuels().size() == 0;
     }
+
     private boolean isValid() {
         return (spawnLocationOne != null
                 && spawnLocationTwo != null
@@ -86,9 +89,23 @@ public class Arena {
         this.activeDuels.remove(completedDuel);
     }
 
-    private void verifySelf(){
-        if(!isValid()) enabled = false;
+    private void verifySelf() {
+        if (!isValid()) enabled = false;
         else enabled = true;
     }
 
+    public ArenaData toArenaData() {
+        return new ArenaData(name, spawnLocationOne, spawnLocationTwo, centerLocation, spectateLocation, true);
+    }
+
+    public static Arena fromArenaData(ArenaData jsonArena) {
+        Arena newArena = new Arena(jsonArena.name);
+        newArena.setLocationProperty(ArenaProperty.CENTER_LOCATION, jsonArena.centerLocation);
+        newArena.setLocationProperty(ArenaProperty.SPAWN_LOCATION_ONE, jsonArena.spawnLocationOne);
+        newArena.setLocationProperty(ArenaProperty.SPAWN_LOCATION_TWO, jsonArena.spawnLocationTwo);
+        newArena.setLocationProperty(ArenaProperty.SPECTATE_LOCATION, jsonArena.spectateLocation);
+        return newArena;
+    }
+
 }
+

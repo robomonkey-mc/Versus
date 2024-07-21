@@ -33,12 +33,17 @@ public final class Versus extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         log("Versus has been enabled!");
+        instance = this;
+        arenaManager = ArenaManager.getInstance();
+        duelManager = DuelManager.getInstance();
+        arenaManager.loadArenas();
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
         log("Versus has been disabled!");
+        arenaManager.saveAllArenas();
     }
 
 }
