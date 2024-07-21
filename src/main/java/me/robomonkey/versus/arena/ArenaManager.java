@@ -67,7 +67,8 @@ public class ArenaManager {
         arena.addDuel(duel);
     }
 
-    public void removeDuel(Arena arena, Duel duel) {
+    public void removeDuel(Duel duel) {
+        Arena arena = duel.getArena();
         arena.removeDuel(duel);
     }
 
