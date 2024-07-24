@@ -18,7 +18,7 @@ public class RootDuelCommand extends RootCommand {
         setPermissionRequired(false);
         setPlayersOnly(true);
         setUsage("/duel <player>");
-        addBranches(new );
+        addBranches(new DenyCommand());
     }
 
     @Override
