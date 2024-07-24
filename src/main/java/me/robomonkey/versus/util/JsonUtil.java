@@ -36,11 +36,8 @@ public class JsonUtil {
      */
     public static <T> void writeObject(T object, File file, Boolean append) throws IOException {
         Gson gson = new Gson();
-        String json = gson.toJson(object);
         Writer writer = new FileWriter(file, append);
-        writer.write(json);
-        writer.flush();
-        writer.close();
+        gson.toJson(object, writer);
     }
 
     /**

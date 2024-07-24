@@ -23,13 +23,16 @@ public class DuelManager {
     private Versus plugin = Versus.getInstance();
 
     public DuelManager() {
+        Versus.log("Ran duel manager constructor");
         inventoryManager = new InventoryManager();
         inventoryManager.loadInventoryMap();
     }
 
     public static DuelManager getInstance() {
+        Versus.log("DuelManager.getInstance() ran");
         if (instance==null) {
             instance = new DuelManager();
+            Versus.log("Created new instance");
         }
         return instance;
     }

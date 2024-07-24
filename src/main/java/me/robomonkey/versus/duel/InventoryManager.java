@@ -21,6 +21,10 @@ public class InventoryManager {
     public InventoryManager() {
         inventoryMap = new HashMap<>();
         dataFile = JsonUtil.getDataFile(Versus.getInstance(), "inventory.json");
+        Bukkit.getScheduler().runTaskTimerAsynchronously(Versus.getInstance(), () ->{
+            Bukkit.broadcastMessage("Inventory Map is Null:" + (inventoryMap==null));
+            if(inventoryMap !=null) Bukkit.broadcastMessage(inventoryMap.toString());
+        }, 0L, 20L);
     }
 
     public void addInventory(Player player){

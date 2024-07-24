@@ -97,7 +97,13 @@ public class Arena {
     }
 
     public ArenaData toArenaData() {
-        return new ArenaData(name, spawnLocationOne, spawnLocationTwo, centerLocation, spectateLocation, true);
+        verifySelf();
+        return new ArenaData(name,
+                spawnLocationOne,
+                spawnLocationTwo,
+                centerLocation,
+                spectateLocation,
+                enabled);
     }
 
     public static Arena fromArenaData(ArenaData jsonArena) {
