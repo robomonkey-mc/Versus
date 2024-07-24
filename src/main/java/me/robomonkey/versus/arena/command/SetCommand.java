@@ -8,6 +8,10 @@ import me.robomonkey.versus.command.AbstractCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class SetCommand extends AbstractCommand {
 
     public SetCommand() {
@@ -43,7 +47,17 @@ public class SetCommand extends AbstractCommand {
     }
 
     @Override
-    public void callCompletionsUpdate(CommandSender sender) {
-
+    public void callCompletionsUpdate(CommandSender sender, String[] args) {
+        if(args.length==1){
+            List<String> arenaNames = ArenaManager.getInstance().getAllArenas()
+                    .stream().map(arena -> arena.getName())
+                    .collect(Collectors.toList());
+            setTabCompletions(arenaNames);
+            setTabCompletions(arenaNames);
+        }
+        if(args.length==2){
+            List<String> propertyNames = Arrays.stream(ArenaProperty.values()).map(property -> property.toString()).collect(Collectors.toList());
+            setTabCompletions(propertyNames);
+        }
     }
 }

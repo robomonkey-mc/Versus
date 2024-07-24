@@ -1,23 +1,22 @@
 package me.robomonkey.versus.duel;
 
-import
 import me.robomonkey.versus.arena.Arena;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.UUID;
 
 public class Duel {
-    private ArrayList<Player> players = new ArrayList<>();
-    private Arena activeArena;
+    private final ArrayList<Player> players = new ArrayList<>();
+    private final Arena activeArena;
     private DuelState state = DuelState.IDLE;
     private UUID winner;
     private UUID loser;
 
     public Duel(Arena arena, Player... duelists){
-        Arrays.stream(duelists).forEach(duelist -> players.add(duelist));
+        Collections.addAll(players, duelists);
         this.activeArena = arena;
     }
 
@@ -60,5 +59,6 @@ public class Duel {
     public void registerVictory(Player winner, Player loser){
         this.loser = loser.getUniqueId();
         this.winner = winner.getUniqueId();
+        this.setState(DuelState.ENDED);
     }
 }

@@ -26,7 +26,7 @@ public class CreateCommand extends AbstractCommand {
     }
 
     @Override
-    public void callCompletionsUpdate(CommandSender sender) {
+    public void callCompletionsUpdate(CommandSender sender, String[] args) {
 
     }
 }

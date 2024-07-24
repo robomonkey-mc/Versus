@@ -1,5 +1,6 @@
 package me.robomonkey.versus.arena;
 
+import com.google.gson.JsonElement;
 import me.robomonkey.versus.data.ArenaData;
 import me.robomonkey.versus.duel.Duel;
 import org.bukkit.Location;
@@ -105,6 +106,7 @@ public class Arena {
         newArena.setLocationProperty(ArenaProperty.SPAWN_LOCATION_TWO, jsonArena.spawnLocationTwo);
         newArena.setLocationProperty(ArenaProperty.SPECTATE_LOCATION, jsonArena.spectateLocation);
         return newArena;
+
     }
 
 }

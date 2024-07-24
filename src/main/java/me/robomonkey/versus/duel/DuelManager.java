@@ -6,7 +6,9 @@ import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.util.EffectUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -17,7 +19,13 @@ public class DuelManager {
     private Set<Duel> activeDuels = new HashSet<>();
     private HashMap<UUID, Duel> duelistMap = new HashMap<>();
     private ArenaManager arenaManager = ArenaManager.getInstance();
+    private InventoryManager inventoryManager;
     private Versus plugin = Versus.getInstance();
+
+    public DuelManager() {
+        inventoryManager = new InventoryManager();
+        inventoryManager.loadInventoryMap();
+    }
 
     public static DuelManager getInstance() {
         if (instance==null) {
@@ -26,7 +34,8 @@ public class DuelManager {
         return instance;
     }
 
-    public void registerQuitter() {
+    public void registerQuitter(Player quitter) {
+        quitter.setHealth(0);
     }
 
     public Duel duelFromPlayer(Player player) {
@@ -105,7 +114,7 @@ public class DuelManager {
     }
 
     private void saveInventory(Player player) {
-        //TODO: Implement
+        inventoryManager.addInventory(player);
     }
 
     public void registerMoveEvent(Player player, PlayerMoveEvent event) {
@@ -123,52 +132,75 @@ public class DuelManager {
     }
 
     public void stopDuel(Duel duel) {
+        if(duel.isActive()) return;
         arenaManager.removeDuel(duel);
         activeDuels.remove(duel);
-        
         Player loser = duel.getLoser();
         Player winner = duel.getWinner();
         
-        if(winner != null) showWinningEffects(winner);
-        if(loser != null) showLosingEffects(loser);
+        if(winner != null) {
+            showWinningEffects(winner, duel);
+        }
+        if(loser != null) {
+            showLosingEffects(loser);
+        }
     }
 
-    public void showWinningEffects(Player winner) {
-        Bukkit.broadcastMessage(Main.colour(Main.prefix + " &3Congratulate&6 " + winner.getName() + "! &3They won this match against&6 " + loser.getName() + "!"));
+    /**
+     * Only call after checking that ensuring that the player is currently in a duel with duelManager.duelFromPlayer(..);
+     * @param event PlayerDeathEvent
+     */
+    public void registerDuelistDeath(PlayerDeathEvent event) {
+        Player loser = event.getEntity();
+        Duel currentDuel = duelFromPlayer(loser);
+        if(currentDuel.isActive()){
+            registerDuelCompletion(loser, currentDuel);
+        }
+    }
 
+    public void registerDuelCompletion(Player loser, Duel duel) {
+        Optional<Player> optionalWinner = duel.getPlayers().stream().filter(player -> !player.equals(loser)).findFirst();
+        if(!optionalWinner.isPresent()) return;
+        Player winner = optionalWinner.get();
+        duel.registerVictory(winner, loser);
+        stopDuel(duel);
+    }
+
+    public void extricatePlayer(Player player, Duel duel) {
+        player.setItemOnCursor(null);
+        player.closeInventory();
+        restoreInventory(player);
+        player.stopAllSounds();
+        player.stopSound(Sound.MUSIC_DISC_PIGSTEP);
+        arenaManager.sendToSpectatingArea(player, duel.getArena());
+        player.setHealth(20);
+        player.setFoodLevel(20);
+        player.setInvulnerable(false);
+    }
+
+    public void showWinningEffects(Player winner, Duel duel) {
+        // Bukkit.broadcastMessage(Main.colour(Main.prefix + " &3Congratulate&6 " + winner.getName() + "! &3They won this match against&6 " + loser.getName() + "!"));
         EffectUtil.spawnFireWorks(winner.getLocation(), 1, 50);
         winner.playSound(winner.getLocation(), Sound.MUSIC_DISC_PIGSTEP, Float.MAX_VALUE, 1F);
-        winner.sendTitle(
-                Versus.color("&6&lCONGRATULATIONS"),
-                Versus.color("&6" + winner.getName().toUpperCase() + "!"),
-                20,
-                40,
-                20);
+        winner.sendTitle(Versus.color("&6&lCONGRATULATIONS"), Versus.color("&6" + winner.getName().toUpperCase() + "!"), 20, 40, 20);
         winner.setInvulnerable(true);
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            winner.setItemOnCursor(null);
-            winner.closeInventory();
-            restoreInventory(winner);
-            restoreExp(winner);
-            winner.stopSound(Sound.MUSIC_DISC_PIGSTEP);
-            sendToSpectate(winner, a);
-            winner.setHealth(20);
-            winner.setFoodLevel(20);
-            winner.setInvulnerable(false);
-            spawnFireWorksTimed(winner.getLocation(), 3, 20, 20L);
-            activePlayers.remove(winner.getUniqueId());
-            currentArena.remove(winner.getUniqueId());
-            deleteItems(winner.getWorld());
-            OfflinePlayer loseroff = Bukkit.getOfflinePlayer(loser.getUniqueId());
-            showSkull(winner, loseroff);
-            a.removePlayer(winner);
+            //TODO Delete nearby items on the ground if necessary.
+            //TODO Implement skull system if you want later on
+            extricatePlayer(winner, duel);
+            EffectUtil.spawnFireWorksDelayed(winner.getLocation(), 3, 20, 20L);
         }, 200L);
     }
 
-    public void showLosingEffects(Player loser){
+    public void showLosingEffects(Player loser) {
         loser.sendMessage("&c&lDon't worry about it &6&l"+loser.getName()+"&c&l. Type /ccspectate to return to the spectator area.");
-        saveLoss(loser);
-        loser.stopSound(Sound.MUSIC_DISC_BLOCKS);
         loser.getWorld().strikeLightningEffect(loser.getLocation());
+    }
+
+    public void restoreInventory(Player player) {
+        if(inventoryManager.contains(player)) {
+            ItemStack[] items = inventoryManager.retrieveInventory(player);
+            player.getInventory().setContents(items);
+        }
     }
 }

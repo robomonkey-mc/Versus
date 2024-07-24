@@ -1,5 +1,6 @@
 package me.robomonkey.versus.util;
 
+import me.robomonkey.versus.Versus;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
@@ -26,6 +27,12 @@ public class EffectUtil {
             firework1.setFireworkMeta(fireworkMeta);
             firework1.detonate();
         }
+    }
+
+    public static void spawnFireWorksDelayed(Location loc, int amount, Integer power, Long delayTicks) {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(Versus.getInstance(), () -> {
+            spawnFireWorks(loc, amount, power);
+        }, delayTicks);
     }
 
     public static void freezePlayer(Player player, int duration){

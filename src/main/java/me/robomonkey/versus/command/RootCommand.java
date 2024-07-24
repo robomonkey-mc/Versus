@@ -10,6 +10,7 @@ import java.util.List;
 
 public abstract class RootCommand extends AbstractCommand implements CommandExecutor, TabCompleter {
 
+
     public RootCommand(String command, String permission) {
         super(command, permission);
         this.registerCommand();

@@ -5,6 +5,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.ChatColor;
 
 public class MessageUtil {
 
@@ -16,7 +17,7 @@ public class MessageUtil {
         String commandOnClick = "/" + commandText;
         String[] splitMessage = message.split("%button%", 3);
         if(splitMessage.length<2){
-            //TODO: Add default setting in this case
+            return null;
         }
         String beforeText = splitMessage[0];
         String afterText = splitMessage[1];
@@ -65,5 +66,13 @@ public class MessageUtil {
         TextComponent newButton = new TextComponent(buttontText);
         newButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, commandOnClick));
         return newButton;
+    }
+
+    public static String color(String message){
+        return ChatColor.translateAlternateColorCodes('&', message);
+    }
+
+    public static String error(String message){
+        return color("&c&lError: &4" + message);
     }
 }

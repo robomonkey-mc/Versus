@@ -5,7 +5,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 
 public class ArenaBuilder {
-
     ArenaProperty currentProperty;
     Player builder;
     Arena targetArena;

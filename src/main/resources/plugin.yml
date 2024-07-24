@@ -5,3 +5,8 @@ api-version: 1.21
 prefix: Versus
 authors: [ robomonkey ]
 description: Dueling optimized for Semi-Vanilla servers and casual fun.
+commands:
+  arena:
+    description: Create, edit, and delete arenas.
+  duel:
+    description: Request a duel with another player.

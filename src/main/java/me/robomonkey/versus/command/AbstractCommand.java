@@ -8,7 +8,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class AbstractCommand {
-
     public static String permissionErrorMessage = Versus.color("&c&lError: &4You do not have permission to use this command!");
     public static String improperSenderErrorMessage = Versus.color("&c&lError: &4Only players can use this command!");
     String command;
@@ -18,6 +17,7 @@ public abstract class AbstractCommand {
     boolean playersOnly = false;
     boolean staticTabComplete = false;
     private List<String> additionalCompletions = new ArrayList<>();
+    private boolean permissionRequired;
 
     public AbstractCommand(String name, String permission) {
         this.permission = permission;
@@ -48,6 +48,14 @@ public abstract class AbstractCommand {
 
     public boolean isPlayersOnly() {
         return this.playersOnly;
+    }
+
+    public void setPermissionRequired(boolean required) {
+        this.permissionRequired = required;
+    }
+
+    public boolean isPermissionRequired() {
+        return permissionRequired;
     }
 
     public List<String> getCompletions() {
@@ -123,7 +131,7 @@ public abstract class AbstractCommand {
     }
 
     List<String> dispatchTabCompleter(CommandSender sender, String[] args) {
-        callCompletionsUpdate(sender);
+        callCompletionsUpdate(sender, Arrays.copyOfRange(args, 1, args.length));
         List<String> completions = getCompletionOptions(sender);
         if (args.length == 1) {
             if(staticTabComplete) return completions;
@@ -148,9 +156,11 @@ public abstract class AbstractCommand {
         if (isLeaf() || branchFromName == null) {
             if(isPlayersOnly() && !(sender instanceof Player)){
                 sender.sendMessage(improperSenderErrorMessage);
+                return;
             }
-            if(!sender.hasPermission(permission)){
+            if(permissionRequired && !sender.hasPermission(permission)){
                 sender.sendMessage(permissionErrorMessage);
+                return;
             }
             callCommand(sender, args);
         } else {
@@ -170,5 +180,5 @@ public abstract class AbstractCommand {
      <p>Upon recieving the update, child classes can run setTabCompletions() or addTabCompletion() to update
      if necessary.</p>
      */
-    public abstract void callCompletionsUpdate(CommandSender sender);
+    public abstract void callCompletionsUpdate(CommandSender sender, String[] args);
 }

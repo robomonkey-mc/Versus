@@ -12,7 +12,7 @@ public class QuitEventListener implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         if(DuelManager.getInstance().isDueling(player)) {
-            DuelManager.getInstance().registerQuitter();
+            DuelManager.getInstance().registerQuitter(player);
         }
     }
 }

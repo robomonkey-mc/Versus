@@ -1,10 +1,14 @@
 package me.robomonkey.versus.arena;
 
+import com.google.gson.Gson;
 import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.duel.Duel;
 import me.robomonkey.versus.duel.DuelManager;
 import me.robomonkey.versus.util.JsonUtil;
 import me.robomonkey.versus.data.ArenaData;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,8 +18,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class ArenaManager {
-
-    public ArrayList<Arena> arenaList = new ArrayList<>();
+    private ArrayList<Arena> arenaList = new ArrayList<>();
     public File dataFile;
     public DuelManager duelManager = DuelManager.getInstance();
     public Versus plugin = Versus.getInstance();
@@ -27,11 +30,16 @@ public class ArenaManager {
         }
         return instance;
     }
+
     public Arena getArena(String name) {
         Arena matching = arenaList.stream()
                 .filter((arena) -> arena.getName().equalsIgnoreCase(name))
                 .findFirst().get();
         return matching;
+    }
+
+    public ArrayList<Arena> getAllArenas() {
+        return arenaList;
     }
 
     /**
@@ -71,6 +79,11 @@ public class ArenaManager {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void sendToSpectatingArea(Player p, Arena a) {
+        Location spectateLocation = a.getSpectateLocation();
+        p.teleport(spectateLocation);
     }
 
     public void deleteArena(Arena arena) {
