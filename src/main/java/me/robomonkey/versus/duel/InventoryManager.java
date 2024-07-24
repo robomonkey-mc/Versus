@@ -14,11 +14,12 @@ import java.util.Map;
 import java.util.UUID;
 
 public class InventoryManager {
-    private Map<UUID, ItemStack[]> inventoryMap = new HashMap<>();
+    private Map<UUID, ItemStack[]> inventoryMap;
     private File dataFile;
     private JsonObject inventoryMapJSON;
 
     public InventoryManager() {
+        inventoryMap = new HashMap<>();
         dataFile = JsonUtil.getDataFile(Versus.getInstance(), "inventory.json");
     }
 
@@ -58,8 +59,11 @@ public class InventoryManager {
     public void loadInventoryMap() {
         Bukkit.getScheduler().runTaskAsynchronously(Versus.getInstance(), () -> {
             try {
-                inventoryMap = JsonUtil.readObject(inventoryMap.getClass(), dataFile);
-            } catch (IOException e) {
+                Map<UUID, ItemStack[]> itemsMap = JsonUtil.readObject(inventoryMap.getClass(), dataFile);
+                if(itemsMap != null) {
+                    inventoryMap = itemsMap;
+                }
+            } catch (Exception e) {
                 Versus.error("Failed to read dueling inventory data.");
             }
         });

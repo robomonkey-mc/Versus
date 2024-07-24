@@ -5,6 +5,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 public class MessageUtil {
@@ -14,7 +15,6 @@ public class MessageUtil {
      * Example: "Click %button% to do X!
      */
     public static TextComponent getClickableMessage(String message, String commandText, String hoverText){
-        String commandOnClick = "/" + commandText;
         String[] splitMessage = message.split("%button%", 3);
         if(splitMessage.length<2){
             return null;
@@ -22,7 +22,7 @@ public class MessageUtil {
         String beforeText = splitMessage[0];
         String afterText = splitMessage[1];
 
-        TextComponent selectButton = createButton("SELECT", commandOnClick, hoverText);
+        TextComponent selectButton = createButton("SELECT", commandText, hoverText);
         TextComponent mainMessage = new TextComponent(Versus.color(beforeText));
         mainMessage.addExtra(selectButton);
         mainMessage.addExtra(Versus.color(afterText));
@@ -34,7 +34,6 @@ public class MessageUtil {
      * Example: "Click %button% to do X!
      */
     public static TextComponent getClickableMessage(String message, String commandText){
-        String commandOnClick = "/" + commandText;
         String[] splitMessage = message.split("%button%", 3);
         if(splitMessage.length<2){
             //TODO: Add default setting in this case
@@ -42,7 +41,7 @@ public class MessageUtil {
         String beforeText = splitMessage[0];
         String afterText = splitMessage[1];
 
-        TextComponent selectButton = createButton("SELECT", commandOnClick);
+        TextComponent selectButton = createButton("SELECT", commandText);
         TextComponent mainMessage = new TextComponent(Versus.color(beforeText));
         mainMessage.addExtra(selectButton);
         mainMessage.addExtra(Versus.color(afterText));

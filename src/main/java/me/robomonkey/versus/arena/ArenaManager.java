@@ -14,13 +14,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 public class ArenaManager {
     private ArrayList<Arena> arenaList = new ArrayList<>();
     public File dataFile;
-    public DuelManager duelManager = DuelManager.getInstance();
     public Versus plugin = Versus.getInstance();
     private static ArenaManager instance;
 
@@ -32,10 +32,15 @@ public class ArenaManager {
     }
 
     public Arena getArena(String name) {
-        Arena matching = arenaList.stream()
+        Optional<Arena> matching = arenaList.stream()
                 .filter((arena) -> arena.getName().equalsIgnoreCase(name))
-                .findFirst().get();
-        return matching;
+                .findFirst();
+        if(matching.isPresent()) return matching.get();
+        else return null;
+    }
+
+    public void addArena(Arena arena) {
+        arenaList.add(arena);
     }
 
     public ArrayList<Arena> getAllArenas() {
@@ -63,19 +68,21 @@ public class ArenaManager {
         dataFile = JsonUtil.getDataFile(plugin, "arena.json");
         try {
             loaded = JsonUtil.readObject(loaded.getClass(), dataFile);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            loaded.stream().forEach(arena -> {
+                Arena newArena = Arena.fromArenaData(arena);
+                arenaList.add(newArena);
+            });
+        } catch (Exception e) {
+            Versus.error("Arena data not loaded correctly");
         }
-        loaded.stream().forEach(arena -> {
-            Arena newArena = Arena.fromArenaData(arena);
-            arenaList.add(newArena);
-        });
     }
 
     public void saveAllArenas() {
-        List<ArenaData> data = arenaList.stream().map(arena -> arena.toArenaData()).collect(Collectors.toList());
+        List<ArenaData> data = arenaList.stream()
+                .filter(arena -> arena.isEnabled())
+                .map(arena -> arena.toArenaData()).collect(Collectors.toList());
         try {
-            JsonUtil.writeObject(data, dataFile, true);
+            JsonUtil.writeObject(data, dataFile, false);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

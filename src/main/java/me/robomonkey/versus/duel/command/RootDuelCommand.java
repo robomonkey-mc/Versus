@@ -32,10 +32,12 @@ public class RootDuelCommand extends RootCommand {
             return;
         }
         if(requestManager.hasIncomingRequest(player)
-                && requestManager.getCurrentlyRequesting(player).equals(requested.getUniqueId())) {
+                && requestManager.getRequester(player).equals(requested.getUniqueId())) {
            tryAcceptRequest(player);
+           return;
         }
         requestManager.sendRequest(player, requested);
+        player.sendMessage("You just sent a request to "+playerNameRequested);
     }
 
     public void tryAcceptRequest(Player player) {

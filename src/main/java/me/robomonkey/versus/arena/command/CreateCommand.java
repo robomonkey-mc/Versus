@@ -1,5 +1,6 @@
 package me.robomonkey.versus.arena.command;
 
+import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.arena.ArenaBuilderCoordinator;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.command.AbstractCommand;
@@ -23,6 +24,7 @@ public class CreateCommand extends AbstractCommand {
         String arenaName = args[0];
         Player player = (Player) sender;
         ArenaBuilderCoordinator.getInstance().initiateArenaBuilder(player, arenaName);
+        Versus.log("Arena command registered");
     }
 
     @Override

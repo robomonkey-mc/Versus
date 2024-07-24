@@ -30,6 +30,7 @@ public class ArenaBuilderCoordinator {
 
         ArenaBuilder arenaBuilder = new ArenaBuilder(builderPlayer, name);
         arenaMap.put(builderPlayer, arenaBuilder);
+        arenaBuilder.handleNextStep();
     }
 
     public void removeArenaBuilder(Player builderPlayer){

@@ -1,5 +1,6 @@
 package me.robomonkey.versus.arena;
 
+import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.util.MessageUtil;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
@@ -12,12 +13,13 @@ public class ArenaBuilder {
     ArenaBuilderCoordinator coordinator = ArenaBuilderCoordinator.getInstance();
 
     public ArenaBuilder(Player builder, String name){
-        currentProperty = ArenaProperty.CENTER_LOCATION;
         targetArena = new Arena(name);
         editor = new ArenaEditor(targetArena);
+        this.builder = builder;
     }
     public void handleNextStep() {
-        currentProperty = currentProperty.getNextProperty();
+        currentProperty = (currentProperty == null)? ArenaProperty.CENTER_LOCATION : currentProperty.getNextProperty();
+        Versus.log("current property is "+currentProperty);
         if(isAllPropertiesCompleted()){
             finalizeArena();
         } else {
@@ -32,6 +34,7 @@ public class ArenaBuilder {
 
     private void finalizeArena(){
         builder.sendMessage("You have completed the construction of the "+targetArena.getName()+" arena!");
+        ArenaManager.getInstance().addArena(targetArena);
         coordinator.removeArenaBuilder(builder);
     }
 

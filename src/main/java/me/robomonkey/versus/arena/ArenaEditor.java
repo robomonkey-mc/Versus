@@ -15,13 +15,13 @@ public class ArenaEditor {
         this.targetArena = target;
     }
 
-    void displayInstructionalMessage(ArenaProperty property, Player p){
-        p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);
-        p.sendMessage(property.getExplanation());
+    void displayInstructionalMessage(ArenaProperty property, Player player){
+        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);
+        player.sendMessage(property.getExplanation());
         String clickableMessage = "&cClick &c&l%button%&c to select the &4"+property.toFriendlyString();
         String command = "/arena set " + targetArena.getName() + " " +property.toString();
         TextComponent setPropertyMessage = MessageUtil.getClickableMessage(clickableMessage, command, command);
-        p.spigot().sendMessage(setPropertyMessage);
+        player.spigot().sendMessage(setPropertyMessage);
     }
 
     public void openEditingMenu(Player player) {

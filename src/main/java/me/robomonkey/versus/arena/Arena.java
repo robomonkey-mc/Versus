@@ -16,7 +16,7 @@ public class Arena {
     private Location spawnLocationTwo;
     private Location centerLocation;
     private Location spectateLocation;
-    private boolean enabled;
+    private boolean enabled = false;
 
     /**
      * <h1>Creates Arena.</h1>
@@ -27,6 +27,7 @@ public class Arena {
     public Arena(String name) {
         this.name = name;
         this.activeDuels = new ArrayList<Duel>();
+        this.enabled = false;
     }
 
     public String getName() {

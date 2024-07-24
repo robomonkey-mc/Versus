@@ -36,8 +36,8 @@ public final class Versus extends JavaPlugin {
         // Plugin startup logic
         log("Versus has been enabled!");
         instance = this;
-        arenaManager = ArenaManager.getInstance();
         duelManager = DuelManager.getInstance();
+        arenaManager = ArenaManager.getInstance();
         arenaManager.loadArenas();
         registerCommands();
     }

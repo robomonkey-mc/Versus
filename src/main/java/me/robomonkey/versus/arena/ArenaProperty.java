@@ -44,7 +44,7 @@ public enum ArenaProperty {
 
     public static ArenaProperty fromString(String propertyName) {
         try {
-            ArenaProperty fromString = ArenaProperty.valueOf(propertyName);
+            ArenaProperty fromString = ArenaProperty.valueOf(propertyName.toUpperCase());
             return fromString;
         } catch (IllegalArgumentException e){
             return null;

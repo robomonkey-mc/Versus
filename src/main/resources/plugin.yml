@@ -1,7 +1,6 @@
 name: Versus
 version: '${project.version}'
 main: me.robomonkey.versus.Versus
-api-version: 1.21
 prefix: Versus
 authors: [ robomonkey ]
 description: Dueling optimized for Semi-Vanilla servers and casual fun.

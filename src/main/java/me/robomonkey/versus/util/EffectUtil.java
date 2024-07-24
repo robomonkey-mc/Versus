@@ -35,8 +35,7 @@ public class EffectUtil {
         }, delayTicks);
     }
 
-    public static void freezePlayer(Player player, int duration){
-        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST,duration*20 , 250));
+    public static void freezePlayer(Player player) {
         player.setWalkSpeed(0);
         player.setSprinting(false);
         player.setFlySpeed(0);
@@ -46,6 +45,5 @@ public class EffectUtil {
         player.setInvulnerable(false);
         player.setWalkSpeed(0.2F);
         player.setFlySpeed(0.1F);
-        player.removePotionEffect(PotionEffectType.JUMP_BOOST);
     }
 }

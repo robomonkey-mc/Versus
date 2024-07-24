@@ -16,7 +16,7 @@ public class RootArenaCommand extends RootCommand {
                     new EditCommand(),
                     new SetCommand()
         );
-        setUsage("/arena <create/delete/edit/list>");
+        setUsage("/arena <create/delete/edit/set>");
     }
 
     @Override

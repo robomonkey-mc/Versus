@@ -17,7 +17,7 @@ public abstract class AbstractCommand {
     boolean playersOnly = false;
     boolean staticTabComplete = false;
     private List<String> additionalCompletions = new ArrayList<>();
-    private boolean permissionRequired;
+    private boolean permissionRequired = true;
 
     public AbstractCommand(String name, String permission) {
         this.permission = permission;
@@ -151,7 +151,11 @@ public abstract class AbstractCommand {
     }
 
     public void dispatchCommand(CommandSender sender, String[] args){
-        String firstArg = (args.length > 0)? args[0]: "";
+        if(args.length == 0) {
+            sender.sendMessage(usage);
+            return;
+        }
+        String firstArg = args[0];
         AbstractCommand branchFromName = getBranchFromName(firstArg);
         if (isLeaf() || branchFromName == null) {
             if(isPlayersOnly() && !(sender instanceof Player)){

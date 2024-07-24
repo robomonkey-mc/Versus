@@ -39,7 +39,7 @@ public class RequestManager {
         return requestMap.get(player.getUniqueId());
     }
 
-    private UUID getRequester(Player player) {
+    public UUID getRequester(Player player) {
         if(!hasIncomingRequest(player)) return null;
         Map.Entry<UUID, UUID> request = requestMap.entrySet().stream().filter(entry -> entry.getValue().equals(player.getUniqueId())).findFirst().get();
         return request.getKey();

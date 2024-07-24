@@ -69,7 +69,7 @@ public class DuelManager {
         duel.setState(DuelState.COUNTDOWN);
         int countdownDuration = 0;
         String countdownMessage = "Hello";
-        duel.getPlayers().stream().forEach((player) -> EffectUtil.freezePlayer(player, countdownDuration));
+        duel.getPlayers().stream().forEach((player) -> EffectUtil.freezePlayer(player));
         Countdown countdown = new Countdown(countdownDuration, countdownMessage, () -> {
             duel.getPlayers().stream()
                     .forEach(player -> EffectUtil.unfreezePlayer(player));

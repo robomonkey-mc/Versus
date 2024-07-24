@@ -49,7 +49,7 @@ public class JsonUtil {
      * @param file the file to be read from
      * @throws IOException
      */
-    public static <T> T readObject(Class<T> type, File file) throws FileNotFoundException {
+    public static <T> T readObject(Class<T> type, File file) throws IOException {
         Gson gson = new Gson();
         Reader reader = new FileReader(file);
         T fetchedObject = gson.fromJson(reader, type);
