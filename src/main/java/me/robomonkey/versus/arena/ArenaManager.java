@@ -1,6 +1,10 @@
 package me.robomonkey.versus.arena;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
 import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.duel.Duel;
 import me.robomonkey.versus.duel.DuelManager;
@@ -9,9 +13,8 @@ import me.robomonkey.versus.data.ArenaData;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -67,22 +70,33 @@ public class ArenaManager {
         List<ArenaData> loaded = new ArrayList<>();
         dataFile = JsonUtil.getDataFile(plugin, "arena.json");
         try {
-            loaded = JsonUtil.readObject(loaded.getClass(), dataFile);
+            Type arenaListType = new TypeToken<List<ArenaData>>(){}.getType();
+            Reader reader = new FileReader(dataFile);
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            loaded = gson.fromJson(reader, arenaListType);
             loaded.stream().forEach(arena -> {
                 Arena newArena = Arena.fromArenaData(arena);
                 arenaList.add(newArena);
+                Versus.log("Loaded "+ newArena.getName() +" arena.");
             });
+            Versus.log("Successfully loaded arenas");
         } catch (Exception e) {
-            Versus.error("Arena data not loaded correctly");
+            e.printStackTrace();
         }
     }
 
     public void saveAllArenas() {
         List<ArenaData> data = arenaList.stream()
-                .filter(arena -> arena.isEnabled())
-                .map(arena -> arena.toArenaData()).collect(Collectors.toList());
+                .filter(Arena::isEnabled)
+                .map(Arena::toArenaData)
+                .collect(Collectors.toList());
         try {
-            JsonUtil.writeObject(data, dataFile, false);
+            Writer writer = new FileWriter(dataFile);
+            Type arenaListType = new TypeToken<List<ArenaData>>(){}.getType();
+            Gson gson = new Gson();
+            gson.toJson(data, arenaListType, writer);
+            writer.close();
+            Versus.log("Successfully saved arenas");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -1,11 +1,17 @@
 package me.robomonkey.versus.util;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+import me.robomonkey.versus.data.ArenaData;
 import org.bukkit.plugin.Plugin;
 
 import java.io.*;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JsonUtil {
 
@@ -31,13 +37,21 @@ public class JsonUtil {
      *
      * @param object the object to be written
      * @param file the file to be written on
-     * @param append if true, the object will be appended to the end of the file instead of the beginning.
      * @throws IOException
      */
-    public static <T> void writeObject(T object, File file, Boolean append) throws IOException {
+    public static <T> void writeObject(Type type, T object, File file) throws IOException {
+        Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
+        Writer writer = new FileWriter(file, false);
+        gson.toJson(object, type, writer);
+        writer.close();
+    }
+
+    public static <T> void writeObjectList(List<T> list, File file) throws IOException {
+        Type listType = new TypeToken<List<T>>(){}.getType();
         Gson gson = new Gson();
-        Writer writer = new FileWriter(file, append);
-        gson.toJson(object, writer);
+        Writer writer = new FileWriter(file, false);
+        gson.toJson(list, listType, writer);
+        writer.close();
     }
 
     /**
@@ -46,11 +60,19 @@ public class JsonUtil {
      * @param file the file to be read from
      * @throws IOException
      */
-    public static <T> T readObject(Class<T> type, File file) throws IOException {
+    public static <T> T readObject(Type type, File file) throws IOException {
         Gson gson = new Gson();
         Reader reader = new FileReader(file);
         T fetchedObject = gson.fromJson(reader, type);
         return fetchedObject;
+    }
+
+    public static <T> ArrayList<T> readObjectList(Class<T> type, File file) throws IOException {
+        Type listType = new TypeToken<ArrayList<T>>(){}.getType();
+        Gson gson = new Gson();
+        Reader reader = new FileReader(file);
+        ArrayList<T> fetchedList = gson.fromJson(reader, listType);
+        return fetchedList;
     }
 
     public static JsonElement readJsonElement(File file) throws FileNotFoundException {

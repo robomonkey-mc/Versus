@@ -1,5 +1,6 @@
 package me.robomonkey.versus.data;
 
+import com.google.gson.annotations.Expose;
 import me.robomonkey.versus.duel.Duel;
 import org.bukkit.Location;
 
@@ -7,11 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArenaData {
+    @Expose
     public String name;
-    public Location spawnLocationOne;
-    public Location spawnLocationTwo;
-    public Location centerLocation;
-    public Location spectateLocation;
+    @Expose
+    public LocationData spawnLocationOne;
+    @Expose
+    public LocationData spawnLocationTwo;
+    @Expose
+    public LocationData centerLocation;
+    @Expose
+    public LocationData spectateLocation;
+    @Expose
     public boolean enabled;
 
     /**
@@ -26,10 +33,10 @@ public class ArenaData {
                      Location spectateLocation,
                      Boolean enabled) {
         this.name = name;
-        this.spawnLocationOne = spawnLocationOne;
-        this.spawnLocationTwo = spawnLocationTwo;
-        this.centerLocation = centerLocation;
-        this.spectateLocation = spectateLocation;
+        this.spawnLocationOne = new LocationData(spawnLocationOne);
+        this.spawnLocationTwo = new LocationData(spawnLocationTwo);
+        this.centerLocation = new LocationData(centerLocation);
+        this.spectateLocation = new LocationData(spectateLocation);
         this.enabled = enabled;
     }
 

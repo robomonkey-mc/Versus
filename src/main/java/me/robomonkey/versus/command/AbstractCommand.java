@@ -12,12 +12,14 @@ public abstract class AbstractCommand {
     public static String improperSenderErrorMessage = Versus.color("&c&lError: &4Only players can use this command!");
     String command;
     String permission;
-    private String usage;
+    private String usage = "";
     private Set<AbstractCommand> branches = new HashSet<>();
     boolean playersOnly = false;
     boolean staticTabComplete = false;
     private List<String> additionalCompletions = new ArrayList<>();
     private boolean permissionRequired = true;
+    private boolean argumentRequired = true;
+    private int maxArguments = -1;
 
     public AbstractCommand(String name, String permission) {
         this.permission = permission;
@@ -42,6 +44,10 @@ public abstract class AbstractCommand {
         return permission;
     }
 
+    public int getMaxArguments() {
+        return maxArguments;
+    }
+
     public String getUsage() {
         return this.usage;
     }
@@ -49,6 +55,11 @@ public abstract class AbstractCommand {
     public boolean isPlayersOnly() {
         return this.playersOnly;
     }
+
+    public boolean isArgumentRequired() {
+        return argumentRequired;
+    }
+
 
     public void setPermissionRequired(boolean required) {
         this.permissionRequired = required;
@@ -98,7 +109,7 @@ public abstract class AbstractCommand {
     }
 
     public void addTabCompletions(List<String> completions) {
-        completions.forEach(completion -> additionalCompletions.add(completion));
+        additionalCompletions.addAll(completions);
     }
 
     public void setTabCompletions(List<String> completions) {
@@ -107,6 +118,17 @@ public abstract class AbstractCommand {
 
     public void setPlayersOnly(Boolean playersOnly) {
         this.playersOnly = playersOnly;
+    }
+
+    public void setArgumentRequired(boolean argumentRequired) {
+        this.argumentRequired = argumentRequired;
+    }
+    /**
+     * Sets the maximum number of arguments for tab completion. -1 is the default value and will
+     * allow infinite arguments.
+     */
+    public void setMaxArguments(int maxArguments) {
+        this.maxArguments = maxArguments;
     }
 
     public boolean isStaticTabComplete() {
@@ -121,7 +143,11 @@ public abstract class AbstractCommand {
         this.usage = usage;
     }
 
-    List<String> getCompletionOptions(CommandSender sender) {
+    private boolean shouldTabComplete(String[] args) {
+        return maxArguments == -1 || args.length <= maxArguments;
+    }
+
+    List<String> getBuiltinCompletionOptions(CommandSender sender) {
         List<String> allowedCompletions = getBranches().stream()
                 .filter(branch -> sender.hasPermission(branch.getPermission()))
                 .map(branch -> branch.getCommand())
@@ -131,13 +157,19 @@ public abstract class AbstractCommand {
     }
 
     List<String> dispatchTabCompleter(CommandSender sender, String[] args) {
-        callCompletionsUpdate(sender, Arrays.copyOfRange(args, 1, args.length));
-        List<String> completions = getCompletionOptions(sender);
-        if (args.length == 1) {
+        List<String> emptyList = new ArrayList<>();
+        List<String> completions = getBuiltinCompletionOptions(sender);
+        List<String> additionalCompletions = callCompletionsUpdate(sender, args);
+        if(additionalCompletions!= null) {
+            completions.addAll(additionalCompletions);
+        }
+        if (args.length == 1 || isLeaf()) {
+            if(!shouldTabComplete(args)) return emptyList;
+            String lastArg = args[args.length-1];
             if(staticTabComplete) return completions;
-            for (String s : args) {
-                if (s.toLowerCase().startsWith(args[0].toLowerCase())) completions.add(s);
-            }
+            completions = completions.stream()
+                    .filter(completion -> completion.toLowerCase().startsWith(lastArg.toLowerCase()))
+                    .collect(Collectors.toList());
             return completions;
         }
         AbstractCommand potentialBranch = getBranchFromName(args[0]);
@@ -146,12 +178,18 @@ public abstract class AbstractCommand {
             List<String> childCompletions = potentialBranch.dispatchTabCompleter(sender, rest);
             return childCompletions;
         }
-        List<String> emptyList = new ArrayList<>();
         return emptyList;
     }
 
     public void dispatchCommand(CommandSender sender, String[] args){
-        if(args.length == 0) {
+        if(permissionRequired && !sender.hasPermission(permission)){
+            sender.sendMessage(permissionErrorMessage);
+            return;
+        }
+        if(!argumentRequired) {
+            callCommand(sender, args);
+            return;
+        } else if (args.length == 0) {
             sender.sendMessage(usage);
             return;
         }
@@ -160,10 +198,6 @@ public abstract class AbstractCommand {
         if (isLeaf() || branchFromName == null) {
             if(isPlayersOnly() && !(sender instanceof Player)){
                 sender.sendMessage(improperSenderErrorMessage);
-                return;
-            }
-            if(permissionRequired && !sender.hasPermission(permission)){
-                sender.sendMessage(permissionErrorMessage);
                 return;
             }
             callCommand(sender, args);
@@ -184,5 +218,7 @@ public abstract class AbstractCommand {
      <p>Upon recieving the update, child classes can run setTabCompletions() or addTabCompletion() to update
      if necessary.</p>
      */
-    public abstract void callCompletionsUpdate(CommandSender sender, String[] args);
+    public abstract List<String> callCompletionsUpdate(CommandSender sender, String[] args);
+
+
 }

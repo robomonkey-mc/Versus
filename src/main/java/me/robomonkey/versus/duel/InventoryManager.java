@@ -1,6 +1,7 @@
 package me.robomonkey.versus.duel;
 
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.util.JsonUtil;
 import org.bukkit.Bukkit;
@@ -9,28 +10,25 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.lang.reflect.Type;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class InventoryManager {
     private Map<UUID, ItemStack[]> inventoryMap;
     private File dataFile;
-    private JsonObject inventoryMapJSON;
 
     public InventoryManager() {
         inventoryMap = new HashMap<>();
         dataFile = JsonUtil.getDataFile(Versus.getInstance(), "inventory.json");
-        Bukkit.getScheduler().runTaskTimerAsynchronously(Versus.getInstance(), () ->{
-            Bukkit.broadcastMessage("Inventory Map is Null:" + (inventoryMap==null));
-            if(inventoryMap !=null) Bukkit.broadcastMessage(inventoryMap.toString());
-        }, 0L, 21L);
     }
 
     public void addInventory(Player player){
         UUID playerID = player.getUniqueId();
         ItemStack[] items = player.getInventory().getContents();
         inventoryMap.put(playerID, items);
+        Versus.log("Saved inventory of "+player.getName());
+        Versus.log(Arrays.deepToString(items));
     }
 
     public void removeInventory(UUID id) {
@@ -66,6 +64,8 @@ public class InventoryManager {
                 Map<UUID, ItemStack[]> itemsMap = JsonUtil.readObject(inventoryMap.getClass(), dataFile);
                 if(itemsMap != null) {
                     inventoryMap = itemsMap;
+                }else{
+                    Versus.log("Inventory map is null");
                 }
             } catch (Exception e) {
                 Versus.error("Failed to read dueling inventory data.");
@@ -74,9 +74,11 @@ public class InventoryManager {
     }
 
     public void saveInventoryMap() {
+        Type mapType = new TypeToken<Map<UUID, ItemStack[]>>(){}.getType();
+        
         Bukkit.getScheduler().runTaskAsynchronously(Versus.getInstance(), () -> {
             try {
-                JsonUtil.writeObject(inventoryMap, dataFile, false);
+                JsonUtil.writeObject(mapType, inventoryMap, dataFile);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

@@ -108,10 +108,10 @@ public class Arena {
 
     public static Arena fromArenaData(ArenaData jsonArena) {
         Arena newArena = new Arena(jsonArena.name);
-        newArena.setLocationProperty(ArenaProperty.CENTER_LOCATION, jsonArena.centerLocation);
-        newArena.setLocationProperty(ArenaProperty.SPAWN_LOCATION_ONE, jsonArena.spawnLocationOne);
-        newArena.setLocationProperty(ArenaProperty.SPAWN_LOCATION_TWO, jsonArena.spawnLocationTwo);
-        newArena.setLocationProperty(ArenaProperty.SPECTATE_LOCATION, jsonArena.spectateLocation);
+        newArena.setLocationProperty(ArenaProperty.CENTER_LOCATION, jsonArena.centerLocation.toLocation());
+        newArena.setLocationProperty(ArenaProperty.SPAWN_LOCATION_ONE, jsonArena.spawnLocationOne.toLocation());
+        newArena.setLocationProperty(ArenaProperty.SPAWN_LOCATION_TWO, jsonArena.spawnLocationTwo.toLocation());
+        newArena.setLocationProperty(ArenaProperty.SPECTATE_LOCATION, jsonArena.spectateLocation.toLocation());
         return newArena;
 
     }

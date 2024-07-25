@@ -51,18 +51,18 @@ public class MessageUtil {
     /**
      * Returns a button component with the given text on both click and hover events.
      */
-    public static TextComponent createButton(String buttontText, String commandOnClick, String hoverText){
-        TextComponent newButton = new TextComponent(buttontText);
+    public static TextComponent createButton(String buttonText, String commandOnClick, String hoverText){
+        TextComponent newButton = new TextComponent(color(buttonText));
         newButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, commandOnClick));
         newButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hoverText).create()));
         return newButton;
     }
 
     /**
-     * Returns a button component with the given text on click event.
+     * Returns a button component with the given command ran on click event.
      */
-    public static TextComponent createButton(String buttontText, String commandOnClick){
-        TextComponent newButton = new TextComponent(buttontText);
+    public static TextComponent createButton(String buttonText, String commandOnClick){
+        TextComponent newButton = new TextComponent(color(buttonText));
         newButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, commandOnClick));
         return newButton;
     }

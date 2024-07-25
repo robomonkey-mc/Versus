@@ -17,6 +17,7 @@ public class EditCommand extends AbstractCommand {
         setPlayersOnly(true);
         setUsage("/arena edit <arenaname>" + "\n" +
                 "Edit an existing Arena.");
+        setMaxArguments(1);
     }
 
     @Override
@@ -34,12 +35,13 @@ public class EditCommand extends AbstractCommand {
     }
 
     @Override
-    public void callCompletionsUpdate(CommandSender sender, String[] args) {
+    public List<String> callCompletionsUpdate(CommandSender sender, String[] args) {
         if(args.length==1) {
             List<String> arenaNames = ArenaManager.getInstance().getAllArenas()
                     .stream().map(arena -> arena.getName())
                     .collect(Collectors.toList());
-            setTabCompletions(arenaNames);
+            return arenaNames;
         }
+        return null;
     }
 }

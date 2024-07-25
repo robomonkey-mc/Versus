@@ -7,7 +7,7 @@ import org.bukkit.scheduler.BukkitTask;
 public class Countdown {
     private BukkitTask countdown;
     private Versus plugin = Versus.getInstance();
-    public static String countdownMessage;
+    public String countdownMessage;
     private long initialTime;
     private int duration;
     private Runnable onCountdownEnd;
@@ -19,6 +19,7 @@ public class Countdown {
     public Countdown(int duration, String countdownMessage, Runnable onCountdownEnd) {
         this.duration = duration;
         this.onCountdownEnd = onCountdownEnd;
+        this.countdownMessage = countdownMessage;
     }
 
     public void setOnCountdownEnd(Runnable onCountdownEnd) {

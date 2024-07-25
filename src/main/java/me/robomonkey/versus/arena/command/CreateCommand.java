@@ -17,18 +17,23 @@ public class CreateCommand extends AbstractCommand {
         setUsage("/arena create <arenaname>");
         setPlayersOnly(true);
         setStaticTabComplete(true);
+        setMaxArguments(1);
     }
 
     @Override
     public void callCommand(CommandSender sender, String[] args) {
         String arenaName = args[0];
         Player player = (Player) sender;
+        if(ArenaManager.getInstance().getArena(arenaName) != null){
+            error(sender, "Another arena already exists with the name "+arenaName+".");
+            return;
+        }
         ArenaBuilderCoordinator.getInstance().initiateArenaBuilder(player, arenaName);
         Versus.log("Arena command registered");
     }
 
     @Override
-    public void callCompletionsUpdate(CommandSender sender, String[] args) {
-
+    public List<String> callCompletionsUpdate(CommandSender sender, String[] args) {
+        return null;
     }
 }

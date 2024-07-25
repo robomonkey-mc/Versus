@@ -1,5 +1,6 @@
 package me.robomonkey.versus.arena.command;
 
+import com.google.common.collect.Lists;
 import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.arena.*;
 import me.robomonkey.versus.command.AbstractCommand;
@@ -55,17 +56,17 @@ public class SetCommand extends AbstractCommand {
     }
 
     @Override
-    public void callCompletionsUpdate(CommandSender sender, String[] args) {
+    public List<String> callCompletionsUpdate(CommandSender sender, String[] args) {
         if(args.length==1){
             List<String> arenaNames = ArenaManager.getInstance().getAllArenas()
                     .stream().map(arena -> arena.getName())
                     .collect(Collectors.toList());
-            setTabCompletions(arenaNames);
-            setTabCompletions(arenaNames);
+            return arenaNames;
         }
         if(args.length==2){
             List<String> propertyNames = Arrays.stream(ArenaProperty.values()).map(property -> property.toString()).collect(Collectors.toList());
-            setTabCompletions(propertyNames);
+            return propertyNames;
         }
+        return null;
     }
 }

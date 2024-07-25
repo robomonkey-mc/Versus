@@ -16,7 +16,7 @@ public final class Versus extends JavaPlugin {
     public static String prefix = "[Versus]";
 
     public static void log(String message){
-        Bukkit.getServer().getLogger().info(message);
+        Bukkit.getServer().getLogger().info(prefix+" "+message);
     }
 
     public static void error(String message) {

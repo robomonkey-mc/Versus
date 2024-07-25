@@ -29,12 +29,13 @@ public class DeleteCommand extends AbstractCommand {
     }
 
     @Override
-    public void callCompletionsUpdate(CommandSender sender, String[] args) {
+    public List<String> callCompletionsUpdate(CommandSender sender, String[] args) {
         if(args.length == 1){
             List<String> arenaNames = ArenaManager.getInstance().getAllArenas()
                     .stream().map(arena -> arena.getName())
                     .collect(Collectors.toList());
-            setTabCompletions(arenaNames);
+            return arenaNames;
         }
+        return null;
     }
 }

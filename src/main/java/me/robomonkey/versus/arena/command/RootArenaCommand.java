@@ -14,9 +14,10 @@ public class RootArenaCommand extends RootCommand {
         addBranches(new CreateCommand(),
                     new DeleteCommand(),
                     new EditCommand(),
-                    new SetCommand()
+                    new SetCommand(),
+                    new ListCommand()
         );
-        setUsage("/arena <create/delete/edit/set>");
+        setUsage("/arena <create/delete/edit/list/set>");
     }
 
     @Override
@@ -25,7 +26,7 @@ public class RootArenaCommand extends RootCommand {
     }
 
     @Override
-    public void callCompletionsUpdate(CommandSender sender, String[] args) {
-
+    public List<String> callCompletionsUpdate(CommandSender sender, String[] args) {
+        return null;
     }
 }

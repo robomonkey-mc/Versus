@@ -4,6 +4,10 @@ import me.robomonkey.versus.command.AbstractCommand;
 import me.robomonkey.versus.duel.RequestManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.optional.qual.OptionalBottom;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class DenyCommand extends AbstractCommand {
 
@@ -24,7 +28,7 @@ public class DenyCommand extends AbstractCommand {
     }
 
     @Override
-    public void callCompletionsUpdate(CommandSender sender, String[] args) {
-
+    public List<String> callCompletionsUpdate(CommandSender sender, String[] args) {
+        return null;
     }
 }
