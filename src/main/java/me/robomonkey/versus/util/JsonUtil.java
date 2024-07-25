@@ -40,7 +40,7 @@ public class JsonUtil {
      * @throws IOException
      */
     public static <T> void writeObject(Type type, T object, File file) throws IOException {
-        Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Writer writer = new FileWriter(file, false);
         gson.toJson(object, type, writer);
         writer.close();

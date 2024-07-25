@@ -74,6 +74,10 @@ public class ArenaManager {
             Reader reader = new FileReader(dataFile);
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             loaded = gson.fromJson(reader, arenaListType);
+            if(loaded == null) {
+                Versus.log("Arena list is null");
+                return;
+            }
             loaded.stream().forEach(arena -> {
                 Arena newArena = Arena.fromArenaData(arena);
                 arenaList.add(newArena);

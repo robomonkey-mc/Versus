@@ -1,5 +1,7 @@
 package me.robomonkey.versus;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.arena.command.RootArenaCommand;
 import me.robomonkey.versus.duel.DuelManager;
@@ -10,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Versus extends JavaPlugin {
 
+    private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private ArenaManager arenaManager;
     private DuelManager duelManager;
     private static Versus instance;
@@ -21,6 +24,10 @@ public final class Versus extends JavaPlugin {
 
     public static void error(String message) {
         log("Error: "+message);
+    }
+
+    public static Gson getGSON() {
+        return gson;
     }
 
     public static String color(String message){

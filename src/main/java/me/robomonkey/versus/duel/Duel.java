@@ -75,7 +75,7 @@ public class Duel {
         players.stream().forEach((player) -> EffectUtil.freezePlayer(player));
         countdown = new Countdown(countdownDuration, countdownMessage, () -> {
                 players.stream()
-                        .forEach(player -> EffectUtil.unfreezePlayer(player));
+                        .forEach(EffectUtil::unfreezePlayer);
                 startDuelFunction.run();
         });
         countdown.initiateCountdown();

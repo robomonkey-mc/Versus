@@ -155,6 +155,7 @@ public class DuelManager {
     private void saveData(Player player) {
         saveInventory(player);
         saveExp(player);
+        inventoryManager.saveInventoryMap();
     }
 
     private void saveExp(Player player) {
