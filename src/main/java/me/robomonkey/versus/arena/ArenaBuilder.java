@@ -1,8 +1,11 @@
 package me.robomonkey.versus.arena;
 
 import me.robomonkey.versus.Versus;
+import me.robomonkey.versus.util.EffectUtil;
 import me.robomonkey.versus.util.MessageUtil;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Color;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public class ArenaBuilder {
@@ -28,12 +31,14 @@ public class ArenaBuilder {
     }
 
     public void handleArenaEdit(ArenaProperty property){
-        editor.alterArenaProperty(currentProperty, builder);
+        editor.alterArenaProperty(property, builder);
         if(currentProperty == property) handleNextStep();
     }
 
     private void finalizeArena(){
-        builder.sendMessage("You have completed the construction of the "+targetArena.getName()+" arena!");
+        builder.sendMessage(Versus.color("&eYou have completed the construction of the &6"+targetArena.getName()+"&e arena!"));
+        EffectUtil.playSound(builder, Sound.ENTITY_CAT_AMBIENT);
+        EffectUtil.spawnFireWorks(builder.getLocation(), Color.YELLOW);
         ArenaManager.getInstance().addArena(targetArena);
         coordinator.removeArenaBuilder(builder);
     }

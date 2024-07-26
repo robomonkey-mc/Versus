@@ -13,8 +13,9 @@ import org.bukkit.potion.PotionEffectType;
 public class EffectUtil {
 
     public static String fireworkNoDamageFlag = "nodamage";
-    public static void playSound(Player p, Sound sound){
 
+    public static void playSound(Player player, Sound sound){
+        player.playSound(player.getLocation(), sound, Float.POSITIVE_INFINITY, 1F);
     }
 
     public static void spawnFireWorks(Location loc, int amount, Integer power) {
@@ -30,6 +31,17 @@ public class EffectUtil {
         }
     }
 
+    public static void spawnFireWorks(Location loc, Color color) {
+        Firework firework = (Firework) loc.getWorld().spawnEntity(loc, EntityType.FIREWORK_ROCKET);
+        FireworkMeta fireworkMeta = firework.getFireworkMeta();
+        fireworkMeta.addEffect(FireworkEffect.builder().withColor(color).flicker(true).trail(false).build());
+        fireworkMeta.setPower(50);
+        firework.setFireworkMeta(fireworkMeta);
+        firework.setMetadata(fireworkNoDamageFlag, new FixedMetadataValue(Versus.getInstance(), true));
+        firework.detonate();
+    }
+
+
     public static void spawnFireWorksDelayed(Location loc, int amount, Integer power, Long delayTicks) {
         Bukkit.getScheduler().runTaskLater(Versus.getInstance(), () -> {
             spawnFireWorks(loc, amount, power);
@@ -42,9 +54,20 @@ public class EffectUtil {
         player.setFlySpeed(0);
     }
 
-    public static void unfreezePlayer(Player player){
+    public static void unfreezePlayer(Player player) {
         player.setInvulnerable(false);
         player.setWalkSpeed(0.2F);
         player.setFlySpeed(0.1F);
     }
+
+    public static void sendTitle(Player player, String title, int ticks, boolean fade) {
+        int fadeTime = (fade)? 20: 0;
+        player.sendTitle(MessageUtil.color(title),"", fadeTime, ticks, fadeTime);
+    }
+
+    public static void sendTitle(Player player, String title, String subtitle, int ticks, boolean fade) {
+        int fadeTime = (fade)? 20: 0;
+        player.sendTitle(MessageUtil.color(title), MessageUtil.color(subtitle), fadeTime, ticks, fadeTime);
+    }
+
 }

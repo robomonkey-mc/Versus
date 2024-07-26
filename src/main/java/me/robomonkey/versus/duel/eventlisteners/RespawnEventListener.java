@@ -9,13 +9,13 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class RespawnEventListener implements Listener {
 
+    DuelManager duelManager = DuelManager.getInstance();
+
     @EventHandler
     public void onRespawn(PlayerRespawnEvent event) {
-        Versus.log(("Player respawned"));
         Player player = event.getPlayer();
-        DuelManager duelManager = DuelManager.getInstance();
         if(duelManager.hasStoredInventory(player)) {
-            Versus.log(("had inventory"));
+            Versus.log("Restored "+player.getName()+"'s inventory from a previous duel.");
             duelManager.restoreInventory(player);
         }
     }

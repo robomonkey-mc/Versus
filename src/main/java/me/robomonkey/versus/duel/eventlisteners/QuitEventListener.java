@@ -8,10 +8,12 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class QuitEventListener implements Listener {
 
+    DuelManager duelManager = DuelManager.getInstance();
+
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        if(DuelManager.getInstance().isDueling(player)) {
+        if(duelManager.isDueling(player)) {
             DuelManager.getInstance().registerQuitter(player);
         }
     }

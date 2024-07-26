@@ -22,12 +22,12 @@ public class ListCommand extends AbstractCommand {
 
     @Override
     public void callCommand(CommandSender sender, String[] args) {
-        sender.sendMessage(MessageUtil.color("&m-----------------------------"));
+        sender.sendMessage(MessageUtil.LINE);
         ArenaManager.getInstance().getAllArenas().forEach(arena -> {
             String description = getArenaDescription(arena);
             sender.sendMessage(description);
         });
-        sender.sendMessage(MessageUtil.color("&m-----------------------------"));
+        sender.sendMessage(MessageUtil.LINE);
     }
 
     public String getArenaDescription(Arena arena) {

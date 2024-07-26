@@ -1,4 +1,4 @@
-package me.robomonkey.versus.data;
+package me.robomonkey.versus.data.adapter;
 
 import com.google.gson.*;
 import org.bukkit.inventory.ItemStack;
@@ -21,7 +21,7 @@ public class ItemStackArrayAdapter implements JsonSerializer<ItemStack[]>, JsonD
     public JsonElement serialize(ItemStack[] itemStacks, Type type, JsonSerializationContext context) {
         JsonArray jsonArray = new JsonArray();
         for (ItemStack itemStack : itemStacks) {
-            jsonArray.add(context.serialize(itemStack));
+            jsonArray.add(context.serialize(itemStack, ItemStack.class));
         }
         return jsonArray;
     }

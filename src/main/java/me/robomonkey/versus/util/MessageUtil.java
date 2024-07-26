@@ -8,13 +8,17 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
+import javax.sound.sampled.Line;
+
 public class MessageUtil {
 
     /**
      * Sends a player a clickable message where the button is contained within %button%
      * Example: "Click %button% to do X!
      */
-    public static TextComponent getClickableMessage(String message, String commandText, String hoverText){
+    public static String LINE = MessageUtil.color("&7&m-----------------------------");
+
+    public static TextComponent getClickableMessage(String message, String commandText, String hoverText, String buttonText){
         String[] splitMessage = message.split("%button%", 3);
         if(splitMessage.length<2){
             return null;
@@ -22,7 +26,7 @@ public class MessageUtil {
         String beforeText = splitMessage[0];
         String afterText = splitMessage[1];
 
-        TextComponent selectButton = createButton("SELECT", commandText, hoverText);
+        TextComponent selectButton = createButton(color(buttonText), commandText, hoverText);
         TextComponent mainMessage = new TextComponent(Versus.color(beforeText));
         mainMessage.addExtra(selectButton);
         mainMessage.addExtra(Versus.color(afterText));
@@ -33,7 +37,7 @@ public class MessageUtil {
      * Sends a player a clickable message where the button is contained within %button%
      * Example: "Click %button% to do X!
      */
-    public static TextComponent getClickableMessage(String message, String commandText){
+    public static TextComponent getClickableMessage(String message, String commandText, String buttonText){
         String[] splitMessage = message.split("%button%", 3);
         if(splitMessage.length<2){
             //TODO: Add default setting in this case
@@ -41,7 +45,7 @@ public class MessageUtil {
         String beforeText = splitMessage[0];
         String afterText = splitMessage[1];
 
-        TextComponent selectButton = createButton("SELECT", commandText);
+        TextComponent selectButton = createButton(color(buttonText), commandText);
         TextComponent mainMessage = new TextComponent(Versus.color(beforeText));
         mainMessage.addExtra(selectButton);
         mainMessage.addExtra(Versus.color(afterText));
@@ -67,6 +71,15 @@ public class MessageUtil {
         return newButton;
     }
 
+    /**
+     * Returns a componnet with the given hoverText on hover.
+     */
+    public static TextComponent getHoverText(String text, String hoverText){
+        TextComponent newButton = new TextComponent(color(text));
+        newButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hoverText).create()));
+        return newButton;
+    }
+
     public static String color(String message){
         return ChatColor.translateAlternateColorCodes('&', message);
     }
@@ -74,4 +87,5 @@ public class MessageUtil {
     public static String error(String message){
         return color("&c&lError: &4" + message);
     }
+
 }

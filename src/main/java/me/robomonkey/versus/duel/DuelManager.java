@@ -24,7 +24,7 @@ public class DuelManager {
     private InventoryManager inventoryManager;
     private Versus plugin = Versus.getInstance();
 
-    public DuelManager() {
+    private DuelManager() {
         instance = this;
         inventoryManager = new InventoryManager();
         inventoryManager.loadInventoryMap();
@@ -69,6 +69,13 @@ public class DuelManager {
         return false;
     }
 
+    public void restoreInventory(Player player) {
+        if(inventoryManager.contains(player)) {
+            ItemStack[] items = inventoryManager.retrieveInventory(player);
+            player.getInventory().setContents(items);
+        }
+    }
+
     public void setupDuel(Player playerOne, Player playerTwo) {
         groomForDuel(playerOne);
         groomForDuel(playerTwo);
@@ -102,19 +109,26 @@ public class DuelManager {
         }
     }
 
+    private void registerDuelCompletion(Player loser, Duel duel) {
+        Optional<Player> optionalWinner = duel.getPlayers().stream().filter(player -> !player.equals(loser)).findFirst();
+        if(!optionalWinner.isPresent()) return;
+        Player winner = optionalWinner.get();
+        duel.end(winner, loser);
+        stopDuel(duel);
+    }
+
     private void stopDuel(Duel duel) {
         if(duel.isActive()) return;
         arenaManager.removeDuel(duel);
         activeDuels.remove(duel);
-        removeDuel(duel);
         Player loser = duel.getLoser();
         Player winner = duel.getWinner();
 
         if(winner != null) {
-            showWinningEffects(winner, duel);
+            renderWinEffects(winner, duel);
         }
         if(loser != null) {
-            showLosingEffects(loser);
+            renderLossEffects(loser);
         }
     }
 
@@ -134,18 +148,15 @@ public class DuelManager {
     private void handleStartEffects(Duel duel){
         EffectUtil.spawnFireWorks(duel.getArena().getCenterLocation(), 1, 10);
         for(Player player: duel.getPlayers()){
-            player.sendTitle(plugin.color("&6&lGO!"),player.getName().toUpperCase()+"!", 20, 20, 20);
+            EffectUtil.sendTitle(player, "&6&lGO!", 20, true);
             player.setInvulnerable(false);
+            player.playSound(player.getLocation(), Sound.MUSIC_DISC_FAR, Float.POSITIVE_INFINITY, 2.0F);
         }
     }
 
     private void groomForDuel(Player player) {
-        player.getActivePotionEffects().stream().forEach((effect) -> player.removePotionEffect(effect.getType()));
+        resetAttributes(player);
         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 10));
-        player.setHealth(20);
-        player.closeInventory();
-        player.setFoodLevel(20);
-        player.setAbsorptionAmount(0);
         player.setGameMode(GameMode.SURVIVAL);
         player.setInvulnerable(true);
         player.setAllowFlight(false);
@@ -179,7 +190,7 @@ public class DuelManager {
     }
 
     private void registerListeners() {
-        Listener[] listeners = {new RespawnEventListener(), new DeathEventListener(), new MoveEventListener(), new QuitEventListener(), new FireworkExplosionListener()};
+        Listener[] listeners = {new JoinEventListener(), new RespawnEventListener(), new DeathEventListener(), new MoveEventListener(), new QuitEventListener(), new FireworkExplosionListener()};
         Arrays.stream(listeners).forEach(listener -> Bukkit.getPluginManager().registerEvents(listener, Versus.getInstance()));
     }
 
@@ -188,32 +199,29 @@ public class DuelManager {
         duel.getPlayers().forEach(EffectUtil::unfreezePlayer);
     }
 
-    private void registerDuelCompletion(Player loser, Duel duel) {
-        Optional<Player> optionalWinner = duel.getPlayers().stream().filter(player -> !player.equals(loser)).findFirst();
-        if(!optionalWinner.isPresent()) return;
-        Player winner = optionalWinner.get();
-        duel.end(winner, loser);
-        stopDuel(duel);
+    private void extricateWinner(Player player, Duel duel) {
+        restoreInventory(player);
+        resetAttributes(player);
+        arenaManager.sendToSpectatingArea(player, duel.getArena());
+        removeDuel(duel);
     }
 
-    private void extricateWinner(Player player, Duel duel) {
-        player.setItemOnCursor(null);
-        player.closeInventory();
-        restoreInventory(player);
-        player.stopAllSounds();
-        player.stopSound(Sound.MUSIC_DISC_PIGSTEP);
-        arenaManager.sendToSpectatingArea(player, duel.getArena());
+    private void resetAttributes(Player player) {
         player.setHealth(20);
         player.setFoodLevel(20);
         player.setInvulnerable(false);
+        EffectUtil.unfreezePlayer(player);
+        player.getActivePotionEffects().stream().forEach(effect -> player.removePotionEffect(effect.getType()));
+        player.setItemOnCursor(null);
+        player.closeInventory();
+        player.stopAllSounds();
     }
 
-    private void showWinningEffects(Player winner, Duel duel) {
+    private void renderWinEffects(Player winner, Duel duel) {
         // Bukkit.broadcastMessage(Main.colour(Main.prefix + " &3Congratulate&6 " + winner.getName() + "! &3They won this match against&6 " + loser.getName() + "!"));
         EffectUtil.spawnFireWorks(winner.getLocation(), 1, 50);
-        winner.playSound(winner.getLocation(), Sound.MUSIC_DISC_PIGSTEP, Float.MAX_VALUE, 1F);
+        EffectUtil.playSound(winner, Sound.MUSIC_DISC_PIGSTEP);
         winner.sendTitle(Versus.color("&6&lCONGRATULATIONS"), Versus.color("&6" + winner.getName().toUpperCase() + "!"), 20, 40, 20);
-        winner.setInvulnerable(true);
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             //TODO Delete nearby items on the ground if necessary.
             //TODO Implement skull system if you want later on
@@ -222,15 +230,9 @@ public class DuelManager {
         }, 200L);
     }
 
-    private void showLosingEffects(Player loser) {
+    private void renderLossEffects(Player loser) {
         loser.sendMessage("&c&lDon't worry about it &6&l"+loser.getName()+"&c&l. Type /ccspectate to return to the spectator area.");
         loser.getWorld().strikeLightningEffect(loser.getLocation());
     }
 
-    public void restoreInventory(Player player) {
-        if(inventoryManager.contains(player)) {
-            ItemStack[] items = inventoryManager.retrieveInventory(player);
-            player.getInventory().setContents(items);
-        }
-    }
 }

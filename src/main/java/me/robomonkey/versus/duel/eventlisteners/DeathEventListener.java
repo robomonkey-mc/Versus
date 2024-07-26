@@ -16,9 +16,7 @@ public class DeathEventListener implements Listener {
         Player player = e.getEntity();
         if(DuelManager.getInstance().isDueling(player)) {
             Versus.log("Player is dueling");
-            player.getNearbyEntities(3,3,0).stream()
-                    .filter(entity -> entity.getType() == EntityType.ITEM)
-                    .forEach(Entity::remove);
+            e.getDrops().clear();
             DuelManager.getInstance().registerDuelistDeath(e);
         }
     }

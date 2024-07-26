@@ -2,17 +2,23 @@ package me.robomonkey.versus;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.arena.command.RootArenaCommand;
+import me.robomonkey.versus.data.adapter.ConfigurationSerializableAdapter;
+import me.robomonkey.versus.data.adapter.ItemStackAdapter;
+import me.robomonkey.versus.data.adapter.ItemStackArrayAdapter;
 import me.robomonkey.versus.duel.DuelManager;
 import me.robomonkey.versus.duel.command.RootDuelCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Versus extends JavaPlugin {
 
-    private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private static Gson gson;
     private ArenaManager arenaManager;
     private DuelManager duelManager;
     private static Versus instance;
@@ -27,6 +33,16 @@ public final class Versus extends JavaPlugin {
     }
 
     public static Gson getGSON() {
+        if(gson == null) {
+            GsonBuilder builder = new GsonBuilder()
+                    .setPrettyPrinting()
+                    .disableHtmlEscaping()
+                    .setObjectToNumberStrategy(JsonReader::nextInt)
+                    .registerTypeAdapter(ConfigurationSerializable.class, new ConfigurationSerializableAdapter())
+                    .registerTypeAdapter(ItemStack.class, new ItemStackAdapter())
+                    .registerTypeAdapter(ItemStack[].class, new ItemStackArrayAdapter());
+            gson = builder.create();
+        }
         return gson;
     }
 

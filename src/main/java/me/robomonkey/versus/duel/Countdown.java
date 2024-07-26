@@ -1,6 +1,8 @@
 package me.robomonkey.versus.duel;
 
 import me.robomonkey.versus.Versus;
+import me.robomonkey.versus.util.EffectUtil;
+import me.robomonkey.versus.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -10,7 +12,10 @@ public class Countdown {
     public String countdownMessage;
     private long initialTime;
     private int duration;
+    private int secondsRemaining;
+
     private Runnable onCountdownEnd;
+    private Runnable onCount;
 
     public Countdown(int duration, String countdownMessage) {
         this.duration = duration;
@@ -18,42 +23,41 @@ public class Countdown {
 
     public Countdown(int duration, String countdownMessage, Runnable onCountdownEnd) {
         this.duration = duration;
+        this.secondsRemaining = duration;
         this.onCountdownEnd = onCountdownEnd;
-        this.countdownMessage = countdownMessage;
+        this.countdownMessage = MessageUtil.color(countdownMessage);
+    }
+
+    public int getSecondsRemaining() {
+        return secondsRemaining;
     }
 
     public void setOnCountdownEnd(Runnable onCountdownEnd) {
         onCountdownEnd = onCountdownEnd;
     }
 
+    public void setOnCount(Runnable onCount) {
+        this.onCount = onCount;
+    }
+
     public void initiateCountdown() {
         initialTime = System.currentTimeMillis();
         countdown = Bukkit.getScheduler().runTaskTimer(Versus.getInstance(),
-                        getCountdownRunnable(),
+                        count(),
                         0,
                         20);
     }
 
-    private int getTimeElapsed(){
-        if (initialTime == 0) {
-            return 0;
-        } else {
-            long millisElapsed = (System.currentTimeMillis() - initialTime);
-            int secondsElapsed = (int) Math.ceil((millisElapsed / 1000));
-            return secondsElapsed;
-        }
-    }
-
-    private int getTimeRemaining(){
-        return duration - getTimeElapsed();
-    }
-
-    private Runnable getCountdownRunnable() {
+    private Runnable count() {
         return () -> {
-            if(getTimeRemaining() < 1) finishCountdown();
-            String timeElapsed = String.valueOf(getTimeRemaining());
-            String message = countdownMessage.replaceAll("%seconds%", timeElapsed);
+            if(getSecondsRemaining() == 0) {
+                finishCountdown();
+                return;
+            }
+            if(onCount != null) onCount.run();
+            String message = countdownMessage.replaceAll("%seconds%", String.valueOf(secondsRemaining));
             Bukkit.getServer().broadcastMessage(message);
+            secondsRemaining--;
         };
     }
 

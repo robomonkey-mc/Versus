@@ -17,10 +17,14 @@ public class ArenaEditor {
 
     void displayInstructionalMessage(ArenaProperty property, Player player){
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);
-        player.sendMessage(property.getExplanation());
-        String clickableMessage = "&cClick &c&l%button%&c to select the &4"+property.toFriendlyString();
-        String command = "/arena set " + targetArena.getName() + " " +property.toString();
-        TextComponent setPropertyMessage = MessageUtil.getClickableMessage(clickableMessage, command, command);
+        String buttonBase = "%button%&6 to select the";
+        String explanationBase = Versus.color("&e&o "+property.toFriendlyString());
+        String explanationOnHover = Versus.color("&7"+property.getExplanation());
+        String commandOnClick = "/arena set " + targetArena.getName() + " " +property.toString();
+        String commandOnHover = Versus.color("&7"+commandOnClick);
+        TextComponent setPropertyMessage = MessageUtil.getClickableMessage(buttonBase, commandOnClick, commandOnHover, "&6&lClick here");
+        TextComponent explanationMessage = MessageUtil.getHoverText(explanationBase, explanationOnHover);
+        setPropertyMessage.addExtra(explanationMessage);
         player.spigot().sendMessage(setPropertyMessage);
     }
 
@@ -35,6 +39,6 @@ public class ArenaEditor {
 
     public void alterArenaProperty(ArenaProperty property, Player p) {
         targetArena.setLocationProperty(property, p.getLocation());
-        p.sendMessage("You have successful set the "+property.toFriendlyString()+" to your current location.");
+        p.sendMessage(MessageUtil.color("&7&oYou have successfully set the "+property.toFriendlyString()+" to your current location."));
     }
 }

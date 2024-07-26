@@ -12,7 +12,7 @@ import org.bukkit.util.Transformation;
 public class MoveEventListener implements Listener {
 
     DuelManager duelManager = DuelManager.getInstance();
-    BlockDisplay display;
+
     @EventHandler
     public void onMove(PlayerMoveEvent e){
         Player player = e.getPlayer();

@@ -36,6 +36,9 @@ public class RootDuelCommand extends RootCommand {
             error(sender, playerNameRequested+" is not online.");
             return;
         }
+        if(requestManager.hasOutgoingRequest(player)){
+            error(sender, "You've");
+        }
         if(requestManager.hasIncomingRequest(player)
                 && requestManager.getRequester(player).equals(requested.getUniqueId())) {
            tryAcceptRequest(player);

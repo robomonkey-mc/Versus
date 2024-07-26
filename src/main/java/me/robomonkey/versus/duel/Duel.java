@@ -3,6 +3,7 @@ package me.robomonkey.versus.duel;
 import me.robomonkey.versus.arena.Arena;
 import me.robomonkey.versus.util.EffectUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -42,10 +43,6 @@ public class Duel {
         return (state == DuelState.ACTIVE || state == DuelState.COUNTDOWN);
     }
 
-    public void setState(DuelState state){
-        this.state = state;
-    }
-
     public UUID getWinnerID() {
         return winner;
     }
@@ -62,21 +59,33 @@ public class Duel {
         return Bukkit.getPlayer(getLoserID());
     }
 
+    public void setWinner(UUID winner) {
+        this.winner = winner;
+    }
+
+    public void setState(DuelState state){
+        this.state = state;
+    }
+
     public void end(Player winner, Player loser){
         this.loser = loser.getUniqueId();
         this.winner = winner.getUniqueId();
         this.setState(DuelState.ENDED);
     }
 
-    public void startCountdown(Runnable startDuelFunction) {
+    public void startCountdown(Runnable onCountdownExpiration) {
         setState(DuelState.COUNTDOWN);
-        int countdownDuration = 10;
-        String countdownMessage = "Starting in %seconds% seconds";
+        int countdownDuration = 5;
+        String countdownMessage = "&6Starting in &e%seconds%&6 seconds";
         players.stream().forEach((player) -> EffectUtil.freezePlayer(player));
         countdown = new Countdown(countdownDuration, countdownMessage, () -> {
                 players.stream()
                         .forEach(EffectUtil::unfreezePlayer);
-                startDuelFunction.run();
+                onCountdownExpiration.run();
+        });
+        countdown.setOnCount(() -> {
+            players.forEach(player -> EffectUtil.playSound(player, Sound.UI_BUTTON_CLICK));
+            players.forEach(player -> EffectUtil.sendTitle(player, "&7"+countdown.getSecondsRemaining(), 30, false));
         });
         countdown.initiateCountdown();
     }

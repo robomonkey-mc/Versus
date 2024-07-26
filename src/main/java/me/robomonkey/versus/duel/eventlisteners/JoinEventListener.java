@@ -8,4 +8,13 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class JoinEventListener implements Listener {
 
+    DuelManager duelManager = DuelManager.getInstance();
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        if(!player.isDead() && duelManager.hasStoredInventory(player)) {
+            duelManager.restoreInventory(player);
+        }
+    }
 }

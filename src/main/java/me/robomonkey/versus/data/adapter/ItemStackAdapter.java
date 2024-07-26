@@ -1,4 +1,4 @@
-package me.robomonkey.versus.data;
+package me.robomonkey.versus.data.adapter;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
@@ -15,7 +15,7 @@ public class ItemStackAdapter implements JsonSerializer<ItemStack>, JsonDeserial
 
     @Override
     public ItemStack deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException {
-        Type mapType = TypeToken.get(Map.class).getType();
+        Type mapType = new TypeToken<Map<String, Object>>() {}.getType();
         Map<String, Object> map = Versus.getGSON().fromJson(jsonElement, mapType);
         map.putIfAbsent("v", Bukkit.getUnsafe().getDataVersion());
 
@@ -23,9 +23,9 @@ public class ItemStackAdapter implements JsonSerializer<ItemStack>, JsonDeserial
             Map<String, Object> itemMeta = (Map<String, Object>) map.get("meta");
             ConfigurationSerializable deserializedMeta = context.deserialize(Versus.getGSON().toJsonTree(itemMeta), ConfigurationSerializable.class);
             map.remove("meta");
-            ItemStack is = ItemStack.deserialize(map);
-            is.setItemMeta((ItemMeta) deserializedMeta);
-            return is;
+            ItemStack itemStack = ItemStack.deserialize(map);
+            itemStack.setItemMeta((ItemMeta) deserializedMeta);
+            return itemStack;
         } else {
             return ItemStack.deserialize(map);
         }
@@ -33,11 +33,12 @@ public class ItemStackAdapter implements JsonSerializer<ItemStack>, JsonDeserial
 
     @Override
     public JsonElement serialize(ItemStack itemStack, Type type, JsonSerializationContext context) {
+        Type mapType = new TypeToken<Map<String, Object>>() {}.getType();
         Map<String, Object> map = itemStack.serialize();
         map.putIfAbsent("v", Bukkit.getUnsafe().getDataVersion());
         if(itemStack.hasItemMeta()) {
-            JsonElement itemMeta = context.serialize(itemStack.getItemMeta(), ConfigurationSerializable.class);
-            map.put("meta", itemMeta.getAsJsonObject());
+            JsonElement meta = context.serialize(itemStack.getItemMeta(), ConfigurationSerializable.class);
+            map.put("meta", meta.getAsJsonObject());
         }
         return Versus.getGSON().toJsonTree(map);
     }
