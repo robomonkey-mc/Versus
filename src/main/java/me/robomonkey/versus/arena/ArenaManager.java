@@ -2,12 +2,10 @@ package me.robomonkey.versus.arena;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.duel.Duel;
-import me.robomonkey.versus.duel.DuelManager;
+import me.robomonkey.versus.kit.Kit;
 import me.robomonkey.versus.util.JsonUtil;
 import me.robomonkey.versus.data.ArenaData;
 import org.bukkit.Location;
@@ -125,4 +123,7 @@ public class ArenaManager {
         arena.removeDuel(duel);
     }
 
+    public void notifyKitSelection(Kit kit, Player whoClicked) {
+
+    }
 }

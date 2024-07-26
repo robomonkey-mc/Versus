@@ -3,6 +3,7 @@ package me.robomonkey.versus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
+import com.samjakob.spigui.SpiGUI;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.arena.command.RootArenaCommand;
 import me.robomonkey.versus.data.adapter.ConfigurationSerializableAdapter;
@@ -23,6 +24,7 @@ public final class Versus extends JavaPlugin {
     private DuelManager duelManager;
     private static Versus instance;
     public static String prefix = "[Versus]";
+    public static SpiGUI spiGUI;
 
     public static void log(String message){
         Bukkit.getServer().getLogger().info(prefix+" "+message);
@@ -59,6 +61,7 @@ public final class Versus extends JavaPlugin {
         // Plugin startup logic
         log("Versus has been enabled!");
         instance = this;
+        spiGUI = new SpiGUI(this);
         duelManager = DuelManager.getInstance();
         arenaManager = ArenaManager.getInstance();
         arenaManager.loadArenas();

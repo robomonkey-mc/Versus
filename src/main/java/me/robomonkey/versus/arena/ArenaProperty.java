@@ -4,7 +4,8 @@ public enum ArenaProperty {
     CENTER_LOCATION("center of the arena"),
     SPAWN_LOCATION_ONE("first spawn location"),
     SPAWN_LOCATION_TWO("second spawn location"),
-    SPECTATE_LOCATION("location for spectators");
+    SPECTATE_LOCATION("location for spectators"),
+    KIT("kit for players");
 
 
     private String friendlyString;
@@ -37,6 +38,8 @@ public enum ArenaProperty {
             case SPECTATE_LOCATION:
                 return "This determines where spectators will be teleported to watch a duel, and where the players will be sent after" +
                         " completing a duel.";
+            case KIT:
+                return "This determines the inventory players will have upon entering a duel in this arena.";
             default:
                 return "";
         }
