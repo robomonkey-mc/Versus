@@ -178,7 +178,7 @@ public class DuelManager {
         ItemStack[] items = {new ItemStack(Material.DIAMOND_AXE, 1),
                 new ItemStack(Material.CROSSBOW),
                 new ItemStack(Material.ARROW, 5),
-                new ItemStack(Material.GOLDEN_APPLE, 1)};
+                new ItemStack(Material.GOLDEN_APPLE, 2)};
         ItemStack[] armor = {
                 new ItemStack(Material.DIAMOND_BOOTS),
                 new ItemStack(Material.DIAMOND_LEGGINGS),
