@@ -7,7 +7,7 @@ import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.duel.Duel;
 import me.robomonkey.versus.kit.Kit;
 import me.robomonkey.versus.util.JsonUtil;
-import me.robomonkey.versus.data.ArenaData;
+import me.robomonkey.versus.arena.data.ArenaData;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -73,7 +73,7 @@ public class ArenaManager {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             loaded = gson.fromJson(reader, arenaListType);
             if(loaded == null) {
-                Versus.log("Arena list is null");
+                Versus.log("Arena list is empty.");
                 return;
             }
             loaded.stream().forEach(arena -> {
@@ -81,7 +81,7 @@ public class ArenaManager {
                 arenaList.add(newArena);
                 Versus.log("Loaded "+ newArena.getName() +" arena.");
             });
-            Versus.log("Successfully loaded arenas");
+            Versus.log("Successfully loaded arenas.");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -98,7 +98,7 @@ public class ArenaManager {
             Gson gson = new Gson();
             gson.toJson(data, arenaListType, writer);
             writer.close();
-            Versus.log("Successfully saved arenas");
+            Versus.log("Successfully saved arenas.");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -124,6 +124,9 @@ public class ArenaManager {
     }
 
     public void notifyKitSelection(Kit kit, Player whoClicked) {
-
+        if(ArenaBuilderCoordinator.getInstance().hasArenaBuilder(whoClicked)) {
+            ArenaBuilder builder = ArenaBuilderCoordinator.getInstance().getArenaBuilder(whoClicked);
+            builder.getTargetArena().setKit(kit);
+        }
     }
 }

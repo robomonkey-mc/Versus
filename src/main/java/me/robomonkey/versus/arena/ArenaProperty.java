@@ -22,6 +22,8 @@ public enum ArenaProperty {
                 return SPAWN_LOCATION_TWO;
             case SPAWN_LOCATION_TWO:
                 return SPECTATE_LOCATION;
+            case SPECTATE_LOCATION:
+                return KIT;
             default:
                 return null;
         }

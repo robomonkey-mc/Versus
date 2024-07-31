@@ -1,12 +1,15 @@
 package me.robomonkey.versus.util;
 
 import me.robomonkey.versus.Versus;
+import me.robomonkey.versus.settings.Setting;
+import me.robomonkey.versus.settings.Settings;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 
 import javax.sound.sampled.Line;
 
@@ -16,7 +19,11 @@ public class MessageUtil {
      * Sends a player a clickable message where the button is contained within %button%
      * Example: "Click %button% to do X!
      */
-    public static String LINE = MessageUtil.color("&7&m-----------------------------");
+    public static String LINE = Settings.getMessage(Setting.LINE);
+    public static String PRIMARY = Settings.getMessage(Setting.PRIMARY_COLOR);
+    public static String HIGHLIGHTED = Settings.getMessage(Setting.HIGHLIGHTED_COLOR);
+    public static String BOLD = Settings.getMessage(Setting.BOLD_COLOR);
+    public static String SUBTLE = Settings.getMessage(Setting.SUBTLE_COLOR);
 
     public static TextComponent getClickableMessage(String message, String commandText, String hoverText, String buttonText){
         String[] splitMessage = message.split("%button%", 3);
@@ -27,9 +34,9 @@ public class MessageUtil {
         String afterText = splitMessage[1];
 
         TextComponent selectButton = createButton(color(buttonText), commandText, hoverText);
-        TextComponent mainMessage = new TextComponent(Versus.color(beforeText));
+        TextComponent mainMessage = new TextComponent(MessageUtil.color(beforeText));
         mainMessage.addExtra(selectButton);
-        mainMessage.addExtra(Versus.color(afterText));
+        mainMessage.addExtra(MessageUtil.color(afterText));
         return mainMessage;
     }
 
@@ -46,9 +53,9 @@ public class MessageUtil {
         String afterText = splitMessage[1];
 
         TextComponent selectButton = createButton(color(buttonText), commandText);
-        TextComponent mainMessage = new TextComponent(Versus.color(beforeText));
+        TextComponent mainMessage = new TextComponent(MessageUtil.color(beforeText));
         mainMessage.addExtra(selectButton);
-        mainMessage.addExtra(Versus.color(afterText));
+        mainMessage.addExtra(MessageUtil.color(afterText));
         return mainMessage;
     }
 
@@ -81,11 +88,20 @@ public class MessageUtil {
     }
 
     public static String color(String message){
+        message = message.replaceAll("&p", PRIMARY)
+                .replaceAll("&h", HIGHLIGHTED)
+                .replaceAll("&bold", BOLD)
+                .replaceAll("&s", SUBTLE);
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 
+    public static String get(String message){
+        message = (Settings.getBoolean(Setting.PREFIX_ENABLED))? Settings.getMessage(Setting.PREFIX) + message: message;
+        return color(message);
+    }
+
     public static String error(String message){
-        return color("&c&lError: &4" + message);
+        return color(Settings.getMessage(Setting.ERROR_PREFIX) + message);
     }
 
 }

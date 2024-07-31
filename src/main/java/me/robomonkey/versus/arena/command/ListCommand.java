@@ -16,8 +16,8 @@ public class ListCommand extends AbstractCommand {
         super("list","arena.list");
         setMaxArguments(1);
         setArgumentRequired(false);
-        setUsage("Get the names of all arenas."+"\n"+
-                "/arena list");
+        setUsage("/arena list");
+        setDescription("Sends a list of all arenas and their locations.");
     }
 
     @Override
@@ -34,8 +34,7 @@ public class ListCommand extends AbstractCommand {
         Location arenaLocation = arena.getCenterLocation();
         int arenaX = (int) arenaLocation.getX(), arenaY = (int) arenaLocation.getY(), arenaZ = (int) arenaLocation.getZ();
         return MessageUtil.color(
-                "&a"+arena.getName()+":" + "\n"+
-                "&7Location: &aX&7 "+arenaX+" &aY&7 "+arenaY+" &aZ&7 " + arenaZ + "\n"
+                "&h"+arena.getName()+": " + "&sX&p "+arenaX+" &sY&p "+arenaY+" &sZ&p " + arenaZ + " &sKit: &p"+arena.getKit().getName()+"\n"
         );
     }
 

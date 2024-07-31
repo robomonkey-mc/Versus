@@ -6,11 +6,13 @@ import com.google.gson.stream.JsonReader;
 import com.samjakob.spigui.SpiGUI;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.arena.command.RootArenaCommand;
-import me.robomonkey.versus.data.adapter.ConfigurationSerializableAdapter;
-import me.robomonkey.versus.data.adapter.ItemStackAdapter;
-import me.robomonkey.versus.data.adapter.ItemStackArrayAdapter;
+import me.robomonkey.versus.duel.command.RootSpectateCommand;
+import me.robomonkey.versus.duel.inventory.adapter.ConfigurationSerializableAdapter;
+import me.robomonkey.versus.duel.inventory.adapter.ItemStackAdapter;
+import me.robomonkey.versus.duel.inventory.adapter.ItemStackArrayAdapter;
 import me.robomonkey.versus.duel.DuelManager;
 import me.robomonkey.versus.duel.command.RootDuelCommand;
+import me.robomonkey.versus.settings.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -61,6 +63,7 @@ public final class Versus extends JavaPlugin {
         // Plugin startup logic
         log("Versus has been enabled!");
         instance = this;
+        Settings.getInstance().registerConfig();
         spiGUI = new SpiGUI(this);
         duelManager = DuelManager.getInstance();
         arenaManager = ArenaManager.getInstance();
@@ -78,6 +81,7 @@ public final class Versus extends JavaPlugin {
     public void registerCommands() {
         new RootArenaCommand();
         new RootDuelCommand();
+        new RootSpectateCommand();
     }
 
 }

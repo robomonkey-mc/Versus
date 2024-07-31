@@ -1,44 +1,63 @@
 package me.robomonkey.versus.arena;
 
 import me.robomonkey.versus.Versus;
+import me.robomonkey.versus.kit.Kit;
+import me.robomonkey.versus.kit.KitManager;
 import me.robomonkey.versus.util.MessageUtil;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
+import java.util.function.BiConsumer;
 
 public class ArenaEditor {
-    private Arena targetArena;
 
-    public ArenaEditor(Arena target){
-        this.targetArena = target;
-    }
-
-    void displayInstructionalMessage(ArenaProperty property, Player player){
+    static void displayInstructionalMessage(Arena targetArena, ArenaProperty property, Player player){
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);
-        String buttonBase = "%button%&6 to select the";
-        String explanationBase = Versus.color("&e&o "+property.toFriendlyString());
-        String explanationOnHover = Versus.color("&7"+property.getExplanation());
+        String buttonBase = MessageUtil.color("%button% &pto select the");
+        String explanationBase = MessageUtil.color("&h "+property.toFriendlyString());
+        String explanationOnHover = MessageUtil.color("&s"+property.getExplanation());
         String commandOnClick = "/arena set " + targetArena.getName() + " " +property.toString();
-        String commandOnHover = Versus.color("&7"+commandOnClick);
-        TextComponent setPropertyMessage = MessageUtil.getClickableMessage(buttonBase, commandOnClick, commandOnHover, "&6&lClick here");
+        String commandOnHover = MessageUtil.color("&s"+commandOnClick);
+        TextComponent setPropertyMessage = MessageUtil.getClickableMessage(buttonBase, commandOnClick, commandOnHover, "&boldClick here");
         TextComponent explanationMessage = MessageUtil.getHoverText(explanationBase, explanationOnHover);
         setPropertyMessage.addExtra(explanationMessage);
         player.spigot().sendMessage(setPropertyMessage);
     }
 
-    public void openEditingMenu(Player player) {
-        player.sendMessage(Versus.color("--------------------------"));
-        Arrays.stream(ArenaProperty.values()).forEach((property) -> displayInstructionalMessage(property, player));
-        String exitButtonText = Versus.color("&4&lEXIT");
-        String exitCommand = "/arena edit";
-        player.spigot().sendMessage(MessageUtil.createButton(exitButtonText, exitCommand, exitCommand));
-        player.sendMessage(Versus.color("--------------------------"));
+    public static void openEditingMenu(Player player, Arena targetArena) {
+        player.sendMessage(MessageUtil.LINE);
+        Arrays.stream(ArenaProperty.values()).forEach((property) -> displayInstructionalMessage(targetArena, property, player));
+        player.sendMessage(MessageUtil.LINE);
     }
 
-    public void alterArenaProperty(ArenaProperty property, Player p) {
-        targetArena.setLocationProperty(property, p.getLocation());
-        p.sendMessage(MessageUtil.color("&7&oYou have successfully set the "+property.toFriendlyString()+" to your current location."));
+    public static void changeArenaProperty(Arena targetArena, ArenaProperty property, Player player, Runnable after) {
+        if(property==ArenaProperty.KIT) {
+            KitManager.getInstance().openKitGUI(player, (kit, whoClicked) -> {
+                changeKit(targetArena, player, kit);
+                after.run();
+            });
+            return;
+        }
+        targetArena.setLocationProperty(property, player.getLocation());
+        player.sendMessage(MessageUtil.get("&sSet the "+property.toFriendlyString()+" for "+targetArena.getName()+"."));
+        after.run();
+    }
+
+    public static void changeArenaProperty(Arena targetArena, ArenaProperty property, Player player) {
+        if(property==ArenaProperty.KIT) {
+            KitManager.getInstance().openKitGUI(player, (kit, whoClicked) -> {
+                changeKit(targetArena, player, kit);
+            });
+            return;
+        }
+        targetArena.setLocationProperty(property, player.getLocation());
+        player.sendMessage(MessageUtil.get("&sYou have successfully set the "+property.toFriendlyString()+"."));
+    }
+
+    public static void changeKit(Arena arena, Player player, Kit kit) {
+        arena.setKit(kit);
+        player.sendMessage(MessageUtil.get("&sYou have successfully set the kit to "+kit.getName()+"."));
     }
 }

@@ -1,10 +1,8 @@
-package me.robomonkey.versus.data;
+package me.robomonkey.versus.arena.data;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-
-import java.io.IOException;
 
 public class LocationData {
     public double x;

@@ -1,0 +1,95 @@
+config-version: 1.0
+
+#-----------------------------------------------------------------------------------------------------------------------------
+#                                                  | MUSIC OPTIONS: |
+#-----------------------------------------------------------------------------------------------------------------------------
+#creative, credits, disc_5, disc_11, disc_13, disc_blocks, disc_cat, disc_chirp, disc_creator,
+#disc_creator_music_box, disc_far, disc_mall, disc_mellohi, disc_otherside, disc_pigstep, disc_precipice, disc_relic,
+# disc_stal, disc_strad, disc_wait, disc_ward
+#-----------------------------------------------------------------------------------------------------------------------------
+#                                                  | COLOR OPTIONS: |
+#-----------------------------------------------------------------------------------------------------------------------------
+#aqua, black, blue, gray, green, lime, orange, purple, red, silver, teal, white, and yellow.
+
+
+
+#Options for general plugin messages.
+messages-general:
+  #How admin commands and messages will be displayed.
+  admin:
+    prefix_enabled: false
+    prefix: "&7[&6Versus&7] "
+    primary_color: "&6"
+    subtle_color: "&7"
+    highlighted_color: "&c"
+    bold_color: "&e&l"
+    line: "&6&m-------------------------------------"
+  #How errors will be displayed stylistically.
+  errors:
+    error_prefix: "&cError: &4"
+    no_permission_message: "You do not have access to that command."
+    only_players_message: "Only players can use this command!"
+
+#Options for dueling behavior, messages, and timings.
+dueling:
+  mechanics:
+    countdown_duration: 5
+    blocked_commands:
+      - 'heal'
+      - 'gamemode'
+      - 'spawn'
+      - 'kit'
+      - 'tp'
+      - 'tpa'
+      - 'tpyes'
+      - 'tpaccept'
+      - 'tpahere'
+      - 'etpa'
+      - 'back'
+      - 'eback'
+      - 'return'
+      - 'ereturn'
+      - 'sethome'
+      - 'esethome'
+      - 'createhome'
+      - 'ecreatehome'
+      - 'espawn'
+      - 'chest'
+      - 'vault'
+      - 'enderchest'
+  effects:
+    blindness_effects_enabled: true
+    victory_effects_enabled: true
+    fireworks_enabled: true
+    #Sets the color for fireworks during a duel. Look at the top of this config file for color options.
+    fireworks_color: "blue"
+  music:
+    fight_music_enabled: true
+    #Sets the music that plays during the duel. Look at the top of this config file for music options.
+    fight_music: 'disc_far'
+    victory_music_enabled: true
+    victory_music: 'disc_pigstep'
+  messages:
+    countdown_title: "EWORKS_ENABLED&7%seconds%"
+    countdown_message: "&6Starting in &e%seconds%&6 seconds"
+    duel_go_message: "&6&lGO!"
+    duel_spectate_message: "&7You are now spectating a duel between &6%player_one% &7and &6%player_two%&7."
+    victory_title_message: "&6&lCONGRATULATIONS"
+    victory_subtitle_message: "%player%"
+    duel_loss_message:  "&6Don't worry about it &c%player%+&6"
+
+arenas:
+
+#This determines how duel requests will appear.
+requesting:
+  messages:
+    denied_request_confirmation: "&7You denied &c%player%'s&6 duel request&7."
+    denied_request: "&c%player% &7has denied your &6duel request&7."
+    sent_request: "&7You just sent a &cduel request&7 to &6%player%."
+    request_notification: "&6%player% &7has invited you to a &cduel!"
+    accept_button: "&7&l[&a&lACCEPT&7&l]"
+    deny_button: "&7&l[&c&lDENY&7&l]"
+    no_arenas_available: "&6You've been placed in a queue. Please wait until an arena is available."
+    cancel_request: "&6You're no longer queueing for a duel."
+
+arena-creation:

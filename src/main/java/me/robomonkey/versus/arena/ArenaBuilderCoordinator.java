@@ -26,8 +26,6 @@ public class ArenaBuilderCoordinator {
     }
 
     public void initiateArenaBuilder(Player builderPlayer, String name){
-        if(hasArenaBuilder(builderPlayer)) return;
-
         ArenaBuilder arenaBuilder = new ArenaBuilder(builderPlayer, name);
         arenaMap.put(builderPlayer, arenaBuilder);
         arenaBuilder.handleNextStep();

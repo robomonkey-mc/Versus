@@ -13,8 +13,9 @@ public class CreateCommand extends AbstractCommand {
 
     public CreateCommand(){
         super("create","arena.create");
-        addTabCompletion("<arena name>");
+        addTabCompletion("<arenaname>");
         setUsage("/arena create <arenaname>");
+        setDescription("Creates a dueling arena and initiates the arena building process.");
         setPlayersOnly(true);
         setStaticTabComplete(true);
         setMaxArguments(1);
@@ -29,7 +30,6 @@ public class CreateCommand extends AbstractCommand {
             return;
         }
         ArenaBuilderCoordinator.getInstance().initiateArenaBuilder(player, arenaName);
-        Versus.log("Arena command registered");
     }
 
     @Override

@@ -1,8 +1,11 @@
 package me.robomonkey.versus.arena;
 
-import com.google.gson.JsonElement;
-import me.robomonkey.versus.data.ArenaData;
+import me.robomonkey.versus.Versus;
+import me.robomonkey.versus.arena.data.ArenaData;
 import me.robomonkey.versus.duel.Duel;
+import me.robomonkey.versus.kit.Kit;
+import me.robomonkey.versus.kit.KitManager;
+import me.robomonkey.versus.util.MessageUtil;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ public class Arena {
     private Location centerLocation;
     private Location spectateLocation;
     private boolean enabled = false;
+    private Kit kit;
 
     /**
      * <h1>Creates Arena.</h1>
@@ -32,6 +36,10 @@ public class Arena {
 
     public String getName() {
         return name;
+    }
+
+    public Kit getKit() {
+        return kit;
     }
 
     public List<Duel> getActiveDuels() {
@@ -73,13 +81,22 @@ public class Arena {
         switch (property) {
             case SPAWN_LOCATION_ONE:
                 spawnLocationOne = value;
+                break;
             case SPAWN_LOCATION_TWO:
                 spawnLocationTwo = value;
+                break;
             case SPECTATE_LOCATION:
                 spectateLocation = value;
+                break;
             case CENTER_LOCATION:
                 centerLocation = value;
+                break;
         }
+        verifySelf();
+    }
+
+    public void setKit(Kit kit) {
+        this.kit = kit;
         verifySelf();
     }
 
@@ -103,7 +120,8 @@ public class Arena {
                 spawnLocationTwo,
                 centerLocation,
                 spectateLocation,
-                enabled);
+                enabled,
+                kit.getName());
     }
 
     public static Arena fromArenaData(ArenaData jsonArena) {
@@ -112,8 +130,8 @@ public class Arena {
         newArena.setLocationProperty(ArenaProperty.SPAWN_LOCATION_ONE, jsonArena.spawnLocationOne.toLocation());
         newArena.setLocationProperty(ArenaProperty.SPAWN_LOCATION_TWO, jsonArena.spawnLocationTwo.toLocation());
         newArena.setLocationProperty(ArenaProperty.SPECTATE_LOCATION, jsonArena.spectateLocation.toLocation());
+        newArena.setKit(KitManager.getInstance().getKit(jsonArena.kit));
         return newArena;
-
     }
 
 }

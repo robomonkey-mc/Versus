@@ -1,12 +1,10 @@
 package me.robomonkey.versus.duel.command;
 
-import me.robomonkey.versus.command.AbstractCommand;
 import me.robomonkey.versus.command.RootCommand;
-import me.robomonkey.versus.duel.RequestManager;
-import me.robomonkey.versus.util.MessageUtil;
+import me.robomonkey.versus.duel.DuelManager;
+import me.robomonkey.versus.duel.request.RequestManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.conversations.PlayerNamePrompt;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -18,8 +16,11 @@ public class RootDuelCommand extends RootCommand {
         super("duel", "duel.general");
         setPermissionRequired(false);
         setPlayersOnly(true);
+        setArgumentRequired(true);
         setUsage("/duel <player>");
-        addBranches(new DenyCommand());
+        setDescription("Sends a duel request.");
+        addBranches(new DenyCommand(), new CancelCommand());
+        setAutonomous(true);
     }
 
     @Override
@@ -28,21 +29,30 @@ public class RootDuelCommand extends RootCommand {
         Player player = (Player) sender;
         String playerNameRequested = args[0];
         Player requested = Bukkit.getPlayer(playerNameRequested);
+        if(requested == null) {
+            error(sender, "'"+playerNameRequested+"' is not online.");
+            return;
+        }
         if(requested.equals(player)) {
             error(sender, "You cannot duel yourself.");
             return;
         }
-        if(requested == null) {
-            error(sender, playerNameRequested+" is not online.");
+        if(DuelManager.getInstance().isDueling(player)) {
+            error(sender, "You cannot duel right now.");
             return;
         }
-        if(requestManager.hasOutgoingRequest(player)){
-            error(sender, "You've");
+        if(DuelManager.getInstance().isDueling(requested) || requestManager.isQueued(requested)) {
+            error(sender, requested.getName()+" cannot duel right now.");
+            return;
         }
         if(requestManager.hasIncomingRequest(player)
                 && requestManager.getRequester(player).equals(requested.getUniqueId())) {
            tryAcceptRequest(player);
            return;
+        }
+        if(requestManager.isQueued(player)) {
+            error(sender, "You cannot send duel requests while queueing for a duel. Type /duel cancel to quit the queue.");
+            return;
         }
         requestManager.sendRequest(player, requested);
     }

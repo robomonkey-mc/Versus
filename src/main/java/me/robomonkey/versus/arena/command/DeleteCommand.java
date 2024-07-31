@@ -4,6 +4,7 @@ import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.arena.Arena;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.command.AbstractCommand;
+import me.robomonkey.versus.util.MessageUtil;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -13,8 +14,8 @@ public class DeleteCommand extends AbstractCommand {
 
     public DeleteCommand(){
         super("delete", "arena.delete");
-        setUsage("/arena delete <arenaName>" + "\n"+
-                "Delete an existing arena.");
+        setUsage("/arena delete <arenaName>");
+        setDescription("Deletes an existing arena.");
         setPlayersOnly(false);
     }
 
@@ -24,7 +25,7 @@ public class DeleteCommand extends AbstractCommand {
         Arena deleteCandidate = ArenaManager.getInstance().getArena(arenaName);
         if(deleteCandidate != null) {
             ArenaManager.getInstance().deleteArena(deleteCandidate);
-            sender.sendMessage(Versus.color("&6&lSuccessfully deleted arena."));
+            sender.sendMessage(MessageUtil.get("&boldSuccessfully deleted &h"+deleteCandidate.getName()));
         }
     }
 

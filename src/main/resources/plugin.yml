@@ -10,3 +10,5 @@ commands:
     description: Create, edit, and delete arenas.
   duel:
     description: Request a duel with another player.
+  spectate:
+    description: Spectate a player in a duel.

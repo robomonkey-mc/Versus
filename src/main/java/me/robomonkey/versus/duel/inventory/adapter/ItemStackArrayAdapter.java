@@ -1,4 +1,4 @@
-package me.robomonkey.versus.data.adapter;
+package me.robomonkey.versus.duel.inventory.adapter;
 
 import com.google.gson.*;
 import org.bukkit.inventory.ItemStack;

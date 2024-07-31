@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import me.robomonkey.versus.data.ArenaData;
 import org.bukkit.plugin.Plugin;
 
 import java.io.*;

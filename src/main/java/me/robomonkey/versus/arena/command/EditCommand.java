@@ -15,8 +15,8 @@ public class EditCommand extends AbstractCommand {
     public EditCommand(){
         super("edit", "arena.edit");
         setPlayersOnly(true);
-        setUsage("/arena edit <arenaname>" + "\n" +
-                "Edit an existing Arena.");
+        setUsage("/arena edit <arenaname>");
+        setDescription("Opens a menu to edit an existing arena.");
         setMaxArguments(1);
     }
 
@@ -29,8 +29,7 @@ public class EditCommand extends AbstractCommand {
         if(fromString == null){
             error(sender, "No arena exists with the name "+arenaName);
         }else{
-            ArenaEditor editor = new ArenaEditor(fromString);
-            editor.openEditingMenu(player);
+            ArenaEditor.openEditingMenu(player, fromString);
         }
     }
 

@@ -1,4 +1,4 @@
-package me.robomonkey.versus.duel;
+package me.robomonkey.versus.duel.inventory;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -19,7 +19,6 @@ public class InventoryManager {
     private File dataFile;
     private Gson inventoryGSON;
     public InventoryManager() {
-        Versus.log("Constructing inventory manager class");
         inventoryMap = new HashMap<>();
         dataFile = JsonUtil.getDataFile(Versus.getInstance(), "inventory.json");
         inventoryGSON = Versus.getGSON();
@@ -30,8 +29,6 @@ public class InventoryManager {
         UUID playerID = player.getUniqueId();
         ItemStack[] items = player.getInventory().getContents();
         inventoryMap.put(playerID, items);
-        Versus.log("Saved inventory of "+player.getName());
-        Versus.log(Arrays.deepToString(items));
     }
 
     public void removeInventory(UUID id) {
@@ -64,23 +61,11 @@ public class InventoryManager {
     public void saveInventoryMap() {
         //TODO FIX THIS METHOD
         Type inventoryMapType = new TypeToken<Map<UUID, ItemStack[]>>(){}.getType();
-        /*inventoryMap.forEach((id, items) -> {
-            InventoryData newData = new InventoryData(items);
-            Versus.log("DATA "+newData.toString());
-            JsonElement jsonInventory = gson.toJsonTree(newData);
-            Versus.log("JSON "+gson.toJson(jsonInventory));
-            serializedMap.put(id, jsonInventory);
-        });
-        Bukkit.getScheduler().runTaskAsynchronously(Versus.getInstance(), () -> {
-
-        });*/
         try {
             FileWriter writer = new FileWriter(dataFile);
-            Versus.log(inventoryGSON.toJson(inventoryMap, inventoryMapType));
             inventoryGSON.toJson(inventoryMap, inventoryMapType, writer);
             writer.close();
         } catch (Exception e) {
-            Versus.log("Object writing failed!");
             e.printStackTrace();
         }
     }
@@ -97,7 +82,6 @@ public class InventoryManager {
                     inventoryMap = loadedMap;
                     Versus.log("Inventories loaded successfully from file.");
                 } else {
-                    Versus.log("Inventory map is null");
                 }
             } catch (Exception e) {
                 e.printStackTrace();

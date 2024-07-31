@@ -1,6 +1,7 @@
 package me.robomonkey.versus.duel.eventlisteners;
 
 import me.robomonkey.versus.duel.DuelManager;
+import me.robomonkey.versus.duel.request.RequestManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

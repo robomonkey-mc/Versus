@@ -1,70 +1,93 @@
 package me.robomonkey.versus.settings;
 
+import me.robomonkey.versus.Versus;
+
 import java.util.Arrays;
 
 public enum Setting {
 
-    CooldownEnterMessage("&6[&4Versus&6]&e You will enter &6passive mode &ein &4%seconds% seconds."),
-    CooldownExitMessage("&6[&4Versus&6]&e You will exit &6passive mode &ein &4%seconds% seconds."),
-    CooldownFailureMessage("&bYou cannot move during the &3cooldown!"),
-    CooldownSpamMessage("&4You must wait until the command is finished!"),
-    PassiveEnterMessage("&6[&4Versus&6]&e You have entered &6passive mode!"),
-    PassiveLeaveMessage("&6[&4Versus&6]&e You have left &6passive mode!"),
-    AttackPassiveMessage("&6[&4Versus&6]&e This player is in &6passive mode!"),
-    AttackWhilePassiveMessage("&6[&4Versus&6]&e You cannot attack while in &6passive mode!"),
-    JoinWhenPassiveMessage("&a&lYou are still in &6&lpassive mode&a&l. Type &6&l/passive &a&lto leave."),
-    PVPCooldownMessage("&4You cannot use /passive during pvp! Please wait %seconds% more seconds."),
-    PeriodicRemindersMessage("&a&lYou are still in &6&lpassive mode&a&l. Type &6&l/passive &a&lto leave."),
-    CooldownTime(5),
-    CooldownPassiveAfterAfkDelay(5),
-    PVPCooldownLength(5),
-    PeriodicRemindersPeriod(300),
-    CooldownActive(true),
-    CanLookDuringCooldown(true),
-    CanMoveDuringCooldown(false),
-    RequiresPermission(false),
-    PassiveWhileAfk(false),
-    CooldownPassiveAfterAfk(true),
-    PassiveByDefault(false),
-    PVPCooldown(true),
-    RecievePassiveJoinMessage(true),
-    PeriodicReminders(true),
-    BlockedCommands(new String[]{"hello", "hello"}),
-    Hello("Hello");
+    ERROR_PREFIX("messages-general.errors"),
+    NO_PERMISSION_MESSAGE("messages-general.errors"),
+    ONLY_PLAYERS_MESSAGE("messages-general.errors"),
+
+    PREFIX("messages-general.admin"),
+    PREFIX_ENABLED("messages-general.admin"),
+    PRIMARY_COLOR("messages-general.admin"),
+    HIGHLIGHTED_COLOR("messages-general.admin"),
+    BOLD_COLOR("messages-general.admin"),
+    SUBTLE_COLOR("messages-general.admin"),
+    LINE("messages-general.admin"),
+
+    DUEL_LOSS_MESSAGE("dueling.messages"),
+    DUEL_SPECTATE_MESSAGE("dueling.messages"),
+    VICTORY_SUBTITLE_MESSAGE("dueling.messages"),
+    VICTORY_TITLE_MESSAGE("dueling.messages"),
+    DUEL_GO_MESSAGE("dueling.messages"),
+    COUNTDOWN_TITLE("dueling.messages"),
+    COUNTDOWN_MESSAGE("dueling.messages"),
+
+    BLOCKED_COMMANDS("dueling.mechanics"),
+    COUNTDOWN_DURATION("dueling.mechanics"),
+
+    VICTORY_EFFECTS_ENABLED("dueling.effects"),
+    FIREWORKS_ENABLED("dueling.effects"),
+    FIREWORKS_COLOR("dueling.effects"),
+    BLINDNESS_EFFECTS_ENABLED("dueling.effects"),
+
+    FIGHT_MUSIC_ENABLED("dueling.music"),
+    FIGHT_MUSIC("dueling.music"),
+    VICTORY_MUSIC_ENABLED("dueling.music"),
+    VICTORY_MUSIC("dueling.music"),
+
+    DENIED_REQUEST("requesting.messages"),
+    DENIED_REQUEST_CONFIRMATION("requesting.messages"),
+    CANCEL_REQUEST("requesting.messages"),
+    SENT_REQUEST("requesting.messages"),
+    REQUEST_NOTIFICATION("requesting.messages"),
+    ACCEPT_BUTTON("requesting.messages"),
+    NO_ARENAS_AVAILABLE("requesting.messages"),
+    DENY_BUTTON("requesting.messages");
 
     public Object value;
-    public Class type;
+    public String path;
 
-    Setting(Object value) {
-        this.value = value;
-        this.type = value.getClass();
+    Setting(String path) {
+        this.path = path + "."+ this.toString().toLowerCase();
     }
 
     public Object getValue() {
-        return this.value;
+        if(value == null) {
+            return getDefaultValue();
+        }
+        return value;
     }
 
-    public Class getType(){
-        return this.getType();
+    public Object getDefaultValue() {
+        return Versus.getInstance().getConfig().getDefaults().get(getPath());
+    }
+
+    public String getPath() {
+        return this.path;
     }
 
     /**
-     * Changes a config setting in plugin memory.
-     * Returns TRUE if change was successful.
-     * Returns FALSE if change request passes in object of different type than the original value.
-     * For example, a setting that's supposed to return a string will return false if the author passes in a integer.
+     * Returns whether a value was successfully set
+     * @param value
+     * @return
      */
-    public <E> boolean setValue(E value) {
-        if(value.getClass().equals(type)){
-            this.value = value;
-            return true;
-        }else{
-            return false;
-        }
+    public boolean setValue(Object value) {
+       if(value.getClass() == getType()) {
+           this.value = value;
+           return true;
+       } else {
+           return false;
+       }
     }
 
-
-
+    public Class getType(){
+        Object savedDefault = Versus.getInstance().getConfig().getDefaults().get(getPath());
+        return savedDefault.getClass();
+    }
 
 }
 

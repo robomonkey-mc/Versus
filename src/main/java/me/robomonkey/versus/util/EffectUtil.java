@@ -10,6 +10,8 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Map;
+
 public class EffectUtil {
 
     public static String fireworkNoDamageFlag = "nodamage";
@@ -18,10 +20,10 @@ public class EffectUtil {
         player.playSound(player.getLocation(), sound, Float.POSITIVE_INFINITY, 1F);
     }
 
-    public static void spawnFireWorks(Location loc, int amount, Integer power) {
+    public static void spawnFireWorks(Location loc, int amount, Integer power, Color color) {
         Firework firework = (Firework) loc.getWorld().spawnEntity(loc, EntityType.FIREWORK_ROCKET);
         FireworkMeta fireworkMeta = firework.getFireworkMeta();
-        fireworkMeta.addEffect(FireworkEffect.builder().withColor(Color.ORANGE).flicker(true).trail(false).build());
+        fireworkMeta.addEffect(FireworkEffect.builder().withColor(color).flicker(true).trail(false).build());
         fireworkMeta.setPower(power);
         for(int i=0; i<amount; i++) {
             Firework firework1 = (Firework) loc.getWorld().spawnEntity(loc, EntityType.FIREWORK_ROCKET);
@@ -42,9 +44,9 @@ public class EffectUtil {
     }
 
 
-    public static void spawnFireWorksDelayed(Location loc, int amount, Integer power, Long delayTicks) {
+    public static void spawnFireWorksDelayed(Location loc, int amount, Integer power, Long delayTicks, Color color) {
         Bukkit.getScheduler().runTaskLater(Versus.getInstance(), () -> {
-            spawnFireWorks(loc, amount, power);
+            spawnFireWorks(loc, amount, power, color);
         }, delayTicks);
     }
 

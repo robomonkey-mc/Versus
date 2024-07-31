@@ -1,6 +1,9 @@
 package me.robomonkey.versus.command;
 
 import me.robomonkey.versus.Versus;
+import me.robomonkey.versus.settings.Setting;
+import me.robomonkey.versus.settings.Settings;
+import me.robomonkey.versus.util.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -8,11 +11,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class AbstractCommand {
-    public static String permissionErrorMessage = Versus.color("&c&lError: &4You do not have permission to use this command!");
-    public static String improperSenderErrorMessage = Versus.color("&c&lError: &4Only players can use this command!");
+    public static String errorPrefix = Settings.getMessage(Setting.ERROR_PREFIX);
+    public static String permissionErrorMessage = errorPrefix + Settings.getMessage(Setting.NO_PERMISSION_MESSAGE);
+    public static String improperSenderErrorMessage = errorPrefix + Settings.getMessage(Setting.ONLY_PLAYERS_MESSAGE);
     String command;
     String permission;
     private String usage = "";
+    private String description = "";
     private Set<AbstractCommand> branches = new HashSet<>();
     boolean playersOnly = false;
     boolean staticTabComplete = false;
@@ -20,6 +25,7 @@ public abstract class AbstractCommand {
     private boolean permissionRequired = true;
     private boolean argumentRequired = true;
     private int maxArguments = -1;
+    private boolean autonomous = false;
 
     public AbstractCommand(String name, String permission) {
         this.permission = permission;
@@ -33,11 +39,28 @@ public abstract class AbstractCommand {
     }
 
     public void error(CommandSender sender, String message) {
-        sender.sendMessage(Versus.color("&c&lError: &4"+message));
+        String errorPrefix = Settings.getMessage(Setting.ERROR_PREFIX);
+        sender.sendMessage(errorPrefix+message);
     }
 
     public String getCommand() {
         return command;
+    }
+
+    public boolean isAutonomous() {
+        return autonomous;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setAutonomous(Boolean autonomous) {
+        this.autonomous = autonomous;
     }
 
     public String getPermission() {
@@ -147,6 +170,24 @@ public abstract class AbstractCommand {
         return maxArguments == -1 || args.length <= maxArguments;
     }
 
+    private String getHelpFromChildren() {
+        String help = "";
+        Iterator<AbstractCommand> branchIter = getBranches().iterator();
+        while(branchIter.hasNext()) {
+            AbstractCommand branch = branchIter.next();
+            help = help + MessageUtil.color("&p"+branch.getUsage()+":&s "+branch.getDescription()) + "\n";
+        }
+        return MessageUtil.LINE + "\n" + help + MessageUtil.LINE;
+    }
+
+    String getHelp() {
+        if(isLeaf() || isAutonomous()) {
+            return MessageUtil.color("&p"+getUsage()+":&s "+getDescription());
+        } else {
+            return getHelpFromChildren();
+        }
+    }
+
     List<String> getBuiltinCompletionOptions(CommandSender sender) {
         List<String> allowedCompletions = getBranches().stream()
                 .filter(branch -> sender.hasPermission(branch.getPermission()))
@@ -168,7 +209,7 @@ public abstract class AbstractCommand {
             String lastArg = args[args.length-1];
             if(staticTabComplete) return completions;
             completions = completions.stream()
-                    .filter(completion -> completion.toLowerCase().startsWith(lastArg.toLowerCase()))
+                    .filter(completion -> completion.toLowerCase().contains(lastArg.toLowerCase()))
                     .collect(Collectors.toList());
             return completions;
         }
@@ -181,26 +222,31 @@ public abstract class AbstractCommand {
         return emptyList;
     }
 
-    public void dispatchCommand(CommandSender sender, String[] args){
+    void dispatchCommand(CommandSender sender, String[] args){
         if(permissionRequired && !sender.hasPermission(permission)){
             sender.sendMessage(permissionErrorMessage);
             return;
         }
-        if(!argumentRequired) {
+        if(isPlayersOnly() && !(sender instanceof Player)){
+            sender.sendMessage(improperSenderErrorMessage);
+            return;
+        }
+        if(args.length == 0 && !argumentRequired) {
             callCommand(sender, args);
             return;
         } else if (args.length == 0) {
-            sender.sendMessage(usage);
+            sender.sendMessage(getHelp());
             return;
         }
         String firstArg = args[0];
-        AbstractCommand branchFromName = getBranchFromName(firstArg);
-        if (isLeaf() || branchFromName == null) {
-            if(isPlayersOnly() && !(sender instanceof Player)){
-                sender.sendMessage(improperSenderErrorMessage);
-                return;
-            }
+        if(isLeaf()) {
             callCommand(sender, args);
+            return;
+        }
+        AbstractCommand branchFromName = getBranchFromName(firstArg);
+        if (branchFromName == null) {
+            if(autonomous) callCommand(sender, args);
+            else error(sender, firstArg+" is not a command. Type /"+command+" for help.");
         } else {
             branchFromName.dispatchCommand(sender, Arrays.copyOfRange(args, 1, args.length));
         }

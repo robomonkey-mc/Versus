@@ -41,7 +41,9 @@ public class Kit {
     }
 
     public Inventory getView(){
-        return Bukkit.createInventory(null, 54, getName());
+        Inventory view = Bukkit.createInventory(null, 54, getName());
+        view.setContents(items);
+        return view;
     }
 
     public ItemStack getDisplayItem() {

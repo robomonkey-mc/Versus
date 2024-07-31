@@ -32,16 +32,17 @@ public class KitData {
      */
     public Kit getKit(String kitName) {
         try {
-            if(!kitsData.isConfigurationSection(kitName)) return null;
             ConfigurationSection kitSection = kitsData.getConfigurationSection(kitName);
+            if(kitSection == null) return null;
             ConfigurationSection kitInventorySection = kitSection.getConfigurationSection("Kit");
+            if(kitInventorySection == null) return null;
             String name = kitSection.getString("Name");
             ItemStack[] items = getInventory(kitInventorySection);
             ItemStack displayItem = kitSection.getItemStack("DisplayItem");
             Kit loadedKit = new Kit(name, items, displayItem);
             return loadedKit;
         } catch (Exception e) {
-            Versus.log("Failed retrieving kit "+kitName+". Check kits.yml for errors.");
+            Versus.error("Failed retrieving kit "+kitName+". Check kits.yml for errors.");
             return null;
         }
     }
@@ -64,7 +65,9 @@ public class KitData {
         ConfigurationSection kitSection = kitsData.createSection(kit.getName());
         kitSection.set("Name", kit.getName());
         kitSection.set("DisplayItem", kit.getDisplayItem());
-        saveInventory(kit.getItems(), kitSection, "Kit");
+        ConfigurationSection inventorySection = kitSection.createSection("Kit");
+        saveInventory(kit.getItems(), inventorySection);
+        saveDataToFile();
     }
 
     public void deleteKit(Kit kit) {
@@ -73,8 +76,13 @@ public class KitData {
         kitsData.set(kitSection.getCurrentPath(), null);
     }
 
+    public void deleteKit(String kitName) {
+        if(!kitsData.isConfigurationSection(kitName)) return;
+        ConfigurationSection kitSection = kitsData.getConfigurationSection(kitName);
+        kitsData.set(kitSection.getCurrentPath(), null);
+    }
+
     public void saveDataToFile(){
-        Versus.log(kitsData.getKeys(true).toString());
         try {
             kitsData.save(kitsFile);
         } catch (IOException e) {
@@ -91,14 +99,13 @@ public class KitData {
         }
     }
 
-    private void saveInventory(ItemStack[] items, ConfigurationSection kitSection, String inventorySection) {
+    private void saveInventory(ItemStack[] items, ConfigurationSection inventorySection) {
         for(int index=0; index<items.length; index++) {
             ItemStack item = items[index];
             if(item!=null){
-                kitSection.set(String.valueOf(index), item);
+                inventorySection.set(String.valueOf(index), item);
             }
         }
-        kitSection.set(inventorySection, items);
     }
 
     /**
@@ -107,7 +114,7 @@ public class KitData {
      */
     private ItemStack[] getInventory(ConfigurationSection inventorySection) throws Exception {
         try {
-            ItemStack[] newInventory = new ItemStack[36];
+            ItemStack[] newInventory = new ItemStack[40];
             inventorySection.getKeys(false).forEach(key -> {
                 int index = Integer.parseInt(key);
                 ItemStack item = inventorySection.getItemStack(key);
@@ -115,6 +122,7 @@ public class KitData {
             });
             return newInventory;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new Exception("Kit item data missing or improperly formatted. Please check kits.yml for formatting.");
         }
     }

@@ -15,7 +15,6 @@ public class RespawnEventListener implements Listener {
     public void onRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
         if(duelManager.hasStoredInventory(player)) {
-            Versus.log("Restored "+player.getName()+"'s inventory from a previous duel.");
             duelManager.restoreInventory(player);
         }
     }

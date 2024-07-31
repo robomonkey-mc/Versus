@@ -2,6 +2,8 @@ package me.robomonkey.versus.arena.command;
 
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.command.RootCommand;
+import me.robomonkey.versus.kit.command.KitDeleteCommand;
+import me.robomonkey.versus.kit.command.SaveKitCommand;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -15,9 +17,11 @@ public class RootArenaCommand extends RootCommand {
                     new DeleteCommand(),
                     new EditCommand(),
                     new SetCommand(),
-                    new ListCommand()
+                    new ListCommand(),
+                    new KitDeleteCommand(),
+                    new SaveKitCommand()
         );
-        setUsage("/arena <create/delete/edit/list/set>");
+        setArgumentRequired(true);
     }
 
     @Override

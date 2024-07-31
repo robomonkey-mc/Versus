@@ -1,6 +1,5 @@
 package me.robomonkey.versus.arena.command;
 
-import com.google.common.collect.Lists;
 import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.arena.*;
 import me.robomonkey.versus.command.AbstractCommand;
@@ -16,6 +15,7 @@ public class SetCommand extends AbstractCommand {
     public SetCommand() {
         super("set", "arena.set");
         setUsage("/arena set <arenaname> <setting_name>");
+        setDescription("Changes a specific setting in existing arena.");
         setPlayersOnly(true);
     }
 
@@ -51,8 +51,7 @@ public class SetCommand extends AbstractCommand {
             return;
         }
 
-        ArenaEditor editor = new ArenaEditor(arenaFromString);
-        editor.alterArenaProperty(property, player);
+        ArenaEditor.changeArenaProperty(arenaFromString, property, player);
     }
 
     @Override
