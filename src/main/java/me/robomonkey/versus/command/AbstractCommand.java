@@ -1,5 +1,7 @@
 package me.robomonkey.versus.command;
 
+import com.samjakob.spigui.menu.SGMenu;
+import com.samjakob.spigui.toolbar.SGToolbarButtonType;
 import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;

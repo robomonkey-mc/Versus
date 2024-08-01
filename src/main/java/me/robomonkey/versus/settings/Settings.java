@@ -176,7 +176,7 @@ public class Settings {
     }
 
     private String getFileConfigVersion() {
-        return config.isSet("ConfigVersion")? config.getString("ConfigVersion"): "1.0";
+        return config.isSet("config-version")? config.getString("config-version"): "0.0";
     }
 
 }

@@ -14,7 +14,7 @@ public class CreateCommand extends AbstractCommand {
     public CreateCommand(){
         super("create","arena.create");
         addTabCompletion("<arenaname>");
-        setUsage("/arena create <arenaname>");
+        setUsage("/versus create <arenaname>");
         setDescription("Creates a dueling arena and initiates the arena building process.");
         setPlayersOnly(true);
         setStaticTabComplete(true);

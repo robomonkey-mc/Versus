@@ -1,9 +1,12 @@
 package me.robomonkey.versus.kit;
 
+import me.robomonkey.versus.Versus;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Objects;
 
 public class Kit {
     private ItemStack displayItem;
@@ -52,5 +55,9 @@ public class Kit {
 
     public void setDisplayItem(ItemStack displayItem) {
         this.displayItem = displayItem;
+    }
+
+    public boolean equals(Kit kit) {
+        return kit != null && name.equals(kit.getName());
     }
 }

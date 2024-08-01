@@ -3,6 +3,7 @@ package me.robomonkey.versus.arena.command;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.command.RootCommand;
 import me.robomonkey.versus.kit.command.KitDeleteCommand;
+import me.robomonkey.versus.kit.command.LoadKitCommand;
 import me.robomonkey.versus.kit.command.SaveKitCommand;
 import org.bukkit.command.CommandSender;
 
@@ -19,7 +20,8 @@ public class RootArenaCommand extends RootCommand {
                     new SetCommand(),
                     new ListCommand(),
                     new KitDeleteCommand(),
-                    new SaveKitCommand()
+                    new SaveKitCommand(),
+                    new LoadKitCommand()
         );
         setArgumentRequired(true);
     }

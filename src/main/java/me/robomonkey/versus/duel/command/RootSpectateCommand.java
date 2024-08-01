@@ -31,6 +31,10 @@ public class RootSpectateCommand extends RootCommand  {
         }
         String playerName = args[0];
         Player selectedPlayer = Bukkit.getPlayer(playerName);
+        if(selectedPlayer.equals(player)){
+            error(sender, "You can't spectate yourself");
+            return;
+        }
         if(selectedPlayer == null){
             error(sender, "'"+playerName+"' is not online.");
             return;

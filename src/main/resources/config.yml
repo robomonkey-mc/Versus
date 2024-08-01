@@ -1,5 +1,15 @@
 config-version: 1.0
 
+
+# $$$$$$\ $$\   $$\ $$$$$$$$\  $$$$$$\
+# \_$$  _|$$$\  $$ |$$  _____|$$  __$$\
+#   $$ |  $$$$\ $$ |$$ |      $$ /  $$ |
+#   $$ |  $$ $$\$$ |$$$$$\    $$ |  $$ |
+#   $$ |  $$ \$$$$ |$$  __|   $$ |  $$ |
+#   $$ |  $$ |\$$$ |$$ |      $$ |  $$ |
+# $$$$$$\ $$ | \$$ |$$ |       $$$$$$  |
+# \______|\__|  \__|\__|       \______/
+#
 #-----------------------------------------------------------------------------------------------------------------------------
 #                                                  | MUSIC OPTIONS: |
 #-----------------------------------------------------------------------------------------------------------------------------
@@ -12,6 +22,14 @@ config-version: 1.0
 #aqua, black, blue, gray, green, lime, orange, purple, red, silver, teal, white, and yellow.
 
 
+
+
+
+
+#  _____  _____  _____  _____  _____  _____  __
+#|   __||   __||   | ||   __|| __  ||  _  ||  |
+#|  |  ||   __|| | | ||   __||    -||     ||  |__
+#|_____||_____||_|___||_____||__|__||__|__||_____|
 
 #Options for general plugin messages.
 messages-general:
@@ -29,6 +47,12 @@ messages-general:
     error_prefix: "&cError: &4"
     no_permission_message: "You do not have access to that command."
     only_players_message: "Only players can use this command!"
+
+
+#  ____   _____  _____  __     _  _____  _____
+#|    \ |  |  ||   __||  |   |_||   | ||   __|
+#|  |  ||  |  ||   __||  |__ | || | | ||  |  |
+#|____/ |_____||_____||_____||_||_|___||_____|
 
 #Options for dueling behavior, messages, and timings.
 dueling:
@@ -74,11 +98,16 @@ dueling:
     countdown_message: "&6Starting in &e%seconds%&6 seconds"
     duel_go_message: "&6&lGO!"
     duel_spectate_message: "&7You are now spectating a duel between &6%player_one% &7and &6%player_two%&7."
-    victory_title_message: "&6&lCONGRATULATIONS"
+    victory_title_message: "&6&VICTORY"
     victory_subtitle_message: "%player%"
     duel_loss_message:  "&6Don't worry about it &c%player%+&6"
 
-arenas:
+
+#  _____  _____  _____  _____  _____  _____  _____  _  _____  _____
+#| __  ||   __||     ||  |  ||   __||   __||_   _||_||   | ||   __|
+#|    -||   __||  |  ||  |  ||   __||__   |  | |  | || | | ||  |  |
+#|__|__||_____||__  _||_____||_____||_____|  |_|  |_||_|___||_____|
+#                 |__|
 
 #This determines how duel requests will appear.
 requesting:

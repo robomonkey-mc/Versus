@@ -1,15 +1,13 @@
 package me.robomonkey.versus.arena;
 
-import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.kit.Kit;
-import me.robomonkey.versus.kit.KitManager;
+import me.robomonkey.versus.kit.KitSelectionGUI;
 import me.robomonkey.versus.util.MessageUtil;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
-import java.util.function.BiConsumer;
 
 public class ArenaEditor {
 
@@ -34,10 +32,11 @@ public class ArenaEditor {
 
     public static void changeArenaProperty(Arena targetArena, ArenaProperty property, Player player, Runnable after) {
         if(property==ArenaProperty.KIT) {
-            KitManager.getInstance().openKitGUI(player, (kit, whoClicked) -> {
+            KitSelectionGUI kitGUI = new KitSelectionGUI(player, (kit, whoClicked) -> {
                 changeKit(targetArena, player, kit);
                 after.run();
             });
+            kitGUI.open();
             return;
         }
         targetArena.setLocationProperty(property, player.getLocation());
@@ -47,9 +46,10 @@ public class ArenaEditor {
 
     public static void changeArenaProperty(Arena targetArena, ArenaProperty property, Player player) {
         if(property==ArenaProperty.KIT) {
-            KitManager.getInstance().openKitGUI(player, (kit, whoClicked) -> {
+            KitSelectionGUI kitGUI = new KitSelectionGUI(player, (kit, whoClicked) -> {
                 changeKit(targetArena, player, kit);
             });
+            kitGUI.open();
             return;
         }
         targetArena.setLocationProperty(property, player.getLocation());
@@ -58,6 +58,6 @@ public class ArenaEditor {
 
     public static void changeKit(Arena arena, Player player, Kit kit) {
         arena.setKit(kit);
-        player.sendMessage(MessageUtil.get("&sYou have successfully set the kit to "+kit.getName()+"."));
+        player.sendMessage(MessageUtil.get("&sSet the kit to "+kit.getName()+" for "+arena.getName()+"."));
     }
 }

@@ -1,21 +1,19 @@
 package me.robomonkey.versus.kit;
 
-import com.samjakob.spigui.SpiGUI;
 import com.samjakob.spigui.buttons.SGButton;
 import com.samjakob.spigui.buttons.SGButtonListener;
 import com.samjakob.spigui.item.ItemBuilder;
 import com.samjakob.spigui.menu.SGMenu;
+import com.samjakob.spigui.toolbar.SGToolbarButtonType;
 import me.robomonkey.versus.Versus;
-import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.util.MessageUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class KitManager {
     private KitData kitData;
@@ -50,22 +48,6 @@ public class KitManager {
         return kitItems;
     }
 
-    public void openKitGUI(Player player, BiConsumer<Kit, Player> onSelect) {
-        SGMenu kitGUI = Versus.spiGUI.create("Kits (Page {currentPage}/{maxPage})", 2);
-        kitGUI.setAutomaticPaginationEnabled(true);
-        verifyDefaultKit();
-        Versus.log("Verified default kit");
-        kitData.getAllKits().stream()
-                .forEach(kit -> {
-                    SGButtonListener listener = (inventoryClickEvent) -> {
-                        onSelect.accept(kit, player);
-                        player.closeInventory();
-                    };
-                    kitGUI.addButton(getKitButton(kit, listener));
-                });
-        player.openInventory(kitGUI.getInventory());
-    }
-
     public void add(Kit kit) {
         kitData.saveKit(kit);
     }
@@ -89,24 +71,22 @@ public class KitManager {
         return retrievedKit == null? kitData.getKit("Default"): retrievedKit;
     }
 
+    public boolean isKit(String kitName) {
+        Kit retrievedKit = kitData.getKit(kitName);
+        return retrievedKit != null;
+    }
+
     public void remove(String kit) {
         kitData.deleteKit(kit);
     }
 
-    private void verifyDefaultKit() {
+    void verifyDefaultKit() {
         if(kitData.getKit("Default") == null) {
             add("Default", getDefaultItems(), new ItemStack(Material.DIAMOND_SWORD));
         }
     }
 
-    private SGButton getKitButton(Kit kit, SGButtonListener listener) {
-        ItemStack displayItem = kit.getDisplayItem();
-        ItemStack icon = new ItemBuilder(displayItem.getType())
-                .name(MessageUtil.color("&h"+kit.getName()))
-                .lore(MessageUtil.color("&pClick to select &o"+kit.getName()+"&6!"))
-                .build();
-        SGButton button = new SGButton(icon);
-        button.withListener(listener);
-        return button;
+    Kit getDefaultKit() {
+        return kitData.getKit("Default");
     }
 }
