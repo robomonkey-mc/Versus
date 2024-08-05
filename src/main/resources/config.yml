@@ -35,22 +35,22 @@ config-version: 1.0
 messages-general:
   #How admin commands and messages will be displayed.
   admin:
-    #determines the prefix for admin messages.
+    #Enables or disables the prefix for admin messages.
     prefix_enabled: false
     prefix: "&7[&6Versus&7] "
     #Sets the primary color for admin messages
     primary_color: "&6"
-    #sets the color for text meant to disappear into the background like confirmation messages
+    #Sets the color for text meant to disappear into the background like confirmation messages.
     subtle_color: "&7"
-    #sets the color used to highlight key terms like player names
+    #Sets the color for text highlighting key terms like player names.
     highlighted_color: "&c"
-    #set the color for important text, like buttons or headings
+    #Sets the color for important text, like buttons or headings.
     bold_color: "&e&l"
-    #set the styling for line elements in all chat messages
+    #Sets the styling for line elements in all chat messages.
     line: "&6&m-------------------------------------"
   #How errors will be displayed stylistically.
   errors:
-    #sets the text and color proceeding error messages
+    #Sets the text and color proceeding error messages in chat.
     error_prefix: "&cError: &4"
     no_permission_message: "You do not have access to that command."
     only_players_message: "Only players can use this command!"
@@ -65,7 +65,7 @@ messages-general:
 dueling:
   mechanics:
     countdown_duration: 5
-    #sets the command that will be blocked during a duel
+    #List of the commands that will be blocked during a duel.
     blocked_commands:
       - 'heal'
       - 'gamemode'
@@ -89,6 +89,7 @@ dueling:
       - 'chest'
       - 'vault'
       - 'enderchest'
+  #Options for potion effects, firework effects activated during a duel.
   effects:
     #enable or disable blindness when entering a duel
     blindness_effects_enabled: true
@@ -98,28 +99,30 @@ dueling:
     fireworks_enabled: true
     #Sets the color for fireworks during a duel. Look at the top of this config file for color options.
     fireworks_color: "blue"
+  #Options for music played during a duel.
   music:
-    #enable or disable music during a duel
+    #enable or disable music during a duel.
     fight_music_enabled: true
     #Sets the music that plays during the duel. Look at the top of this config file for music options.
     fight_music: 'disc_far'
     #enable or disable music playing after a player wins a duel
     victory_music_enabled: true
     victory_music: 'disc_pigstep'
+  #Options for char messages and titles (on-screen text) displayed during a duel.
   messages:
     #The text that appears on a player's screen during the duel countdown.
     countdown_title: "&7%seconds%"
-    #The message sent to each pkayer in chat during the duel countdown.
+    #The chat message sent to each pkayer in chat during the duel countdown.
     countdown_message: "&6Starting in &e%seconds%&6 seconds"
     #The text that appears on a player's screen when a duel starts.
     duel_go_message: "&6&lGO!"
-    #The message sent to a spectator entering the arena.
+    #The chat message sent to a spectator entering the arena.
     duel_spectate_message: "&7You are now spectating a duel between &6%player_one% &7and &6%player_two%&7."
     #The text that appears on a player's screen after winning a duel.
     victory_title_message: "&6&lVICTORY"
     #The subtitle for the text that appears on a player's screen after winning a duel.
     victory_subtitle_message: "%player%"
-    #The message a player recieves when respawning after losing a duel.
+    #The chat message a player recieves when respawning after losing a duel.
     duel_loss_message:  "&6Don't worry about it &c%player%."
 
 
@@ -129,22 +132,22 @@ dueling:
 #|__|__||_____||__  _||_____||_____||_____|  |_|  |_||_|___||_____|
 #                 |__|
 
-#This determines how duel requests will appear.
+#Options for duel requesting chat messages and styling.
 requesting:
   messages:
-    #The message sent to a player after choosing to deny a request to duel.
+    #The chat message sent to a player after choosing to deny a request to duel.
     denied_request_confirmation: "&7You denied &c%player%'s&6 duel request&7."
-    #The message sent to a player after someone else denies their request to duel.
+    #The chat message sent to a player after someone else denies their request to duel.
     denied_request: "&c%player% &7has denied your &6duel request&7."
-    #The message sent to a player after sending a request to duel.
+    #The chat message sent to a player after sending a request to duel.
     sent_request: "&7You just sent a &cduel request&7 to &6%player%."
-    #The message sent to a player after recieving a request to duel.
+    #The chat message sent to a player after recieving a request to duel.
     request_notification: "&6%player% &7has invited you to a &cduel!"
     #Sets the styling for the text a player clicks to accept a duel request.
     accept_button: "&7&l[&a&lACCEPT&7&l]"
     #Sets the styling for the text a player clicks to deny a duel request.
     deny_button: "&7&l[&c&lDENY&7&l]"
-    #The message sent to a player when no arenas are available.
+    #The chat message sent to a player when no arenas are available.
     no_arenas_available: "&6You've been placed in a queue. Please wait until an arena is available."
-    #The message sent to a player after cancelling a queue to duel.
+    #The chat message sent to a player after cancelling a queue to duel.
     cancel_request: "&6You're no longer queueing for a duel."
