@@ -136,11 +136,15 @@ requesting:
     denied_request_confirmation: "&7You denied &c%player%'s&6 duel request&7."
     #The message sent to a player after someone else denies their request to duel.
     denied_request: "&c%player% &7has denied your &6duel request&7."
+    #The message sent to a player after sending a request to duel.
     sent_request: "&7You just sent a &cduel request&7 to &6%player%."
+    #The message sent to a player after recieving a request to duel.
     request_notification: "&6%player% &7has invited you to a &cduel!"
+    #Sets the styling for the text a player clicks to accept a duel request.
     accept_button: "&7&l[&a&lACCEPT&7&l]"
+    #Sets the styling for the text a player clicks to deny a duel request.
     deny_button: "&7&l[&c&lDENY&7&l]"
+    #The message sent to a player when no arenas are available.
     no_arenas_available: "&6You've been placed in a queue. Please wait until an arena is available."
+    #The message sent to a player after cancelling a queue to duel.
     cancel_request: "&6You're no longer queueing for a duel."
-
-arena-creation:
