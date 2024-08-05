@@ -35,15 +35,22 @@ config-version: 1.0
 messages-general:
   #How admin commands and messages will be displayed.
   admin:
+    #determines the prefix for admin messages.
     prefix_enabled: false
     prefix: "&7[&6Versus&7] "
+    #Sets the primary color for admin messages
     primary_color: "&6"
+    #sets the color for text meant to disappear into the background like confirmation messages
     subtle_color: "&7"
+    #sets the color used to highlight key terms like player names
     highlighted_color: "&c"
+    #set the color for important text, like buttons or headings
     bold_color: "&e&l"
+    #set the styling for line elements in all chat messages
     line: "&6&m-------------------------------------"
   #How errors will be displayed stylistically.
   errors:
+    #sets the text and color proceeding error messages
     error_prefix: "&cError: &4"
     no_permission_message: "You do not have access to that command."
     only_players_message: "Only players can use this command!"
@@ -58,6 +65,7 @@ messages-general:
 dueling:
   mechanics:
     countdown_duration: 5
+    #sets the command that will be blocked during a duel
     blocked_commands:
       - 'heal'
       - 'gamemode'
@@ -82,16 +90,22 @@ dueling:
       - 'vault'
       - 'enderchest'
   effects:
+    #enable or disable blindness when entering a duel
     blindness_effects_enabled: true
+    #enable or disable the effects played after a duel victory
     victory_effects_enabled: true
+    #Enable or disable all firework effects during a duel
     fireworks_enabled: true
     #Sets the color for fireworks during a duel. Look at the top of this config file for color options.
     fireworks_color: "blue"
   music:
+    #enable or disable music during a duel
     fight_music_enabled: true
     #Sets the music that plays during the duel. Look at the top of this config file for music options.
     fight_music: 'disc_far'
+    #enable or disable music playing after a player wins a duel
     victory_music_enabled: true
+    
     victory_music: 'disc_pigstep'
   messages:
     countdown_title: "EWORKS_ENABLED&7%seconds%"
