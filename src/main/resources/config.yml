@@ -111,10 +111,15 @@ dueling:
     countdown_title: "&7%seconds%"
     #The message sent to each pkayer in chat during the duel countdown.
     countdown_message: "&6Starting in &e%seconds%&6 seconds"
+    #The text that appears on a player's screen when a duel starts.
     duel_go_message: "&6&lGO!"
+    #The message sent to a spectator entering the arena.
     duel_spectate_message: "&7You are now spectating a duel between &6%player_one% &7and &6%player_two%&7."
+    #The text that appears on a player's screen after winning a duel.
     victory_title_message: "&6&lVICTORY"
+    #The subtitle for the text that appears on a player's screen after winning a duel.
     victory_subtitle_message: "%player%"
+    #The message a player recieves when respawning after losing a duel.
     duel_loss_message:  "&6Don't worry about it &c%player%."
 
 
@@ -127,7 +132,9 @@ dueling:
 #This determines how duel requests will appear.
 requesting:
   messages:
+    #The message sent to a player after choosing to deny a request to duel.
     denied_request_confirmation: "&7You denied &c%player%'s&6 duel request&7."
+    #The message sent to a player after someone else denies their request to duel.
     denied_request: "&c%player% &7has denied your &6duel request&7."
     sent_request: "&7You just sent a &cduel request&7 to &6%player%."
     request_notification: "&6%player% &7has invited you to a &cduel!"
