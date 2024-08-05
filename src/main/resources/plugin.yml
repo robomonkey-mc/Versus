@@ -7,8 +7,8 @@ authors: [ robomonkey ]
 description: Dueling optimized for Semi-Vanilla servers and casual fun.
 commands:
   arena:
-    description: Create, edit, and delete arenas.
+    description: Create, edit, and delete dueling arenas.
   duel:
-    description: Request a duel with another player.
+    description: Request to duel with another player.
   spectate:
     description: Spectate a player in a duel.
