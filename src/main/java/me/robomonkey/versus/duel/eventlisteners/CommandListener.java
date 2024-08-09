@@ -13,10 +13,11 @@ import org.bukkit.event.player.PlayerCommandSendEvent;
 
 public class CommandListener implements Listener {
 
+    public static String BYPASS_BLOCKED_COMMANDS = "versus.bypass";
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event){
         if(DuelManager.getInstance().isDueling(event.getPlayer())) {
-            if(Settings.getInstance()
+            if(!event.getPlayer().hasPermission(BYPASS_BLOCKED_COMMANDS) && Settings.getInstance()
                     .getStringList(Setting.BLOCKED_COMMANDS).stream()
                     .anyMatch(command -> event.getMessage().contains(command))) {
                 event.setCancelled(true);
