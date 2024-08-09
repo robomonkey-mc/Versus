@@ -12,22 +12,25 @@ import java.util.Arrays;
 public class ArenaEditor {
 
     static void displayInstructionalMessage(Arena targetArena, ArenaProperty property, Player player){
-        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);
-        String buttonBase = MessageUtil.color("%button% &pto select the");
+        String buttonBase = MessageUtil.color("%button% &sto select the");
         String explanationBase = MessageUtil.color("&h "+property.toFriendlyString());
         String explanationOnHover = MessageUtil.color("&s"+property.getExplanation());
         String commandOnClick = "/arena set " + targetArena.getName() + " " +property.toString();
         String commandOnHover = MessageUtil.color("&s"+commandOnClick);
-        TextComponent setPropertyMessage = MessageUtil.getClickableMessage(buttonBase, commandOnClick, commandOnHover, "&boldClick here");
+        TextComponent setPropertyMessage = MessageUtil.getClickableMessage(buttonBase, commandOnClick, commandOnHover, "&boldCLICK HERE");
         TextComponent explanationMessage = MessageUtil.getHoverText(explanationBase, explanationOnHover);
         setPropertyMessage.addExtra(explanationMessage);
         player.spigot().sendMessage(setPropertyMessage);
     }
 
     public static void openEditingMenu(Player player, Arena targetArena) {
-        player.sendMessage(MessageUtil.LINE);
+        String message = MessageUtil.get("&pEditing &h"+targetArena.getName()+"&p. &s[%button%&s]");
+        String visitCommand = "/arena visit "+targetArena.getName();
+        String hoverText = MessageUtil.color("&sVisit "+targetArena.getName()+".");
+        TextComponent messageReplaced = MessageUtil.getClickableMessage(message, visitCommand, hoverText,MessageUtil.get("&boldVISIT"));
+        player.spigot().sendMessage(messageReplaced);
         Arrays.stream(ArenaProperty.values()).forEach((property) -> displayInstructionalMessage(targetArena, property, player));
-        player.sendMessage(MessageUtil.LINE);
+        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);
     }
 
     public static void changeArenaProperty(Arena targetArena, ArenaProperty property, Player player, Runnable after) {

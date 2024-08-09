@@ -1,6 +1,8 @@
 package me.robomonkey.versus.arena;
 
 import me.robomonkey.versus.Versus;
+import me.robomonkey.versus.settings.Setting;
+import me.robomonkey.versus.settings.Settings;
 import me.robomonkey.versus.util.EffectUtil;
 import me.robomonkey.versus.util.MessageUtil;
 import org.bukkit.Color;
@@ -31,6 +33,7 @@ public class ArenaBuilder {
             finalizeArena();
         } else {
             ArenaEditor.displayInstructionalMessage(targetArena, currentProperty, builder);
+            builder.playSound(builder.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);
         }
     }
 
@@ -41,9 +44,9 @@ public class ArenaBuilder {
     }
 
     private void finalizeArena(){
-        builder.sendMessage(MessageUtil.get("&pYou have completed the construction of the &bold" + targetArena.getName() + "&p arena!"));
+        builder.sendMessage(MessageUtil.get("&pYou have completed the construction of the &h" + targetArena.getName() + "&p arena!"));
         EffectUtil.playSound(builder, Sound.ENTITY_CAT_AMBIENT);
-        EffectUtil.spawnFireWorks(builder.getLocation(), Color.YELLOW);
+        EffectUtil.spawnFireWorks(builder.getLocation(), Settings.getColor(Setting.FIREWORKS_COLOR));
         ArenaManager.getInstance().addArena(targetArena);
         coordinator.removeArenaBuilder(builder);
     }

@@ -21,7 +21,8 @@ public class RootArenaCommand extends RootCommand {
                     new ListCommand(),
                     new KitDeleteCommand(),
                     new SaveKitCommand(),
-                    new LoadKitCommand()
+                    new LoadKitCommand(),
+                    new VisitCommand()
         );
         setArgumentRequired(true);
     }

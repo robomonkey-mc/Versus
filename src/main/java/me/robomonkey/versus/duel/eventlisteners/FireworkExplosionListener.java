@@ -14,7 +14,7 @@ public class FireworkExplosionListener implements Listener {
 
     @EventHandler
     public void onExplosion(EntityDamageByEntityEvent event) {
-        if(event.getDamager().getType() == EntityType.FIREWORK_ROCKET) {
+        if(event.getDamager() instanceof Firework) {
             Firework firework = (Firework) event.getDamager();
             if(firework.hasMetadata(EffectUtil.fireworkNoDamageFlag)) event.setCancelled(true);
         }

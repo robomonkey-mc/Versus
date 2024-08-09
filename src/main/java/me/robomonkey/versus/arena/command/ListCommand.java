@@ -22,6 +22,10 @@ public class ListCommand extends AbstractCommand {
 
     @Override
     public void callCommand(CommandSender sender, String[] args) {
+        if(ArenaManager.getInstance().getAllArenas().size() == 0) {
+            sender.sendMessage(MessageUtil.get("&sThere are no &pactive arenas&s currently."));
+            return;
+        }
         sender.sendMessage(MessageUtil.LINE);
         ArenaManager.getInstance().getAllArenas().forEach(arena -> {
             String description = getArenaDescription(arena);

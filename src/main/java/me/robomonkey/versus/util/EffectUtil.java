@@ -10,23 +10,35 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Arrays;
 import java.util.Map;
 
 public class EffectUtil {
 
     public static String fireworkNoDamageFlag = "nodamage";
+    public static EntityType FIREWORK_TYPE;
+    static {
+        EntityType type;
+        try {
+            type = EntityType.valueOf("FIREWORK_ROCKET");
+        } catch (IllegalArgumentException e) {
+            // Fallback to the old version if FIREWORK_ROCKET is not found
+            type = EntityType.valueOf("FIREWORK");
+        }
+        FIREWORK_TYPE = type;
+    }
 
     public static void playSound(Player player, Sound sound){
         player.playSound(player.getLocation(), sound, Float.POSITIVE_INFINITY, 1F);
     }
 
     public static void spawnFireWorks(Location loc, int amount, Integer power, Color color) {
-        Firework firework = (Firework) loc.getWorld().spawnEntity(loc, EntityType.FIREWORK_ROCKET);
+        Firework firework = (Firework) loc.getWorld().spawnEntity(loc, FIREWORK_TYPE);
         FireworkMeta fireworkMeta = firework.getFireworkMeta();
         fireworkMeta.addEffect(FireworkEffect.builder().withColor(color).flicker(true).trail(false).build());
         fireworkMeta.setPower(power);
         for(int i=0; i<amount; i++) {
-            Firework firework1 = (Firework) loc.getWorld().spawnEntity(loc, EntityType.FIREWORK_ROCKET);
+            Firework firework1 = (Firework) loc.getWorld().spawnEntity(loc, FIREWORK_TYPE);
             firework1.setFireworkMeta(fireworkMeta);
             firework1.setMetadata(fireworkNoDamageFlag, new FixedMetadataValue(Versus.getInstance(), true));
             firework1.detonate();
@@ -34,7 +46,7 @@ public class EffectUtil {
     }
 
     public static void spawnFireWorks(Location loc, Color color) {
-        Firework firework = (Firework) loc.getWorld().spawnEntity(loc, EntityType.FIREWORK_ROCKET);
+        Firework firework = (Firework) loc.getWorld().spawnEntity(loc, FIREWORK_TYPE);
         FireworkMeta fireworkMeta = firework.getFireworkMeta();
         fireworkMeta.addEffect(FireworkEffect.builder().withColor(color).flicker(true).trail(false).build());
         fireworkMeta.setPower(50);

@@ -27,7 +27,7 @@ public class EditCommand extends AbstractCommand {
         ArenaManager arenaManager = ArenaManager.getInstance();
         Arena fromString = arenaManager.getArena(arenaName);
         if(fromString == null){
-            error(sender, "No arena exists with the name "+arenaName);
+            error(sender, "No arena exists with the name '"+arenaName+"'.");
         }else{
             ArenaEditor.openEditingMenu(player, fromString);
         }

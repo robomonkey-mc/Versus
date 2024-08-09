@@ -45,7 +45,7 @@ messages-general:
     #Sets the color for text highlighting key terms like player names.
     highlighted_color: "&c"
     #Sets the color for important text, like buttons or headings.
-    bold_color: "&e&l"
+    bold_color: "&6&l"
     #Sets the styling for line elements in all chat messages.
     line: "&6&m-------------------------------------"
   #How errors will be displayed stylistically.

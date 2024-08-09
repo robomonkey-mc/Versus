@@ -46,7 +46,7 @@ public class SetCommand extends AbstractCommand {
         Arena arenaFromString = arenaManager.getArena(arenaName);
 
         if(arenaFromString == null) {
-            error(player, "No arena exists with the name. " + arenaName);
+            error(player, "No arena exists with the name '"+arenaName+"'.");
             return;
         }
 
