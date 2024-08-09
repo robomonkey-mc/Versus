@@ -52,7 +52,6 @@ public class Request {
     }
 
     public boolean contains(Player player) {
-        Versus.log("Request contains player: " + (requested.equals(player.getUniqueId()) || requesting.equals(player.getUniqueId())));
         return requested.equals(player.getUniqueId()) || requesting.equals(player.getUniqueId());
     }
 }

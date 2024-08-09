@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class DeleteCommand extends AbstractCommand {
 
     public DeleteCommand(){
-        super("delete", "arena.delete");
+        super("delete", "verus.arena.delete");
         setUsage("/arena delete <arenaName>");
         setDescription("Deletes an existing arena.");
         setPlayersOnly(false);

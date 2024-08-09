@@ -11,7 +11,7 @@ import java.util.List;
 
 public class SaveKitCommand extends AbstractCommand {
     public SaveKitCommand() {
-        super("savekit", "arena.admin.kit");
+        super("savekit", "versus.kit.save");
         setPlayersOnly(true);
         setStaticTabComplete(true);
         this.setMaxArguments(1);

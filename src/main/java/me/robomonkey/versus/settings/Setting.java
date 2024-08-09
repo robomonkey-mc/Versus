@@ -19,12 +19,12 @@ public enum Setting {
     LINE("messages-general.admin"),
 
     DUEL_LOSS_MESSAGE("dueling.messages"),
-    DUEL_SPECTATE_MESSAGE("dueling.messages"),
     VICTORY_SUBTITLE_MESSAGE("dueling.messages"),
     VICTORY_TITLE_MESSAGE("dueling.messages"),
     DUEL_GO_MESSAGE("dueling.messages"),
     COUNTDOWN_TITLE("dueling.messages"),
     COUNTDOWN_MESSAGE("dueling.messages"),
+    DUEL_SPECTATE_MESSAGE("dueling.messages"),
 
     BLOCKED_COMMANDS("dueling.mechanics"),
     COUNTDOWN_DURATION("dueling.mechanics"),

@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class EditCommand extends AbstractCommand {
 
     public EditCommand(){
-        super("edit", "arena.edit");
+        super("edit", "versus.arena.edit");
         setPlayersOnly(true);
         setUsage("/arena edit <arenaname>");
         setDescription("Opens a menu to edit an existing arena.");

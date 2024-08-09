@@ -73,7 +73,7 @@ public class ArenaManager {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             loaded = gson.fromJson(reader, arenaListType);
             if(loaded == null) {
-                Versus.log("Arena list is empty.");
+                Versus.log("There are no arenas in arena.json.");
                 return;
             }
             loaded.stream().forEach(arena -> {

@@ -10,7 +10,7 @@ import java.util.List;
 public class DenyCommand extends AbstractCommand {
 
     public DenyCommand() {
-        super("deny","duel.deny");
+        super("deny","versus.duel");
         setPlayersOnly(true);
         setPermissionRequired(false);
         setArgumentRequired(false);

@@ -15,7 +15,7 @@ public class KitDeleteCommand extends AbstractCommand {
     KitManager kitManager = KitManager.getInstance();
 
     public KitDeleteCommand() {
-        super("deletekit", "arena.admin.kit");
+        super("deletekit", "versus.kit.delete");
         setUsage("/arena deletekit <name>");
         setDescription("Deletes a kit of a given name.");
     }

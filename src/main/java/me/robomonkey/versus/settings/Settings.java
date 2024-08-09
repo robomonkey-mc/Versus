@@ -151,7 +151,7 @@ public class Settings {
             saveSetting(setting);
         }
         saveConfigToFile();
-        Versus.log("Config has been updated");
+        Versus.log("Config has been updated.");
     }
 
     private void loadSetting(Setting setting) throws Exception {

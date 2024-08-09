@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class RootArenaCommand extends RootCommand {
 
     public RootArenaCommand() {
-        super("arena", "arena.admin");
+        super("arena", "versus.arena");
         addBranches(new CreateCommand(),
                     new DeleteCommand(),
                     new EditCommand(),

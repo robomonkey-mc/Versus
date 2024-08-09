@@ -134,4 +134,8 @@ public class Duel {
         player.sendMessage(spectateMessage);
         player.teleport(activeArena.getSpectateLocation());
     }
+
+    public void removeFromSpectating(Player player) {
+        player.teleport(activeArena.getSpectateLocation());
+    }
 }

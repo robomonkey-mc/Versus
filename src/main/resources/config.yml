@@ -116,14 +116,14 @@ dueling:
     countdown_message: "&6Starting in &e%seconds%&6 seconds"
     #The text that appears on a player's screen when a duel starts.
     duel_go_message: "&6&lGO!"
-    #The chat message sent to a spectator entering the arena.
-    duel_spectate_message: "&7You are now spectating a duel between &6%player_one% &7and &6%player_two%&7."
     #The text that appears on a player's screen after winning a duel.
     victory_title_message: "&6&lVICTORY"
     #The subtitle for the text that appears on a player's screen after winning a duel.
     victory_subtitle_message: "%player%"
     #The chat message a player recieves when respawning after losing a duel.
     duel_loss_message:  "&6Don't worry about it &c%player%."
+    #The chat message sent to a spectator after entering an arena.
+    duel_spectate_message: "&7You are now spectating a duel between &6%player_one% &7and &6%player_two%&7."
 
 
 #  _____  _____  _____  _____  _____  _____  _____  _  _____  _____

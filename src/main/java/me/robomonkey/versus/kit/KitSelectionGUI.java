@@ -63,7 +63,6 @@ public class KitSelectionGUI {
         kitManager.getAllKits().stream()
                 .forEach(kit -> {
                     boolean selected = kit.equals(selectedKit);
-                    Versus.log("Selected: "+selected);
                     mainMenu.addButton(getKitButton(kit, selected));
                 });
     }

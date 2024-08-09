@@ -12,7 +12,7 @@ import java.util.List;
 public class CreateCommand extends AbstractCommand {
 
     public CreateCommand(){
-        super("create","arena.create");
+        super("create","versus.arena.create");
         addTabCompletion("<arenaname>");
         setUsage("/versus create <arenaname>");
         setDescription("Creates a dueling arena and initiates the arena building process.");

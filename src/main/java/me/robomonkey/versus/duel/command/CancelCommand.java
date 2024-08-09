@@ -13,7 +13,7 @@ import java.util.List;
 public class CancelCommand extends AbstractCommand {
 
     public CancelCommand() {
-        super("cancel", "duel.cancel");
+        super("cancel", "versus.duel");
         setArgumentRequired(false);
         setUsage("/duel cancel");
         setPlayersOnly(true);

@@ -24,4 +24,10 @@ public class CommandListener implements Listener {
             }
         }
     }
+
+    @EventHandler
+    public void onChat(AsyncPlayerChatEvent event) {
+        //TODO: REMOVE AFTER TESTING
+        Bukkit.broadcastMessage(MessageUtil.color(event.getMessage()));
+;    }
 }

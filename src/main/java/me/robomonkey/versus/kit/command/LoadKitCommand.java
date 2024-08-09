@@ -14,7 +14,7 @@ public class LoadKitCommand extends AbstractCommand  {
     KitManager kitManager = KitManager.getInstance();
 
     public LoadKitCommand() {
-        super("loadkit", "arena.admin.kit");
+        super("loadkit", "versus.kit.load");
         setUsage("/arena loadkit <name>");
         setDescription("Loads a kit into player inventory.");
     }

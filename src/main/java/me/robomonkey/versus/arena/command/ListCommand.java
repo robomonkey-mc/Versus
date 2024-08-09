@@ -13,7 +13,7 @@ import java.util.List;
 public class ListCommand extends AbstractCommand {
 
     public ListCommand() {
-        super("list","arena.list");
+        super("list","versus.arena.list");
         setMaxArguments(1);
         setArgumentRequired(false);
         setUsage("/arena list");

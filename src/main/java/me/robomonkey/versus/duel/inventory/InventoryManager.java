@@ -72,7 +72,7 @@ public class InventoryManager {
 
 
     public void loadInventoryMap() {
-        Versus.log("Attempting to load inventory map");
+        Versus.log("Loading inventories from inventory.json");
         Bukkit.getScheduler().runTaskAsynchronously(Versus.getInstance(), () -> {
             try {
                 Type mapType = new TypeToken<Map<UUID, ItemStack[]>>(){}.getType();

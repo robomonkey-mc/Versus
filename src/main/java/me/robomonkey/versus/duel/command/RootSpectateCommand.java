@@ -47,6 +47,10 @@ public class RootSpectateCommand extends RootCommand  {
         duel.spectate(player);
     }
 
+    public void exitSpectate() {
+
+    }
+
     @Override
     public List<String> callCompletionsUpdate(CommandSender sender, String[] args) {
         return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();

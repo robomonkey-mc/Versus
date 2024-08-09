@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class RootDuelCommand extends RootCommand {
 
     public RootDuelCommand() {
-        super("duel", "duel.general");
+        super("duel", "versus.duel");
         setPermissionRequired(false);
         setPlayersOnly(true);
         setArgumentRequired(true);

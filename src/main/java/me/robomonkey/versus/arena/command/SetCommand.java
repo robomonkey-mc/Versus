@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class SetCommand extends AbstractCommand {
 
     public SetCommand() {
-        super("set", "arena.set");
+        super("set", "versus.arena.set");
         setUsage("/arena set <arenaname> <setting_name>");
         setDescription("Changes a specific setting in existing arena.");
         setPlayersOnly(true);
@@ -21,7 +21,6 @@ public class SetCommand extends AbstractCommand {
 
     @Override
     public void callCommand(CommandSender sender, String[] args) {
-        Versus.log("Set command ran!");
         if(args.length<2){
             sender.sendMessage(getUsage());
             return;
