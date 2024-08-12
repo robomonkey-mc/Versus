@@ -107,17 +107,20 @@ public class Duel {
     public void startCountdown(Runnable onCountdownExpiration) {
         setState(DuelState.COUNTDOWN);
         int countdownDuration = Settings.getNumber(Setting.COUNTDOWN_DURATION);
-        String countdownMessage = Settings.getMessage(Setting.COUNTDOWN_MESSAGE);
         players.stream().forEach((player) -> EffectUtil.freezePlayer(player));
-        countdown = new Countdown(countdownDuration, countdownMessage, () -> {
+        countdown = new Countdown(countdownDuration, () -> {
                 players.stream()
                         .forEach(EffectUtil::unfreezePlayer);
                 onCountdownExpiration.run();
         });
         countdown.setOnCount(() -> {
+            String countdownMessage = Settings.getMessage(Setting.COUNTDOWN_MESSAGE, Placeholder.of("%seconds%", countdown.getSecondsRemaining()));
             String countdownTitle = Settings.getMessage(Setting.COUNTDOWN_TITLE, Placeholder.of("%seconds%", countdown.getSecondsRemaining()));
-            players.forEach(player -> EffectUtil.playSound(player, Sound.UI_BUTTON_CLICK));
-            players.forEach(player -> EffectUtil.sendTitle(player, countdownTitle, 30, false));
+            players.forEach(player -> {
+                EffectUtil.playSound(player, Sound.UI_BUTTON_CLICK);
+                EffectUtil.sendTitle(player, countdownTitle, 30, false);
+                player.sendMessage(countdownMessage);
+            });
         });
         countdown.initiateCountdown();
     }

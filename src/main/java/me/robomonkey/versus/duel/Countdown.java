@@ -9,7 +9,6 @@ import org.bukkit.scheduler.BukkitTask;
 public class Countdown {
     private BukkitTask countdown;
     private Versus plugin = Versus.getInstance();
-    public String countdownMessage;
     private long initialTime;
     private int duration;
     private int secondsRemaining;
@@ -21,11 +20,10 @@ public class Countdown {
         this.duration = duration;
     }
 
-    public Countdown(int duration, String countdownMessage, Runnable onCountdownEnd) {
+    public Countdown(int duration, Runnable onCountdownEnd) {
         this.duration = duration;
         this.secondsRemaining = duration;
         this.onCountdownEnd = onCountdownEnd;
-        this.countdownMessage = MessageUtil.color(countdownMessage);
     }
 
     public int getSecondsRemaining() {
@@ -55,8 +53,6 @@ public class Countdown {
                 return;
             }
             if(onCount != null) onCount.run();
-            String message = countdownMessage.replaceAll("%seconds%", String.valueOf(secondsRemaining));
-            Bukkit.getServer().broadcastMessage(message);
             secondsRemaining--;
         };
     }
