@@ -39,7 +39,7 @@ public class RootSpectateCommand extends RootCommand  {
             error(sender, "'"+playerName+"' is not online.");
             return;
         }
-        if(!DuelManager.getInstance().isDueling(player)){
+        if(!DuelManager.getInstance().isDueling(selectedPlayer)){
             error(sender, "'"+playerName+"' is not dueling right now.");
             return;
         }

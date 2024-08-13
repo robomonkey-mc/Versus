@@ -114,7 +114,7 @@ public class KitData {
      */
     private ItemStack[] getInventory(ConfigurationSection inventorySection) throws Exception {
         try {
-            ItemStack[] newInventory = new ItemStack[40];
+            ItemStack[] newInventory = new ItemStack[41];
             inventorySection.getKeys(false).forEach(key -> {
                 int index = Integer.parseInt(key);
                 ItemStack item = inventorySection.getItemStack(key);

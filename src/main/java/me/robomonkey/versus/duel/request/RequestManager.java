@@ -132,9 +132,8 @@ public class RequestManager {
         }
         removeRequest(requested);
         if(ArenaManager.getInstance().getAvailableArena() == null) {
-            Arrays.asList(requester, requested)
-                    .stream()
-                    .forEach(player -> player.sendMessage(Settings.getMessage(Setting.NO_ARENAS_AVAILABLE)));
+            requester.sendMessage(Settings.getMessage(Setting.NO_ARENAS_AVAILABLE));
+            requested.sendMessage(Settings.getMessage(Setting.NO_ARENAS_AVAILABLE));
             placeInQueue(currentRequest);
         } else {
             DuelManager.getInstance().setupDuel(requester, requested);

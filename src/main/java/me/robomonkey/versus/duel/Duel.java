@@ -132,8 +132,8 @@ public class Duel {
     public void spectate(Player player) {
         String spectateMessage = Settings.getMessage(
                 Setting.DUEL_SPECTATE_MESSAGE,
-                Placeholder.of("%player_one%", getPlayers().getFirst()),
-                Placeholder.of("%player_two%", getPlayers().getLast()));
+                Placeholder.of("%player_one%", getPlayers().getFirst().getName()),
+                Placeholder.of("%player_two%", getPlayers().getLast().getName()));
         player.sendMessage(spectateMessage);
         player.teleport(activeArena.getSpectateLocation());
     }

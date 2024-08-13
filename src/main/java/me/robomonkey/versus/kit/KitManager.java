@@ -36,15 +36,15 @@ public class KitManager {
     }
 
     public static ItemStack[] getDefaultItems() {
-        ItemStack[] kitItems = new ItemStack[40];
+        ItemStack[] kitItems = new ItemStack[41];
         kitItems[0] =  new ItemStack(Material.DIAMOND_AXE, 1);
         kitItems[1] =  new ItemStack(Material.CROSSBOW);
         kitItems[2] =  new ItemStack(Material.ARROW, 5);
-        kitItems[3] =  new ItemStack(Material.GOLDEN_APPLE, 2);
         kitItems[36] =  new ItemStack(Material.DIAMOND_BOOTS);
         kitItems[37] =  new ItemStack(Material.DIAMOND_LEGGINGS);
         kitItems[38] =   new ItemStack(Material.DIAMOND_CHESTPLATE);
         kitItems[39] =  new ItemStack(Material.DIAMOND_HELMET);
+        kitItems[40] =  new ItemStack(Material.SHIELD);
         return kitItems;
     }
 
