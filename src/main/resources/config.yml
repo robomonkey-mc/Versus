@@ -1,4 +1,4 @@
-config-version: 1.0
+ config-version: 1.0
 
 
 # $$$$$$\ $$\   $$\ $$$$$$$$\  $$$$$$\
@@ -64,6 +64,11 @@ messages-general:
 #Options for dueling behavior, messages, and timings.
 dueling:
   mechanics:
+    #enable or disable placing blocks while in a duel.
+    allow_block_placements: true
+    #enable or disable destroying blocks while in a duel.
+    allow_block_destruction: true
+    #Sets the duration of the countdown before a duel.
     countdown_duration: 5
     #List of the commands that will be blocked during a duel.
     blocked_commands:
@@ -91,11 +96,11 @@ dueling:
       - 'enderchest'
   #Options for potion effects, firework effects activated during a duel.
   effects:
-    #enable or disable blindness when entering a duel
+    #enable or disable blindness when entering a duel.
     blindness_effects_enabled: true
-    #enable or disable the effects played after a duel victory
+    #enable or disable the effects played after a duel victory.
     victory_effects_enabled: true
-    #Enable or disable all firework effects during a duel
+    #Enable or disable all firework effects during a duel.
     fireworks_enabled: true
     #Sets the color for fireworks during a duel. Look at the top of this config file for color options.
     fireworks_color: "blue"
@@ -105,7 +110,7 @@ dueling:
     fight_music_enabled: true
     #Sets the music that plays during the duel. Look at the top of this config file for music options.
     fight_music: 'disc_far'
-    #enable or disable music playing after a player wins a duel
+    #enable or disable music playing after a player wins a duel.
     victory_music_enabled: true
     victory_music: 'disc_pigstep'
   #Options for char messages and titles (on-screen text) displayed during a duel.

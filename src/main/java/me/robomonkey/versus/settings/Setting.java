@@ -27,7 +27,9 @@ public enum Setting {
     DUEL_SPECTATE_MESSAGE("dueling.messages"),
 
     BLOCKED_COMMANDS("dueling.mechanics"),
+    ALLOW_BLOCK_PLACEMENTS("dueling.mechanics"),
     COUNTDOWN_DURATION("dueling.mechanics"),
+    ALLOW_BLOCK_DESTRUCTION("dueling.mechanics"),
 
     VICTORY_EFFECTS_ENABLED("dueling.effects"),
     FIREWORKS_ENABLED("dueling.effects"),
@@ -47,6 +49,7 @@ public enum Setting {
     ACCEPT_BUTTON("requesting.messages"),
     NO_ARENAS_AVAILABLE("requesting.messages"),
     DENY_BUTTON("requesting.messages");
+
 
     public Object value;
     public String path;
