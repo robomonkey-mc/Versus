@@ -18,7 +18,6 @@ public class BlockPlaceListener implements Listener {
         if(!Settings.getBoolean(Setting.ALLOW_BLOCK_PLACEMENTS)
                 && DuelManager.getInstance().isDueling(player)) {
             event.setCancelled(true);
-            MessageUtil.error("You cannot do this right now.");
         }
     }
 }
