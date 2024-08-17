@@ -64,6 +64,22 @@ messages-general:
 #Options for dueling behavior, messages, and timings.
 dueling:
   mechanics:
+    #Sets where winners return to after a duel.
+    #Options include: 'spectate' , 'spawn' , and 'previous'
+    #Typing anything else will default to 'spawn'.
+    #'spectate' returns winners to the spectator area.
+    #'spawn' returns winners to their spawnpoint.
+    #'previous' returns winners to their previous location.
+    return_winners: 'spectate'
+
+    #Sets where losers return to after a duel.
+    #Options include: 'spectate' , 'spawn' , and 'previous'
+    #Typing anything else will default to 'spawn'.
+    #'spectate' returns losers to the spectator area.
+    #'spawn' returns losers to their spawnpoint.
+    #'previous' returns losers to their previous location.
+    return_losers: 'spawn'
+
     #enable or disable placing blocks while in a duel.
     allow_block_placements: true
     #enable or disable destroying blocks while in a duel.

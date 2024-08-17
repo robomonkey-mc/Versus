@@ -26,6 +26,8 @@ public enum Setting {
     COUNTDOWN_MESSAGE("dueling.messages"),
     DUEL_SPECTATE_MESSAGE("dueling.messages"),
 
+    RETURN_WINNERS("dueling.mechanics"),
+    RETURN_LOSERS("dueling.mechanics"),
     BLOCKED_COMMANDS("dueling.mechanics"),
     ALLOW_BLOCK_PLACEMENTS("dueling.mechanics"),
     COUNTDOWN_DURATION("dueling.mechanics"),

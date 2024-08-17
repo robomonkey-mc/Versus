@@ -71,6 +71,17 @@ public class Settings {
         return MessageUtil.color(message);
     }
 
+    public static ReturnOption getReturnOption(Setting setting) {
+        String option = (String) setting.getValue();
+        try {
+            return ReturnOption.valueOf(option.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            Versus.log("Config option named: '"+setting.toString().toLowerCase()+"' is not set properly. " +
+                    "Please review config.yml file.");
+            return ReturnOption.SPAWN;
+        }
+    }
+
     public static Color getColor(Setting setting) {
         String colorStr = (String) setting.getValue();
         if(colorMap.containsKey(colorStr)) {

@@ -4,19 +4,19 @@ import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.arena.Arena;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.duel.eventlisteners.*;
-import me.robomonkey.versus.duel.inventory.InventoryManager;
+import me.robomonkey.versus.duel.playerdata.DataManager;
+import me.robomonkey.versus.duel.playerdata.PlayerData;
 import me.robomonkey.versus.kit.Kit;
 import me.robomonkey.versus.duel.request.RequestManager;
 import me.robomonkey.versus.settings.Placeholder;
+import me.robomonkey.versus.settings.ReturnOption;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
 import me.robomonkey.versus.util.EffectUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -27,13 +27,13 @@ public class DuelManager {
     private Set<Duel> activeDuels = new HashSet<>();
     private HashMap<UUID, Duel> duelistMap = new HashMap<>();
     private ArenaManager arenaManager = ArenaManager.getInstance();
-    private InventoryManager inventoryManager;
+    private DataManager dataManager;
     private Versus plugin = Versus.getInstance();
 
     private DuelManager() {
         instance = this;
-        inventoryManager = new InventoryManager();
-        inventoryManager.loadInventoryMap();
+        dataManager = new DataManager();
+        dataManager.loadDataMap();
         registerListeners();
     }
 
@@ -60,8 +60,8 @@ public class DuelManager {
         quitter.setHealth(0);
     }
 
-    public boolean hasStoredInventory(Player player) {
-        return inventoryManager.contains(player);
+    public boolean hasStoredData(Player player) {
+        return dataManager.contains(player);
     }
 
     public Boolean isDueling(Player player) {
@@ -75,18 +75,41 @@ public class DuelManager {
         return false;
     }
 
-    public void restoreInventory(Player player) {
-        if(inventoryManager.contains(player)) {
-            ItemStack[] items = inventoryManager.retrieveInventory(player);
-            player.getInventory().setContents(items);
+    public void restoreData(Player player, boolean isWinner) {
+        if(!player.isOnline()) return;
+        Versus.log("Attempting to restore data");
+        if(!dataManager.contains(player)) return;
+        PlayerData data = dataManager.extractData(player);
+        player.setLevel(data.xpLevel);
+        player.setExp(data.xpProgress);
+        player.getInventory().setContents(data.items);
+        ReturnOption returnOption = isWinner? Settings.getReturnOption(Setting.RETURN_WINNERS): Settings.getReturnOption(Setting.RETURN_LOSERS);
+        restoreLocation(player, returnOption, data);
+    }
+
+    private void restoreLocation(Player player, ReturnOption returnOption, PlayerData data) {
+        switch(returnOption) {
+            case SPAWN:
+                if(player.getRespawnLocation() == null) player.teleport(player.getWorld().getSpawnLocation());
+                else player.teleport(player.getRespawnLocation());
+                break;
+            case PREVIOUS:
+                player.teleport(data.previousLocation.toLocation());
+                break;
+            case SPECTATE:
+                Arena respawnArena = arenaManager.getArena(data.arenaName);
+                if(respawnArena == null) player.teleport(player.getRespawnLocation());
+                else player.teleport(respawnArena.getSpectateLocation());
+                break;
         }
     }
 
     public void setupDuel(Player playerOne, Player playerTwo) {
         Duel newDuel = createNewDuel(playerOne, playerTwo);
         newDuel.getPlayers().stream().forEach((player) -> {
+            dataManager.save(player, newDuel.getArena());
+            dataManager.saveDataMap();
             groomForDuel(player);
-            saveData(player);
         });
         populateKits(newDuel);
         playerOne.teleport(newDuel.getArena().getSpawnLocationOne());
@@ -176,20 +199,7 @@ public class DuelManager {
         player.setInvulnerable(true);
         player.setAllowFlight(false);
         player.setLevel(0);
-    }
-
-    private void saveData(Player player) {
-        saveInventory(player);
-        saveExp(player);
-        inventoryManager.saveInventoryMap();
-    }
-
-    private void saveExp(Player player) {
-        //TODO: Implement
-    }
-
-    private void saveInventory(Player player) {
-        inventoryManager.addInventory(player);
+        player.setExp(0);
     }
 
     private void registerListeners() {
@@ -211,9 +221,8 @@ public class DuelManager {
     }
 
     private void extricateWinner(Player player, Duel duel) {
-        restoreInventory(player);
+        restoreData(player, true);
         resetAttributes(player);
-        arenaManager.sendToSpectatingArea(player, duel.getArena());
         removeDuel(duel);
         RequestManager.getInstance().notifyDuelCompletion();
     }

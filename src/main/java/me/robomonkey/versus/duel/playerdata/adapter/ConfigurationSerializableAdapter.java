@@ -1,4 +1,4 @@
-package me.robomonkey.versus.duel.inventory.adapter;
+package me.robomonkey.versus.duel.playerdata.adapter;
 
 import com.google.gson.*;
 
