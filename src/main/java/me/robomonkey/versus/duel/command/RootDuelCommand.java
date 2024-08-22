@@ -19,7 +19,9 @@ public class RootDuelCommand extends RootCommand {
         setArgumentRequired(true);
         setUsage("/duel <player>");
         setDescription("Sends a duel request.");
-        addBranches(new DenyCommand(), new CancelCommand());
+        addBranches(new DenyCommand(),
+                new CancelCommand(),
+                new AcceptCommand());
         setAutonomous(true);
     }
 
@@ -47,7 +49,11 @@ public class RootDuelCommand extends RootCommand {
         }
         if(requestManager.hasIncomingRequest(player)
                 && requestManager.getRequester(player).equals(requested.getUniqueId())) {
-           tryAcceptRequest(player);
+            try {
+                RequestManager.getInstance().acceptSpecificRequest(player, requested);
+            } catch (RequestManager.PlayerOfflineException e) {
+                error(player, "The player that requested a duel is no longer online!");
+            }
            return;
         }
         if(requestManager.isQueued(player)) {
@@ -55,14 +61,6 @@ public class RootDuelCommand extends RootCommand {
             return;
         }
         requestManager.sendRequest(player, requested);
-    }
-
-    public void tryAcceptRequest(Player player) {
-        try {
-            RequestManager.getInstance().acceptRequest(player);
-        } catch (RequestManager.PlayerOfflineException e) {
-            error(player, "The player that requested a duel is no longer online!");
-        }
     }
 
     @Override

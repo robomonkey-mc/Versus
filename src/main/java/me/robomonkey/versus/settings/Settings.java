@@ -1,9 +1,8 @@
 package me.robomonkey.versus.settings;
 
-import com.google.gson.reflect.TypeToken;
 import me.robomonkey.versus.Versus;
+import me.robomonkey.versus.duel.ReturnOption;
 import me.robomonkey.versus.util.MessageUtil;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -11,8 +10,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;

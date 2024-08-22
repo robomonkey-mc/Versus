@@ -17,6 +17,7 @@ public class CancelCommand extends AbstractCommand {
         setArgumentRequired(false);
         setUsage("/duel cancel");
         setPlayersOnly(true);
+        setDescription("Cancels a request to duel.");
     }
 
     @Override

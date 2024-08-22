@@ -1,4 +1,4 @@
-package me.robomonkey.versus.settings;
+package me.robomonkey.versus.duel;
 
 public enum ReturnOption {
     SPECTATE,

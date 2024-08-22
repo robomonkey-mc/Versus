@@ -1,26 +1,32 @@
 package me.robomonkey.versus.duel.request;
 
-import com.google.common.collect.Lists;
-import me.robomonkey.versus.Versus;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 public class Request {
     private UUID requested;
     private UUID requesting;
+    private Long timecode;
 
     public Request(UUID requested, UUID requesting) {
         this.requested = requested;
         this.requesting = requesting;
+        this.timecode = System.currentTimeMillis();
     }
 
     public Request(Player requested, Player requesting) {
         this.requested = requested.getUniqueId();
         this.requesting = requesting.getUniqueId();
+    }
+
+    public Long getTimeSent() {
+        return timecode;
+    }
+
+    public void setTimecode(Long timecode) {
+        this.timecode = timecode;
     }
 
     public UUID getRequested() {
@@ -53,5 +59,9 @@ public class Request {
 
     public boolean contains(Player player) {
         return requested.equals(player.getUniqueId()) || requesting.equals(player.getUniqueId());
+    }
+
+    public boolean matches(Player requested, Player requesting) {
+        return this.requested.equals(requested) && this.requesting.equals(requesting);
     }
 }

@@ -79,7 +79,6 @@ dueling:
     #'spawn' returns losers to their spawnpoint.
     #'previous' returns losers to their previous location.
     return_losers: 'spawn'
-
     #enable or disable placing blocks while in a duel.
     allow_block_placements: true
     #enable or disable destroying blocks while in a duel.

@@ -9,7 +9,6 @@ import me.robomonkey.versus.duel.playerdata.PlayerData;
 import me.robomonkey.versus.kit.Kit;
 import me.robomonkey.versus.duel.request.RequestManager;
 import me.robomonkey.versus.settings.Placeholder;
-import me.robomonkey.versus.settings.ReturnOption;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
 import me.robomonkey.versus.util.EffectUtil;
