@@ -13,13 +13,14 @@ config-version: 1.0
 #-----------------------------------------------------------------------------------------------------------------------------
 #                                                  | MUSIC OPTIONS: |
 #-----------------------------------------------------------------------------------------------------------------------------
-#creative, credits, disc_5, disc_11, disc_13, disc_blocks, disc_cat, disc_chirp, disc_creator,
-#disc_creator_music_box, disc_far, disc_mall, disc_mellohi, disc_otherside, disc_pigstep, disc_precipice, disc_relic,
+# creative, credits, disc_5, disc_11, disc_13, disc_blocks, disc_cat, disc_chirp, disc_creator,
+# disc_creator_music_box, disc_far, disc_mall, disc_mellohi, disc_otherside, disc_pigstep, disc_precipice, disc_relic,
 # disc_stal, disc_strad, disc_wait, disc_ward
+# WARNING: Certain songs are only available in specific versions!!!
 #-----------------------------------------------------------------------------------------------------------------------------
 #                                                  | COLOR OPTIONS: |
 #-----------------------------------------------------------------------------------------------------------------------------
-#aqua, black, blue, gray, green, lime, orange, purple, red, silver, teal, white, and yellow.
+# aqua, black, blue, gray, green, lime, orange, purple, red, silver, teal, white, and yellow.
 
 
 
@@ -84,6 +85,9 @@ dueling:
     #'previous' returns losers to their previous location.
     return_losers: 'spawn'
 
+    #Sets whether players respawn instantly after losing a duel, skipping the respawn screen.
+    instant_respawn: false
+
     #enable or disable placing blocks while in a duel.
     allow_block_placements: true
     #enable or disable destroying blocks while in a duel.
@@ -121,7 +125,7 @@ dueling:
     announce_duels: false
     #The text that announces that a duel has started.
     #Place the text a player clicks to spectate the duel, in between %button% and %button%.
-    duel_start_announcement: "&c%player_one%&6 is dueling &c%player_two%&6! %button%&6&lSpectate now!%button%"
+    duel_start_announcement: "&c%player_one%&6 is dueling &c%player_two%&6! %button%&6&lSpectate here.%button%"
     #The text that announces that a duel has ended and who won/loss.
     duel_end_announcement: "&6Congratulate &c%winner%&6! They just won a match against &c%loser%&6!"
   effects:

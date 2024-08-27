@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class KitDeleteCommand extends AbstractCommand {
 
@@ -38,6 +39,6 @@ public class KitDeleteCommand extends AbstractCommand {
 
     @Override
     public List<String> callCompletionsUpdate(CommandSender sender, String[] args) {
-        return kitManager.getAllKits().stream().map(Kit::getName).toList();
+        return kitManager.getAllKits().stream().map(Kit::getName).collect(Collectors.toList());
     }
 }

@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LoadKitCommand extends AbstractCommand  {
     KitManager kitManager = KitManager.getInstance();
@@ -38,6 +39,6 @@ public class LoadKitCommand extends AbstractCommand  {
 
     @Override
     public List<String> callCompletionsUpdate(CommandSender sender, String[] args) {
-        return kitManager.getAllKits().stream().map(Kit::getName).toList();
+        return kitManager.getAllKits().stream().map(Kit::getName).collect(Collectors.toList());
     }
 }

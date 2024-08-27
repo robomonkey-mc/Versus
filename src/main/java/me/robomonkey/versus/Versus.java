@@ -45,7 +45,6 @@ public final class Versus extends JavaPlugin {
             GsonBuilder builder = new GsonBuilder()
                     .setPrettyPrinting()
                     .disableHtmlEscaping()
-                    .setObjectToNumberStrategy(JsonReader::nextInt)
                     .registerTypeAdapter(ConfigurationSerializable.class, new ConfigurationSerializableAdapter())
                     .registerTypeAdapter(ItemStack.class, new ItemStackAdapter())
                     .registerTypeAdapter(ItemStack[].class, new ItemStackArrayAdapter());

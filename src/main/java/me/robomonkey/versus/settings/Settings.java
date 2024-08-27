@@ -110,6 +110,14 @@ public class Settings {
         return MessageUtil.color(message);
     }
 
+    public static String getDefaultMessage(Setting setting, Placeholder... placeholders){
+        String message = (String) setting.getDefaultValue();
+        for(Placeholder placeholder: placeholders) {
+            message = message.replaceAll(placeholder.holder, placeholder.replacement);
+        }
+        return MessageUtil.color(message);
+    }
+
     public List<String> getStringList(Setting setting) {
         return config.getStringList(setting.getPath());
     }

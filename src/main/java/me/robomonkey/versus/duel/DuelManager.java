@@ -94,15 +94,14 @@ public class DuelManager {
     private void restoreLocation(Player player, ReturnOption returnOption, PlayerData data) {
         switch(returnOption) {
             case SPAWN:
-                if(player.getRespawnLocation() == null) player.teleport(player.getWorld().getSpawnLocation());
-                else player.teleport(player.getRespawnLocation());
+                player.teleport(player.getWorld().getSpawnLocation());
                 break;
             case PREVIOUS:
                 player.teleport(data.previousLocation.toLocation());
                 break;
             case SPECTATE:
                 Arena respawnArena = arenaManager.getArena(data.arenaName);
-                if(respawnArena == null) player.teleport(player.getRespawnLocation());
+                if(respawnArena == null) player.teleport(player.getWorld().getSpawnLocation());
                 else player.teleport(respawnArena.getSpectateLocation());
                 break;
         }
@@ -134,7 +133,16 @@ public class DuelManager {
                 Placeholder.of("%player_one%", duel.getPlayers().get(0).getName()),
                 Placeholder.of("%player_two%", duel.getPlayers().get(1).getName()));
         String commandText ="/spectate "+duel.getPlayers().get(0).getName();
-        TextComponent announcement = MessageUtil.getClickableMessageBetween(announcementMessage, commandText, commandText, "%button%");
+        TextComponent announcement;
+        try {
+            announcement = MessageUtil.getClickableMessageBetween(announcementMessage, commandText, commandText, "%button%");
+        } catch (Exception e) {
+            Versus.log("Config.yml option 'duel_start_announcement' is improperly configured. Please review. Using default value...");
+            announcementMessage = Settings.getDefaultMessage(Setting.DUEL_START_ANNOUNCEMENT,
+                    Placeholder.of("%player_one%", duel.getPlayers().get(0).getName()),
+                    Placeholder.of("%player_two%", duel.getPlayers().get(1).getName()));
+            announcement = MessageUtil.getClickableMessageBetween(announcementMessage, commandText, commandText, "%button%");
+        }
         Bukkit.spigot().broadcast(announcement);
     }
 
@@ -158,11 +166,14 @@ public class DuelManager {
      * Only call after checking that ensuring that the player is currently in a duel with duelManager.duelFromPlayer(..);
      * @param event PlayerDeathEvent
      */
-    public void registerDuelistDeath(PlayerDeathEvent event) {
-        Player loser = event.getEntity();
+    public void registerDuelistDeath(Player loser, boolean fakeDeath) {
         Duel currentDuel = getDuel(loser);
         if(currentDuel.getState() == DuelState.COUNTDOWN) {
             undoCountdown(currentDuel);
+        }
+        if(fakeDeath) {
+            restoreData(loser, false);
+            resetAttributes(loser);
         }
         if(currentDuel.isActive()){
             registerDuelCompletion(loser, currentDuel);
@@ -234,7 +245,9 @@ public class DuelManager {
                 new QuitEventListener(),
                 new FireworkExplosionListener(),
                 new BlockBreakListener(),
-                new BlockPlaceListener())
+                new BlockPlaceListener(),
+                new DamageEventListener(),
+                new DeathEventListener())
                 .forEach(listener -> Bukkit.getPluginManager().registerEvents(listener, Versus.getInstance()));
     }
 

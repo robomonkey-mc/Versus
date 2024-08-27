@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RootSpectateCommand extends RootCommand  {
 
@@ -57,6 +58,6 @@ public class RootSpectateCommand extends RootCommand  {
 
     @Override
     public List<String> callCompletionsUpdate(CommandSender sender, String[] args) {
-        return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
+        return Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList());
     }
 }
