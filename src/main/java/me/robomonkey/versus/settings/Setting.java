@@ -33,6 +33,10 @@ public enum Setting {
     COUNTDOWN_DURATION("dueling.mechanics"),
     ALLOW_BLOCK_DESTRUCTION("dueling.mechanics"),
 
+    ANNOUNCE_DUELS("dueling.announcements"),
+    DUEL_START_ANNOUNCEMENT("dueling.announcements"),
+    DUEL_END_ANNOUNCEMENT("dueling.announcements"),
+
     VICTORY_EFFECTS_ENABLED("dueling.effects"),
     FIREWORKS_ENABLED("dueling.effects"),
     FIREWORKS_COLOR("dueling.effects"),

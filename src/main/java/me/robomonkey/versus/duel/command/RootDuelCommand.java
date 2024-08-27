@@ -48,7 +48,7 @@ public class RootDuelCommand extends RootCommand {
             return;
         }
         if(requestManager.hasIncomingRequest(player)
-                && requestManager.getRequester(player).equals(requested.getUniqueId())) {
+                && requestManager.isRequestedBy(requested, player)) {
             try {
                 RequestManager.getInstance().acceptSpecificRequest(player, requested);
             } catch (RequestManager.PlayerOfflineException e) {
@@ -58,6 +58,10 @@ public class RootDuelCommand extends RootCommand {
         }
         if(requestManager.isQueued(player)) {
             error(sender, "You cannot send duel requests while queueing for a duel. Type /duel cancel to quit the queue.");
+            return;
+        }
+        if(requestManager.isRequestedBy(player, requested)) {
+            error(sender, "Please wait for "+requested.getName()+" to respond to your first request.");
             return;
         }
         requestManager.sendRequest(player, requested);

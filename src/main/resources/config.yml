@@ -79,6 +79,7 @@ dueling:
     #'spawn' returns losers to their spawnpoint.
     #'previous' returns losers to their previous location.
     return_losers: 'spawn'
+
     #enable or disable placing blocks while in a duel.
     allow_block_placements: true
     #enable or disable destroying blocks while in a duel.
@@ -109,7 +110,16 @@ dueling:
       - 'chest'
       - 'vault'
       - 'enderchest'
+
   #Options for potion effects, firework effects activated during a duel.
+  announcements:
+    #Sets whether duels are announced in global chat.
+    announce_duels: false
+    #The text that announces that a duel has started.
+    #Place the text a player clicks to spectate the duel, in between %button% and %button%.
+    duel_start_announcement: "&c%player_one%&6 is dueling &c%player_two%&6! %button%&6&lSpectate now!%button%"
+    #The text that announces that a duel has ended and who won/loss.
+    duel_end_announcement: "&6Congratulate &c%winner%&6! They just won a match against &c%loser%&6!"
   effects:
     #enable or disable blindness when entering a duel.
     blindness_effects_enabled: true

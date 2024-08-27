@@ -12,6 +12,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import javax.sound.sampled.Line;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class MessageUtil {
 
@@ -38,6 +42,27 @@ public class MessageUtil {
         mainMessage.addExtra(selectButton);
         mainMessage.addExtra(MessageUtil.color(afterText));
         return mainMessage;
+    }
+
+    public static TextComponent getClickableMessageBetween(String message, String commandText, String hoverText, String buttonEndpoint){
+        String[] messageSegments = message.split(buttonEndpoint);
+        String buttonText = "";
+        int buttonTextIndex;
+
+        if (message.startsWith(buttonEndpoint)) buttonTextIndex = 1;
+        else if (message.endsWith(buttonEndpoint)) buttonTextIndex = messageSegments.length - 1;
+        else buttonTextIndex = 1;
+        TextComponent messageWithButton = new TextComponent("");
+        for(int index=0; index < messageSegments.length; index++) {
+            if(index == buttonTextIndex) {
+                buttonText = messageSegments[buttonTextIndex];
+                TextComponent button = createButton(color(buttonText), commandText, hoverText);
+                messageWithButton.addExtra(button);
+            } else {
+                messageWithButton.addExtra(color(messageSegments[index]));
+            }
+        }
+       return messageWithButton;
     }
 
     /**

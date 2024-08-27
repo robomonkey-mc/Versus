@@ -21,6 +21,7 @@ public class Duel {
     private DuelState state = DuelState.IDLE;
     private UUID winner;
     private UUID loser;
+    private boolean isPublic = Settings.getBoolean(Setting.ANNOUNCE_DUELS);
     private Countdown countdown = null;
     private boolean victoryEffectsEnabled = Settings.getBoolean(Setting.VICTORY_EFFECTS_ENABLED);
     private boolean fireworksEnabled = Settings.getBoolean(Setting.FIREWORKS_ENABLED);
@@ -77,6 +78,8 @@ public class Duel {
     public Player getLoser() {
         return Bukkit.getPlayer(getLoserID());
     }
+
+    public boolean isPublic() { return this.isPublic; }
 
     public Sound getFightMusic() {
         return fightMusic;

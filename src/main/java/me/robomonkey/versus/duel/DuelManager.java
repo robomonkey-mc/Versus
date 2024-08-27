@@ -12,6 +12,8 @@ import me.robomonkey.versus.settings.Placeholder;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
 import me.robomonkey.versus.util.EffectUtil;
+import me.robomonkey.versus.util.MessageUtil;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -23,7 +25,6 @@ import java.util.*;
 
 public class DuelManager {
     private static DuelManager instance;
-    private Set<Duel> activeDuels = new HashSet<>();
     private HashMap<UUID, Duel> duelistMap = new HashMap<>();
     private ArenaManager arenaManager = ArenaManager.getInstance();
     private DataManager dataManager;
@@ -45,6 +46,10 @@ public class DuelManager {
 
     public void addDuel(Duel duel){
         duel.getPlayers().forEach(player -> duelistMap.put(player.getUniqueId(), duel));
+    }
+
+    public void unregisterFromDuel(Player player) {
+        duelistMap.remove(player.getUniqueId());
     }
 
     private void removeDuel(Duel duel) {
@@ -114,6 +119,7 @@ public class DuelManager {
         playerOne.teleport(newDuel.getArena().getSpawnLocationOne());
         playerTwo.teleport(newDuel.getArena().getSpawnLocationTwo());
         newDuel.startCountdown(() -> commenceDuel(newDuel));
+        if(newDuel.isPublic()) announceDuelStart(newDuel);
     }
 
     private void populateKits(Duel duel) {
@@ -122,6 +128,24 @@ public class DuelManager {
             player.getInventory().setContents(kit.getItems());
         });
     }
+
+    public void announceDuelStart(Duel duel) {
+        String announcementMessage = Settings.getMessage(Setting.DUEL_START_ANNOUNCEMENT,
+                Placeholder.of("%player_one%", duel.getPlayers().get(0).getName()),
+                Placeholder.of("%player_two%", duel.getPlayers().get(1).getName()));
+        String commandText ="/spectate "+duel.getPlayers().get(0).getName();
+        TextComponent announcement = MessageUtil.getClickableMessageBetween(announcementMessage, commandText, commandText, "%button%");
+        Bukkit.spigot().broadcast(announcement);
+    }
+
+    public void announceDuelEnd(Duel duel) {
+        if(duel.getWinner() == null || duel.getLoser() == null) return;
+        String announcementMessage = Settings.getMessage(Setting.DUEL_END_ANNOUNCEMENT,
+                Placeholder.of("%winner%", duel.getWinner().getName()),
+                Placeholder.of("%loser%", duel.getLoser().getName()));
+        Bukkit.broadcastMessage(announcementMessage);
+    }
+
 
     public void registerMoveEvent(Player player, PlayerMoveEvent event) {
         Duel currentDuel = getDuel(player);
@@ -156,11 +180,11 @@ public class DuelManager {
     private void stopDuel(Duel duel) {
         if(duel.isActive()) return;
         arenaManager.removeDuel(duel);
-        activeDuels.remove(duel);
         duel.getPlayers().stream().filter(Player::isOnline).forEach(Player::stopAllSounds);
         Player loser = duel.getLoser();
         Player winner = duel.getWinner();
-
+        unregisterFromDuel(loser);
+        if(duel.isPublic()) announceDuelEnd(duel);
         if(winner != null) {
             renderWinEffects(winner, duel);
         }

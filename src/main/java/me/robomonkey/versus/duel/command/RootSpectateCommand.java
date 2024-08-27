@@ -31,12 +31,16 @@ public class RootSpectateCommand extends RootCommand  {
         }
         String playerName = args[0];
         Player selectedPlayer = Bukkit.getPlayer(playerName);
-        if(selectedPlayer.equals(player)){
-            error(sender, "You can't spectate yourself");
+        if(DuelManager.getInstance().isDueling(player)) {
+            error(sender, "You cannot spectate right now.");
             return;
         }
         if(selectedPlayer == null){
             error(sender, "'"+playerName+"' is not online.");
+            return;
+        }
+        if(selectedPlayer.equals(player)){
+            error(sender, "You can't spectate yourself");
             return;
         }
         if(!DuelManager.getInstance().isDueling(selectedPlayer)){

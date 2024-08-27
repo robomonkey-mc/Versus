@@ -62,6 +62,6 @@ public class Request {
     }
 
     public boolean matches(Player requested, Player requesting) {
-        return this.requested.equals(requested) && this.requesting.equals(requesting);
+        return this.requested.equals(requested.getUniqueId()) && this.requesting.equals(requesting.getUniqueId());
     }
 }

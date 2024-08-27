@@ -1,5 +1,6 @@
 package me.robomonkey.versus.duel.request;
 
+import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.duel.DuelManager;
 import me.robomonkey.versus.settings.Placeholder;
@@ -50,7 +51,8 @@ public class RequestManager {
     }
 
     private void removeRequest(Player requested, Player requesting) {
-        requestList.remove(getRequest(requested, requesting));
+        Request requestToRemove = getRequest(requested, requesting);
+        if(requestToRemove != null) requestList.remove(requestToRemove);
     }
 
     public void placeInQueue(Request request) {
@@ -112,10 +114,16 @@ public class RequestManager {
         else return null;
     }
 
-    public UUID getRequester(Player requested) {
+    public UUID getLatestRequester(Player requested) {
         if(hasIncomingRequest(requested)) return getLatestRequest(requested).getRequesting();
         else return null;
     }
+
+    public boolean isRequestedBy(Player requesting, Player requested) {
+        return requestList.stream().anyMatch(request -> requesting.equals(request.getRequestingPlayer()) &&
+                                                        requested.equals((request.getRequestedPlayer())));
+    }
+
 
     public void sendRequest(Player requesting, Player requested) {
         requestList.add(new Request(requested, requesting));
@@ -163,7 +171,7 @@ public class RequestManager {
     public void denyRequest(Player requested, Player requester) {
         removeRequest(requested, requester);
         if(requester != null) {
-            requester.sendMessage(Settings.getMessage(Setting.DENIED_REQUEST, Placeholder.of("%player", requested.getName())));
+            requester.sendMessage(Settings.getMessage(Setting.DENIED_REQUEST, Placeholder.of("%player%", requested.getName())));
             requested.sendMessage(Settings.getMessage(Setting.DENIED_REQUEST_CONFIRMATION, Placeholder.of("%player%", requester.getName())));
         }
     }
