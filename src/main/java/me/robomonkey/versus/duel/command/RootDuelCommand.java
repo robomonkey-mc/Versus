@@ -3,6 +3,8 @@ package me.robomonkey.versus.duel.command;
 import me.robomonkey.versus.command.RootCommand;
 import me.robomonkey.versus.duel.DuelManager;
 import me.robomonkey.versus.duel.request.RequestManager;
+import me.robomonkey.versus.settings.Setting;
+import me.robomonkey.versus.settings.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,7 +16,7 @@ public class RootDuelCommand extends RootCommand {
 
     public RootDuelCommand() {
         super("duel", "versus.duel");
-        setPermissionRequired(false);
+        setPermissionRequired(Settings.getBoolean(Setting.PERMISSION_REQUIRED_TO_DUEL));
         setPlayersOnly(true);
         setArgumentRequired(true);
         setUsage("/duel <player>");
@@ -23,6 +25,7 @@ public class RootDuelCommand extends RootCommand {
                 new CancelCommand(),
                 new AcceptCommand());
         setAutonomous(true);
+        enforcePermissionRulesForChildren();
     }
 
     @Override

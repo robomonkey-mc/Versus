@@ -27,6 +27,7 @@ public enum Setting {
     DUEL_SPECTATE_MESSAGE("dueling.messages"),
 
     RETURN_WINNERS("dueling.mechanics"),
+    PERMISSION_REQUIRED_TO_DUEL("dueling.mechanics"),
     RETURN_LOSERS("dueling.mechanics"),
     BLOCKED_COMMANDS("dueling.mechanics"),
     ALLOW_BLOCK_PLACEMENTS("dueling.mechanics"),

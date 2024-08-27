@@ -4,6 +4,8 @@ import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.command.RootCommand;
 import me.robomonkey.versus.duel.Duel;
 import me.robomonkey.versus.duel.DuelManager;
+import me.robomonkey.versus.settings.Setting;
+import me.robomonkey.versus.settings.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -17,9 +19,11 @@ public class RootSpectateCommand extends RootCommand  {
         setUsage("/spectate <player>");
         setDescription("Spectates a player in their current duel.");
         setAutonomous(true);
+        setPermissionRequired(Settings.getBoolean(Setting.PERMISSION_REQUIRED_TO_DUEL));
         setPlayersOnly(true);
         setArgumentRequired(true);
         setMaxArguments(1);
+        enforcePermissionRulesForChildren();
     }
 
     @Override

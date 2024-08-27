@@ -64,6 +64,10 @@ messages-general:
 #Options for dueling behavior, messages, and timings.
 dueling:
   mechanics:
+    #Sets whether the 'versus.spectate' and 'versus.duel' permissions are required to spectate and duel.
+    #If false, any player will be able to duel.
+    permission_required_to_duel: false
+
     #Sets where winners return to after a duel.
     #Options include: 'spectate' , 'spawn' , and 'previous'
     #Typing anything else will default to 'spawn'.

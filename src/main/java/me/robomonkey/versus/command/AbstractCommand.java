@@ -85,7 +85,6 @@ public abstract class AbstractCommand {
         return argumentRequired;
     }
 
-
     public void setPermissionRequired(boolean required) {
         this.permissionRequired = required;
     }
@@ -127,6 +126,10 @@ public abstract class AbstractCommand {
 
     public void addBranches(AbstractCommand... newBranch) {
         branches.addAll(Arrays.asList(newBranch));
+    }
+
+    public void enforcePermissionRulesForChildren() {
+        branches.forEach(branch -> branch.setPermissionRequired(this.permissionRequired));
     }
 
     public void addTabCompletion(String completion) {
@@ -192,7 +195,7 @@ public abstract class AbstractCommand {
 
     List<String> getBuiltinCompletionOptions(CommandSender sender) {
         List<String> allowedCompletions = getBranches().stream()
-                .filter(branch -> sender.hasPermission(branch.getPermission()))
+                .filter(branch -> !branch.isPermissionRequired() ||sender.hasPermission(branch.getPermission()))
                 .map(branch -> branch.getCommand())
                 .collect(Collectors.toList());
         if (sender.hasPermission(this.getPermission())) allowedCompletions.addAll(additionalCompletions);
