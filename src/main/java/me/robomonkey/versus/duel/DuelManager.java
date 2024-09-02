@@ -246,8 +246,7 @@ public class DuelManager {
                 new FireworkExplosionListener(),
                 new BlockBreakListener(),
                 new BlockPlaceListener(),
-                new DamageEventListener(),
-                new DeathEventListener())
+                new DamageEventListener())
                 .forEach(listener -> Bukkit.getPluginManager().registerEvents(listener, Versus.getInstance()));
     }
 

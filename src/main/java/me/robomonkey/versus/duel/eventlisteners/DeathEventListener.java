@@ -11,6 +11,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class DeathEventListener implements Listener {
 
+    @EventHandler
     public void onDeath(PlayerDeathEvent e) {
         Player player = e.getEntity();
         if(DuelManager.getInstance().isDueling(player)) {
