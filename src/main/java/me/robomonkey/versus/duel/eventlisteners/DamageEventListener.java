@@ -17,6 +17,7 @@ public class DamageEventListener implements Listener {
         if(!DuelManager.getInstance().isDueling((Player) event.getEntity())) return;
         if(!Settings.getBoolean(Setting.INSTANT_RESPAWN)) return;
         Player duelist = (Player) event.getEntity();
+        //Simulates death if damage > duelist health.
         if(event.getDamage() > duelist.getHealth()) {
             event.setCancelled(true);
             DuelManager.getInstance().registerDuelistDeath(duelist, true);
