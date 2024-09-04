@@ -2,7 +2,6 @@ package me.robomonkey.versus;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.stream.JsonReader;
 import com.samjakob.spigui.SpiGUI;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.arena.command.RootArenaCommand;
@@ -12,11 +11,7 @@ import me.robomonkey.versus.duel.playerdata.adapter.ItemStackAdapter;
 import me.robomonkey.versus.duel.playerdata.adapter.ItemStackArrayAdapter;
 import me.robomonkey.versus.duel.DuelManager;
 import me.robomonkey.versus.duel.command.RootDuelCommand;
-import me.robomonkey.versus.settings.Placeholder;
-import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
-import me.robomonkey.versus.util.MessageUtil;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -72,6 +67,7 @@ public final class Versus extends JavaPlugin {
         arenaManager = ArenaManager.getInstance();
         arenaManager.loadArenas();
         registerCommands();
+        DependencyTracker.refresh(getServer());
     }
 
     @Override

@@ -8,6 +8,7 @@ import me.robomonkey.versus.duel.playerdata.DataManager;
 import me.robomonkey.versus.duel.playerdata.PlayerData;
 import me.robomonkey.versus.kit.Kit;
 import me.robomonkey.versus.duel.request.RequestManager;
+import me.robomonkey.versus.placeholderapi.PAPIUtil;
 import me.robomonkey.versus.settings.Placeholder;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
@@ -130,8 +131,8 @@ public class DuelManager {
 
     public void announceDuelStart(Duel duel) {
         String announcementMessage = Settings.getMessage(Setting.DUEL_START_ANNOUNCEMENT,
-                Placeholder.of("%player_one%", duel.getPlayers().get(0).getName()),
-                Placeholder.of("%player_two%", duel.getPlayers().get(1).getName()));
+                Placeholder.of("%player_one%", PAPIUtil.getName(duel.getPlayers().get(0))),
+                Placeholder.of("%player_two%", PAPIUtil.getName(duel.getPlayers().get(0))));
         String commandText ="/spectate "+duel.getPlayers().get(0).getName();
         TextComponent announcement;
         try {
@@ -139,8 +140,8 @@ public class DuelManager {
         } catch (Exception e) {
             Versus.log("Config.yml option 'duel_start_announcement' is improperly configured. Please review. Using default value...");
             announcementMessage = Settings.getDefaultMessage(Setting.DUEL_START_ANNOUNCEMENT,
-                    Placeholder.of("%player_one%", duel.getPlayers().get(0).getName()),
-                    Placeholder.of("%player_two%", duel.getPlayers().get(1).getName()));
+                    Placeholder.of("%player_one%", PAPIUtil.getName(duel.getPlayers().get(0))),
+                    Placeholder.of("%player_two%", PAPIUtil.getName(duel.getPlayers().get(0))));
             announcement = MessageUtil.getClickableMessageBetween(announcementMessage, commandText, commandText, "%button%");
         }
         Bukkit.spigot().broadcast(announcement);
@@ -149,8 +150,8 @@ public class DuelManager {
     public void announceDuelEnd(Duel duel) {
         if(duel.getWinner() == null || duel.getLoser() == null) return;
         String announcementMessage = Settings.getMessage(Setting.DUEL_END_ANNOUNCEMENT,
-                Placeholder.of("%winner%", duel.getWinner().getName()),
-                Placeholder.of("%loser%", duel.getLoser().getName()));
+                Placeholder.of("%winner%", PAPIUtil.getName(duel.getWinner())),
+                Placeholder.of("%loser%", PAPIUtil.getName(duel.getLoser())));
         Bukkit.broadcastMessage(announcementMessage);
     }
 
@@ -164,7 +165,6 @@ public class DuelManager {
 
     /**
      * Only call after checking that ensuring that the player is currently in a duel with duelManager.duelFromPlayer(..);
-     * @param event PlayerDeathEvent
      */
     public void registerDuelistDeath(Player loser, boolean fakeDeath) {
         Duel currentDuel = getDuel(loser);
@@ -278,21 +278,19 @@ public class DuelManager {
         EffectUtil.playSound(winner, duel.getVictorySong());
         winner.sendTitle(
                 Settings.getMessage(Setting.VICTORY_TITLE_MESSAGE),
-                Settings.getMessage(Setting.VICTORY_SUBTITLE_MESSAGE, Placeholder.of("%player%", winner.getName())), 20, 40, 20);
+                Settings.getMessage(Setting.VICTORY_SUBTITLE_MESSAGE, Placeholder.of("%player%", PAPIUtil.getName(winner))), 20, 40, 20);
         if(duel.isVictoryEffectsEnabled()) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                //TODO Delete nearby items on the ground if necessary.
-                //TODO Implement skull system if you want later on
                 extricateWinner(winner, duel);
                 if(duel.isFireworksEnabled()) EffectUtil.spawnFireWorksDelayed(winner.getLocation(), 3, 20, 20L, duel.getFireworkColor());
-            }, 200L);
+            }, Settings.getNumber(Setting.VICTORY_EFFECTS_DURATION) * 20);
         } else {
             extricateWinner(winner, duel);
         }
     }
 
     private void renderLossEffects(Player loser) {
-        loser.sendMessage(Settings.getMessage(Setting.DUEL_LOSS_MESSAGE, Placeholder.of("%player%", loser.getName())));
+        loser.sendMessage(Settings.getMessage(Setting.DUEL_LOSS_MESSAGE, Placeholder.of("%player%", PAPIUtil.getName(loser))));
         loser.getWorld().strikeLightningEffect(loser.getLocation());
 
     }

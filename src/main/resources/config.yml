@@ -133,6 +133,8 @@ dueling:
     blindness_effects_enabled: true
     #enable or disable the effects played after a duel victory.
     victory_effects_enabled: true
+    #Sets the duration (in seconds) of the effects played after a duel victory.
+    victory_effects_duration: 10
     #Enable or disable all firework effects during a duel.
     fireworks_enabled: true
     #Sets the color for fireworks during a duel. Look at the top of this config file for color options.
@@ -189,3 +191,21 @@ requesting:
     no_arenas_available: "&6You've been placed in a queue. Please wait until an arena is available."
     #The chat message sent to a player after cancelling a queue to duel.
     cancel_request: "&6You're no longer queueing for a duel."
+
+
+
+#  ____  _____ _____ _____ _____ ____  _____ _____ _____ _____ _____ _____
+#|    \|   __|  _  |   __|   | |    \|   __|   | |     |     |   __|   __|
+#|  |  |   __|   __|   __| | | |  |  |   __| | | |   --|-   -|   __|__   |
+#|____/|_____|__|  |_____|_|___|____/|_____|_|___|_____|_____|_____|_____|
+
+#(OPTIONAL)
+#Options for dependencies and interacting with other plugins or API's.
+dependencies:
+  placeholderAPI:
+    #NOTE: This feature only functions if:
+    #1) Essentials and PlaceholderAPI are both installed.
+    #2) Essentials has been reigstered by PlaceholderAPI by typing /papi ecloud download Essentials.
+    #Otherwise, this feature will be ignored and player names will remain unchanged.
+    #Sets whether essentials nicknames replace player names in Versus chat messages.
+    essentials_nicknames_enabled: true

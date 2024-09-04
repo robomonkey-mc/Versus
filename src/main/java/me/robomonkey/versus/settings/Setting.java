@@ -40,6 +40,7 @@ public enum Setting {
     DUEL_END_ANNOUNCEMENT("dueling.announcements"),
 
     VICTORY_EFFECTS_ENABLED("dueling.effects"),
+    VICTORY_EFFECTS_DURATION("dueling.effects"),
     FIREWORKS_ENABLED("dueling.effects"),
     FIREWORKS_COLOR("dueling.effects"),
     BLINDNESS_EFFECTS_ENABLED("dueling.effects"),
@@ -56,8 +57,9 @@ public enum Setting {
     REQUEST_NOTIFICATION("requesting.messages"),
     ACCEPT_BUTTON("requesting.messages"),
     NO_ARENAS_AVAILABLE("requesting.messages"),
-    DENY_BUTTON("requesting.messages");
+    DENY_BUTTON("requesting.messages"),
 
+    ESSENTIALS_NICKNAMES_ENABLED("dependencies.placeholderAPI");
 
     public Object value;
     public String path;

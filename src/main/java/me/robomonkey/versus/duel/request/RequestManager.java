@@ -3,6 +3,7 @@ package me.robomonkey.versus.duel.request;
 import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.duel.DuelManager;
+import me.robomonkey.versus.placeholderapi.PAPIUtil;
 import me.robomonkey.versus.settings.Placeholder;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
@@ -127,8 +128,8 @@ public class RequestManager {
 
     public void sendRequest(Player requesting, Player requested) {
         requestList.add(new Request(requested, requesting));
-        String sentRequestMessage = Settings.getMessage(Setting.SENT_REQUEST, new Placeholder("%player%", requested.getName()));
-        String requestNotification = Settings.getMessage(Setting.REQUEST_NOTIFICATION, new Placeholder("%player%", requesting.getName()));
+        String sentRequestMessage = Settings.getMessage(Setting.SENT_REQUEST, new Placeholder("%player%", PAPIUtil.getName(requested)));
+        String requestNotification = Settings.getMessage(Setting.REQUEST_NOTIFICATION, new Placeholder("%player%", PAPIUtil.getName(requesting)));
 
         requesting.sendMessage(sentRequestMessage);
         TextComponent requestMessage = getRequestMessage(requested, requesting);
@@ -171,8 +172,8 @@ public class RequestManager {
     public void denyRequest(Player requested, Player requester) {
         removeRequest(requested, requester);
         if(requester != null) {
-            requester.sendMessage(Settings.getMessage(Setting.DENIED_REQUEST, Placeholder.of("%player%", requested.getName())));
-            requested.sendMessage(Settings.getMessage(Setting.DENIED_REQUEST_CONFIRMATION, Placeholder.of("%player%", requester.getName())));
+            requester.sendMessage(Settings.getMessage(Setting.DENIED_REQUEST, Placeholder.of("%player%", PAPIUtil.getName(requested))));
+            requested.sendMessage(Settings.getMessage(Setting.DENIED_REQUEST_CONFIRMATION, Placeholder.of("%player%", PAPIUtil.getName(requester))));
         }
     }
 

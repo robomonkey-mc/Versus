@@ -5,6 +5,8 @@ prefix: Versus
 api-version: 1.14
 authors: [ robomonkey ]
 description: Dueling optimized for Semi-Vanilla servers and casual fun.
+softdepend: [PlaceholderAPI]
+
 commands:
   arena:
     description: Create, edit, and delete dueling arenas.
