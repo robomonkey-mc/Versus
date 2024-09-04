@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.samjakob.spigui.SpiGUI;
 import me.clip.placeholderapi.metrics.bukkit.Metrics;
+import me.clip.placeholderapi.metrics.charts.SimplePie;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.arena.command.RootArenaCommand;
 import me.robomonkey.versus.duel.command.RootSpectateCommand;
@@ -12,12 +13,15 @@ import me.robomonkey.versus.duel.playerdata.adapter.ItemStackAdapter;
 import me.robomonkey.versus.duel.playerdata.adapter.ItemStackArrayAdapter;
 import me.robomonkey.versus.duel.DuelManager;
 import me.robomonkey.versus.duel.command.RootDuelCommand;
+import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.List;
 
 public final class Versus extends JavaPlugin {
 
@@ -88,6 +92,10 @@ public final class Versus extends JavaPlugin {
 
     private void registerMetrics() {
         Metrics metrics = new Metrics(this, pluginId);
+        List<Setting> noted = List.of(Setting.FIGHT_MUSIC_ENABLED, Setting.VICTORY_MUSIC_ENABLED, Setting.RETURN_WINNERS, Setting.RETURN_LOSERS, Setting.ANNOUNCE_DUELS, Setting.FIREWORKS_ENABLED, Setting.VICTORY_EFFECTS_ENABLED);
+        // Collects config metrics to inform development priorities in the future. Opt out in bstats config.
+        noted.stream()
+                .forEach(setting -> metrics.addCustomChart(new SimplePie(setting.toString(), () -> Settings.getStringVersion(setting))));
     }
 
 }

@@ -68,6 +68,10 @@ public class Settings {
         return MessageUtil.color(message);
     }
 
+    public static String getStringVersion(Setting setting){
+        return String.valueOf(setting.getValue());
+    }
+
     public static ReturnOption getReturnOption(Setting setting) {
         String option = (String) setting.getValue();
         try {
