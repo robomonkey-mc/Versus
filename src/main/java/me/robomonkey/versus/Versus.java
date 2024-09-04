@@ -3,6 +3,7 @@ package me.robomonkey.versus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.samjakob.spigui.SpiGUI;
+import me.clip.placeholderapi.metrics.bukkit.Metrics;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.arena.command.RootArenaCommand;
 import me.robomonkey.versus.duel.command.RootSpectateCommand;
@@ -25,6 +26,7 @@ public final class Versus extends JavaPlugin {
     private DuelManager duelManager;
     private static Versus instance;
     public static String prefix = "[Versus]";
+    public static int pluginId = 23279;
     public static SpiGUI spiGUI;
 
     public static void log(String message){
@@ -68,6 +70,7 @@ public final class Versus extends JavaPlugin {
         arenaManager.loadArenas();
         registerCommands();
         DependencyTracker.refresh(getServer());
+        registerMetrics();
     }
 
     @Override
@@ -81,6 +84,10 @@ public final class Versus extends JavaPlugin {
         new RootArenaCommand();
         new RootDuelCommand();
         new RootSpectateCommand();
+    }
+
+    private void registerMetrics() {
+        Metrics metrics = new Metrics(this, pluginId);
     }
 
 }
