@@ -78,8 +78,6 @@ public class DataManager {
                 if(loadedMap != null) {
                     dataMap = loadedMap;
                     Versus.log("Playerdata loaded successfully from file.");
-                } else {
-                    Versus.error("Playerdata loaded unsuccessfully.");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
