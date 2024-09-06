@@ -40,7 +40,7 @@ public abstract class AbstractCommand {
         Arrays.stream(branches).forEach(branch -> this.branches.add(branch));
     }
 
-    public void error(CommandSender sender, String message) {
+    public static void error(CommandSender sender, String message) {
         String errorPrefix = Settings.getMessage(Setting.ERROR_PREFIX);
         sender.sendMessage(errorPrefix+message);
     }

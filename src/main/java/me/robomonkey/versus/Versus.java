@@ -95,7 +95,7 @@ public final class Versus extends JavaPlugin {
         List<Setting> noted = List.of(Setting.FIGHT_MUSIC_ENABLED, Setting.VICTORY_MUSIC_ENABLED, Setting.RETURN_WINNERS, Setting.RETURN_LOSERS, Setting.ANNOUNCE_DUELS, Setting.FIREWORKS_ENABLED, Setting.VICTORY_EFFECTS_ENABLED);
         // Collects config metrics to inform development priorities in the future. Opt out in bstats config.
         noted.stream()
-                .forEach(setting -> metrics.addCustomChart(new SimplePie(setting.toString(), () -> Settings.getStringVersion(setting))));
+                .forEach(setting -> metrics.addCustomChart(new SimplePie(setting.toString().toLowerCase(), () -> Settings.getStringVersion(setting))));
     }
 
 }

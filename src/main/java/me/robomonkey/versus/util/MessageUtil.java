@@ -1,21 +1,12 @@
 package me.robomonkey.versus.util;
 
-import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-
-import javax.sound.sampled.Line;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.regex.Pattern;
 
 public class MessageUtil {
 
@@ -121,7 +112,7 @@ public class MessageUtil {
     }
 
     public static String get(String message){
-        message = (Settings.getBoolean(Setting.PREFIX_ENABLED))? Settings.getMessage(Setting.PREFIX) + message: message;
+        message = (Settings.is(Setting.PREFIX_ENABLED))? Settings.getMessage(Setting.PREFIX) + message: message;
         return color(message);
     }
 

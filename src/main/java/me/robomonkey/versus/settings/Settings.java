@@ -58,7 +58,7 @@ public class Settings {
         }
     }
 
-    public static boolean getBoolean(Setting setting){
+    public static boolean is(Setting setting){
         String key = setting.getPath();
         return (Boolean) setting.getValue();
     }

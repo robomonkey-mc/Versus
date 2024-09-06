@@ -1,6 +1,5 @@
 package me.robomonkey.versus.duel.command;
 
-import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.command.RootCommand;
 import me.robomonkey.versus.duel.Duel;
 import me.robomonkey.versus.duel.DuelManager;
@@ -20,7 +19,7 @@ public class RootSpectateCommand extends RootCommand  {
         setUsage("/spectate <player>");
         setDescription("Spectates a player in their current duel.");
         setAutonomous(true);
-        setPermissionRequired(Settings.getBoolean(Setting.PERMISSION_REQUIRED_TO_DUEL));
+        setPermissionRequired(Settings.is(Setting.PERMISSION_REQUIRED_TO_DUEL));
         setPlayersOnly(true);
         setArgumentRequired(true);
         setMaxArguments(1);

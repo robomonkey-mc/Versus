@@ -16,7 +16,7 @@ public class RootDuelCommand extends RootCommand {
 
     public RootDuelCommand() {
         super("duel", "versus.duel");
-        setPermissionRequired(Settings.getBoolean(Setting.PERMISSION_REQUIRED_TO_DUEL));
+        setPermissionRequired(Settings.is(Setting.PERMISSION_REQUIRED_TO_DUEL));
         setPlayersOnly(true);
         setArgumentRequired(true);
         setUsage("/duel <player>");

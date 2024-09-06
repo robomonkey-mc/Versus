@@ -5,7 +5,6 @@ import me.robomonkey.versus.settings.Placeholder;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
 import me.robomonkey.versus.util.EffectUtil;
-import me.robomonkey.versus.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Sound;
@@ -21,14 +20,14 @@ public class Duel {
     private DuelState state = DuelState.IDLE;
     private UUID winner;
     private UUID loser;
-    private boolean isPublic = Settings.getBoolean(Setting.ANNOUNCE_DUELS);
+    private boolean isPublic = Settings.is(Setting.ANNOUNCE_DUELS);
     private Countdown countdown = null;
-    private boolean victoryEffectsEnabled = Settings.getBoolean(Setting.VICTORY_EFFECTS_ENABLED);
-    private boolean fireworksEnabled = Settings.getBoolean(Setting.FIREWORKS_ENABLED);
+    private boolean victoryEffectsEnabled = Settings.is(Setting.VICTORY_EFFECTS_ENABLED);
+    private boolean fireworksEnabled = Settings.is(Setting.FIREWORKS_ENABLED);
     private Color fireworkColor = Settings.getColor(Setting.FIREWORKS_COLOR);
     private Sound victorySong = Settings.getSong(Setting.VICTORY_MUSIC);
     private Sound fightMusic = Settings.getSong(Setting.FIGHT_MUSIC);
-    private boolean blindnessEnabled = Settings.getBoolean(Setting.BLINDNESS_EFFECTS_ENABLED);
+    private boolean blindnessEnabled = Settings.is(Setting.BLINDNESS_EFFECTS_ENABLED);
 
     public Duel(Arena arena, Player... duelists){
         Collections.addAll(players, duelists);

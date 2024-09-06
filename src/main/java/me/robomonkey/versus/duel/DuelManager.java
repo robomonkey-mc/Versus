@@ -240,6 +240,7 @@ public class DuelManager {
         List.of(new CommandListener(),
                 new JoinEventListener(),
                 new RespawnEventListener(),
+                new InteractEventListener(),
                 new DeathEventListener(),
                 new MoveEventListener(),
                 new QuitEventListener(),

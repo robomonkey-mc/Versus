@@ -50,6 +50,8 @@ public enum Setting {
     VICTORY_MUSIC_ENABLED("dueling.music"),
     VICTORY_MUSIC("dueling.music"),
 
+    SHIFT_CLICK_REQUESTING_ENABLED("requesting.mechanics"),
+
     DENIED_REQUEST("requesting.messages"),
     DENIED_REQUEST_CONFIRMATION("requesting.messages"),
     CANCEL_REQUEST("requesting.messages"),

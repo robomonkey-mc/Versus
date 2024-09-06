@@ -14,7 +14,7 @@ public class PAPIUtil {
     public static String getName(OfflinePlayer player) {
 
         if( DependencyTracker.PlaceholderAPI &&
-            Settings.getBoolean(Setting.ESSENTIALS_NICKNAMES_ENABLED) &&
+            Settings.is(Setting.ESSENTIALS_NICKNAMES_ENABLED) &&
             PlaceholderAPI.isRegistered("essentials")) {
             return PlaceholderAPI.setPlaceholders(player, nickname_key);
         }
@@ -23,7 +23,7 @@ public class PAPIUtil {
 
     public static String getName(Player player) {
         if( DependencyTracker.PlaceholderAPI &&
-                Settings.getBoolean(Setting.ESSENTIALS_NICKNAMES_ENABLED) &&
+                Settings.is(Setting.ESSENTIALS_NICKNAMES_ENABLED) &&
                 PlaceholderAPI.isRegistered("essentials")) {
             return PlaceholderAPI.setPlaceholders(player, nickname_key);
         }
