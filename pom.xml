@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.robomonkey</groupId>
-    <artifactId>versus</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>Versus</artifactId>
+    <version>1.3.3</version>
     <packaging>jar</packaging>
 
     <name>Versus</name>
@@ -34,12 +34,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.6.0</version>
                 <configuration>
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>me.robomonkey.versus</shadedPattern>
+                            <shadedPattern>me.robomonkey</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -49,9 +49,6 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
-                        <configuration>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
