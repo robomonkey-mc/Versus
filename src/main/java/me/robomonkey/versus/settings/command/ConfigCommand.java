@@ -11,7 +11,7 @@ public class ConfigCommand extends AbstractCommand {
         super("config", "");
         setUsage("/versus config");
         setDescription("Shows all commands for /versus config.");
-        addBranches(new SaveCommand(), new SettingCommand(), new ReloadCommand());
+        addBranches(new SaveCommand(), new SetCommand(), new ReloadCommand());
         setPlayersOnly(true);
         setAutonomous(false);
     }

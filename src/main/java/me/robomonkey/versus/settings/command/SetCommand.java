@@ -10,8 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SettingCommand extends AbstractCommand {
-    public SettingCommand() {
+public class SetCommand extends AbstractCommand {
+    public SetCommand() {
         super("set", null);
         setUsage("/versus config set <name> <value>");
         setDescription("Changes a config setting named 'name' to 'value'.");
@@ -33,7 +33,7 @@ public class SettingCommand extends AbstractCommand {
             return;
         }
         Settings.getInstance().changeSetting(setting, converted);
-        sender.sendMessage(MessageUtil.get("&sSuccessfully set the &p"+setting+"&s to &p'")+option+MessageUtil.color("' &sin the config file."),
+        sender.sendMessage(MessageUtil.get("&sSuccessfully set &p"+setting+"&s to &b'")+option+MessageUtil.color("' &sin the config file."),
                 MessageUtil.get("&sType &p/versus config save&s to save all changes."));
     }
 

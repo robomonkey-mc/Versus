@@ -16,3 +16,7 @@ commands:
     description: Spectate a player in a duel.
   versus:
     description: Configure Versus.
+  createworld:
+    description: Create a world.
+  visitworld:
+    description: Visit a world.
