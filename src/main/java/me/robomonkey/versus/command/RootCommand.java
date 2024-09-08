@@ -6,11 +6,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.DoubleStream;
 
 public abstract class RootCommand extends AbstractCommand implements CommandExecutor, TabCompleter {
-
 
     public RootCommand(String command, String permission) {
         super(command, permission);

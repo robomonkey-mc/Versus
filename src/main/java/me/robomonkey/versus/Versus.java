@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.samjakob.spigui.SpiGUI;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.arena.command.RootArenaCommand;
+import me.robomonkey.versus.settings.command.RootVersusCommand;
 import me.robomonkey.versus.duel.command.RootSpectateCommand;
 import me.robomonkey.versus.duel.playerdata.adapter.ConfigurationSerializableAdapter;
 import me.robomonkey.versus.duel.playerdata.adapter.ItemStackAdapter;
@@ -86,6 +87,7 @@ public final class Versus extends JavaPlugin {
 
     public void registerCommands() {
         new RootArenaCommand();
+        new RootVersusCommand();
         new RootDuelCommand();
         new RootSpectateCommand();
     }

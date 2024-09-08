@@ -27,6 +27,7 @@ public abstract class AbstractCommand {
     private boolean permissionRequired = true;
     private boolean argumentRequired = true;
     private int maxArguments = -1;
+    private int minArguments = 0;
     private boolean autonomous = false;
 
     public AbstractCommand(String name, String permission) {
@@ -55,6 +56,10 @@ public abstract class AbstractCommand {
 
     public String getDescription() {
         return this.description;
+    }
+
+    public void setMinArguments(int minimum) {
+        minArguments = minimum;
     }
 
     public void setDescription(String description) {
@@ -128,8 +133,22 @@ public abstract class AbstractCommand {
         branches.addAll(Arrays.asList(newBranch));
     }
 
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+
     public void enforcePermissionRulesForChildren() {
-        branches.forEach(branch -> branch.setPermissionRequired(this.permissionRequired));
+        branches.forEach(branch -> {
+            branch.setPermissionRequired(this.permissionRequired);
+            branch.enforcePermissionRulesForChildren();
+        });
+    }
+
+    public void enforcePermissionForChildren() {
+        branches.forEach(branch -> {
+            branch.setPermission(this.permission);
+            branch.enforcePermissionForChildren();
+        });
     }
 
     public void addTabCompletion(String completion) {
@@ -227,6 +246,18 @@ public abstract class AbstractCommand {
         return emptyList;
     }
 
+    public String buildArgs(String[] args, int startInclusive, int endExclusive) {
+        StringBuilder argsBuilder = new StringBuilder();
+        for(int index = startInclusive; index < endExclusive; index++) {
+            String nextPart = args[index];
+            argsBuilder.append(nextPart);
+            if (index!=endExclusive-1) {
+                argsBuilder.append(" ");
+            }
+        }
+        return argsBuilder.toString();
+    }
+
     void dispatchCommand(CommandSender sender, String[] args){
         if(permissionRequired && !sender.hasPermission(permission)){
             sender.sendMessage(permissionErrorMessage);
@@ -240,6 +271,10 @@ public abstract class AbstractCommand {
             callCommand(sender, args);
             return;
         } else if (args.length == 0) {
+            sender.sendMessage(getHelp());
+            return;
+        }
+        else if (args.length < minArguments) {
             sender.sendMessage(getHelp());
             return;
         }

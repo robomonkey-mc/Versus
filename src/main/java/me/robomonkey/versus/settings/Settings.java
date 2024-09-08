@@ -3,6 +3,7 @@ package me.robomonkey.versus.settings;
 import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.duel.ReturnOption;
 import me.robomonkey.versus.util.MessageUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -10,9 +11,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Consumer;
 
 public class Settings {
 
@@ -20,6 +20,7 @@ public class Settings {
     FileConfiguration config;
     final static String configVersion = "1.0";
     private static Settings instance;
+    private Map<Setting, Object> unsavedSettingChanges = new HashMap<>();
 
     public static Map<String, Color> colorMap = Map.ofEntries(
             Map.entry("aqua", Color.AQUA),
@@ -36,6 +37,8 @@ public class Settings {
             Map.entry("white", Color.WHITE),
             Map.entry("yellow", Color.YELLOW)
     );
+
+    public static List<String> musicOptions = List.of("creative", "credits", "disc_5", "disc_11", "disc_13", "disc_blocks", "disc_cat", "disc_chirp", "disc_creator", "disc_creator_music_box", "disc_far", "disc_mall", "disc_mellohi", "disc_otherside", "disc_pigstep", "disc_precipice", "disc_relic", "disc_stal", "disc_strad", "disc_wait", "disc_ward");
 
     public static Settings getInstance(){
         if(instance==null){
@@ -56,6 +59,13 @@ public class Settings {
             Versus.log("Error: Config is outdated. Versus will now force a config update and copy all existing options.");
             updateConfig();
         }
+    }
+
+    public void reloadConfig(Runnable after) {
+        Bukkit.getScheduler().runTaskAsynchronously(Versus.getInstance(), () -> {
+            registerConfig();
+            Bukkit.getScheduler().runTask(Versus.getInstance(), after);
+        });
     }
 
     public static boolean is(Setting setting){
@@ -134,6 +144,15 @@ public class Settings {
         return (T) setting.getValue();
     }
 
+    public static boolean isSetting(String name) {
+        try {
+            Setting.valueOf(name);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+        return true;
+    }
+
     private void loadSettings(){
         Setting[] settings = Setting.values();
         reloadConfigFromFile();
@@ -174,6 +193,36 @@ public class Settings {
         Versus.log("Config has been updated.");
     }
 
+    public void changeSetting(Setting setting, Object newValue) {
+        unsavedSettingChanges.put(setting, newValue);
+    }
+
+    /**
+     * Saves all setting to the config, saves the config to the file, and reloads certain classes as necessary.
+     * @return A list of all settings changed.
+     */
+    public void saveSettingsChanges(Consumer<List<Setting>> after) {
+        Bukkit.getScheduler().runTaskAsynchronously(Versus.getInstance(), () -> {
+            try {
+                unsavedSettingChanges.keySet().stream().forEach(setting -> {
+                    String key = setting.getPath();
+                    Object value = unsavedSettingChanges.get(setting);
+                    Versus.log("Changing "+setting.toString()+" to "+value.toString());
+                    setting.setValue(value);
+                    config.set(key, value);
+                    saveConfigToFile();
+                });
+                List<Setting> changedCommands = List.copyOf(unsavedSettingChanges.keySet());
+                Bukkit.getScheduler().runTask(Versus.getInstance(), () -> after.accept(changedCommands));
+                unsavedSettingChanges.clear();
+                MessageUtil.updateColors();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Bukkit.getScheduler().runTask(Versus.getInstance(), () -> after.accept(null));
+            }
+        });
+    }
+
     private void loadSetting(Setting setting) throws Exception {
         String key = setting.getPath();
         if(!config.isSet(key) || config.get(key) == null) {
@@ -189,10 +238,44 @@ public class Settings {
         }
     }
 
-    private void saveSetting(Setting setting){
+    /**
+     * Attempts to convert value into an appropriate object.
+     * Returns null if unsuccessful.
+     * @param value The string value of the setting.
+     * @param setting The setting in question.
+     * @return The new value, returned as a generic object.
+     */
+    public static Object tryConvertFromString(String value, Setting setting) {
+        Object newValue;
+        switch(setting.getType()) {
+            case NUMBER:
+                try {
+                    newValue = Integer.parseInt(value);
+                } catch (NumberFormatException e) {
+                    return null;
+                }
+                break;
+            case BOOLEAN:
+                if(value.equals("true")) {
+                    newValue = true;
+                } else if (value.equals("false")) {
+                    newValue = false;
+                } else {
+                    newValue = null;
+                }
+                break;
+            default:
+                newValue = value;
+                break;
+        }
+        return newValue;
+    }
+
+    public void saveSetting(Setting setting){
         String key = setting.getPath();
         Object value = setting.getValue();
         config.set(key, value);
+        saveConfigToFile();
     }
 
     private String getFileConfigVersion() {

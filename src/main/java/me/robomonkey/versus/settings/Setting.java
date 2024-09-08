@@ -1,73 +1,78 @@
 package me.robomonkey.versus.settings;
 
 import me.robomonkey.versus.Versus;
+import me.robomonkey.versus.duel.ReturnOption;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public enum Setting {
 
-    ERROR_PREFIX("messages-general.errors"),
-    NO_PERMISSION_MESSAGE("messages-general.errors"),
-    ONLY_PLAYERS_MESSAGE("messages-general.errors"),
+    ERROR_PREFIX("messages-general.errors", Type.STRING),
+    NO_PERMISSION_MESSAGE("messages-general.errors", Type.STRING),
+    ONLY_PLAYERS_MESSAGE("messages-general.errors", Type.STRING),
 
-    PREFIX("messages-general.admin"),
-    PREFIX_ENABLED("messages-general.admin"),
-    PRIMARY_COLOR("messages-general.admin"),
-    HIGHLIGHTED_COLOR("messages-general.admin"),
-    BOLD_COLOR("messages-general.admin"),
-    SUBTLE_COLOR("messages-general.admin"),
-    LINE("messages-general.admin"),
+    PREFIX("messages-general.admin", Type.STRING),
+    PREFIX_ENABLED("messages-general.admin", Type.BOOLEAN),
+    PRIMARY_COLOR("messages-general.admin", Type.MCCOLOR),
+    HIGHLIGHTED_COLOR("messages-general.admin", Type.MCCOLOR),
+    BOLD_COLOR("messages-general.admin", Type.MCCOLOR),
+    SUBTLE_COLOR("messages-general.admin", Type.MCCOLOR),
+    LINE("messages-general.admin", Type.STRING),
 
-    DUEL_LOSS_MESSAGE("dueling.messages"),
-    VICTORY_SUBTITLE_MESSAGE("dueling.messages"),
-    VICTORY_TITLE_MESSAGE("dueling.messages"),
-    DUEL_GO_MESSAGE("dueling.messages"),
-    COUNTDOWN_TITLE("dueling.messages"),
-    COUNTDOWN_MESSAGE("dueling.messages"),
-    DUEL_SPECTATE_MESSAGE("dueling.messages"),
+    DUEL_LOSS_MESSAGE("dueling.messages", Type.STRING),
+    VICTORY_SUBTITLE_MESSAGE("dueling.messages", Type.STRING),
+    VICTORY_TITLE_MESSAGE("dueling.messages", Type.STRING),
+    DUEL_GO_MESSAGE("dueling.messages", Type.STRING),
+    COUNTDOWN_TITLE("dueling.messages", Type.STRING),
+    COUNTDOWN_MESSAGE("dueling.messages", Type.STRING),
+    DUEL_SPECTATE_MESSAGE("dueling.messages", Type.STRING),
 
-    RETURN_WINNERS("dueling.mechanics"),
-    INSTANT_RESPAWN("dueling.mechanics"),
-    PERMISSION_REQUIRED_TO_DUEL("dueling.mechanics"),
-    RETURN_LOSERS("dueling.mechanics"),
-    BLOCKED_COMMANDS("dueling.mechanics"),
-    ALLOW_BLOCK_PLACEMENTS("dueling.mechanics"),
-    COUNTDOWN_DURATION("dueling.mechanics"),
-    ALLOW_BLOCK_DESTRUCTION("dueling.mechanics"),
+    RETURN_WINNERS("dueling.mechanics", Type.RETURNOPTIONS),
+    INSTANT_RESPAWN("dueling.mechanics", Type.BOOLEAN),
+    PERMISSION_REQUIRED_TO_DUEL("dueling.mechanics", Type.BOOLEAN),
+    RETURN_LOSERS("dueling.mechanics", Type.RETURNOPTIONS),
+    BLOCKED_COMMANDS("dueling.mechanics", Type.INVALID),
+    ALLOW_BLOCK_PLACEMENTS("dueling.mechanics", Type.BOOLEAN),
+    COUNTDOWN_DURATION("dueling.mechanics", Type.NUMBER),
+    ALLOW_BLOCK_DESTRUCTION("dueling.mechanics", Type.BOOLEAN),
 
-    ANNOUNCE_DUELS("dueling.announcements"),
-    DUEL_START_ANNOUNCEMENT("dueling.announcements"),
-    DUEL_END_ANNOUNCEMENT("dueling.announcements"),
+    ANNOUNCE_DUELS("dueling.announcements", Type.BOOLEAN),
+    DUEL_START_ANNOUNCEMENT("dueling.announcements", Type.STRING),
+    DUEL_END_ANNOUNCEMENT("dueling.announcements", Type.STRING),
 
-    VICTORY_EFFECTS_ENABLED("dueling.effects"),
-    VICTORY_EFFECTS_DURATION("dueling.effects"),
-    FIREWORKS_ENABLED("dueling.effects"),
-    FIREWORKS_COLOR("dueling.effects"),
-    BLINDNESS_EFFECTS_ENABLED("dueling.effects"),
+    VICTORY_EFFECTS_ENABLED("dueling.effects", Type.BOOLEAN),
+    VICTORY_EFFECTS_DURATION("dueling.effects", Type.BOOLEAN),
+    FIREWORKS_ENABLED("dueling.effects", Type.BOOLEAN),
+    FIREWORKS_COLOR("dueling.effects", Type.COLOR),
+    BLINDNESS_EFFECTS_ENABLED("dueling.effects", Type.BOOLEAN),
 
-    FIGHT_MUSIC_ENABLED("dueling.music"),
-    FIGHT_MUSIC("dueling.music"),
-    VICTORY_MUSIC_ENABLED("dueling.music"),
-    VICTORY_MUSIC("dueling.music"),
+    FIGHT_MUSIC_ENABLED("dueling.music", Type.BOOLEAN),
+    FIGHT_MUSIC("dueling.music", Type.BOOLEAN),
+    VICTORY_MUSIC_ENABLED("dueling.music", Type.BOOLEAN),
+    VICTORY_MUSIC("dueling.music", Type.MUSIC),
 
-    SHIFT_CLICK_REQUESTING_ENABLED("requesting.mechanics"),
+    SHIFT_CLICK_REQUESTING_ENABLED("requesting.mechanics", Type.BOOLEAN),
 
-    DENIED_REQUEST("requesting.messages"),
-    DENIED_REQUEST_CONFIRMATION("requesting.messages"),
-    CANCEL_REQUEST("requesting.messages"),
-    SENT_REQUEST("requesting.messages"),
-    REQUEST_NOTIFICATION("requesting.messages"),
-    ACCEPT_BUTTON("requesting.messages"),
-    NO_ARENAS_AVAILABLE("requesting.messages"),
-    DENY_BUTTON("requesting.messages"),
+    DENIED_REQUEST("requesting.messages", Type.STRING),
+    DENIED_REQUEST_CONFIRMATION("requesting.messages", Type.STRING),
+    CANCEL_REQUEST("requesting.messages", Type.STRING),
+    SENT_REQUEST("requesting.messages", Type.STRING),
+    REQUEST_NOTIFICATION("requesting.messages", Type.STRING),
+    ACCEPT_BUTTON("requesting.messages", Type.STRING),
+    NO_ARENAS_AVAILABLE("requesting.messages", Type.STRING),
+    DENY_BUTTON("requesting.messages", Type.STRING),
 
-    ESSENTIALS_NICKNAMES_ENABLED("dependencies.placeholderAPI");
+    ESSENTIALS_NICKNAMES_ENABLED("dependencies.placeholderAPI", Type.BOOLEAN);
 
     public Object value;
     public String path;
+    public Type type;
 
-    Setting(String path) {
+    Setting(String path, Type type) {
         this.path = path + "."+ this.toString().toLowerCase();
+        this.type = type;
     }
 
     public Object getValue() {
@@ -91,7 +96,7 @@ public enum Setting {
      * @return
      */
     public boolean setValue(Object value) {
-       if(value.getClass() == getType()) {
+       if(value.getClass() == myClass()) {
            this.value = value;
            return true;
        } else {
@@ -99,9 +104,33 @@ public enum Setting {
        }
     }
 
-    public Class getType(){
+    public Class myClass(){
         Object savedDefault = Versus.getInstance().getConfig().getDefaults().get(getPath());
         return savedDefault.getClass();
+    }
+
+    public Type getType(){
+        return this.type;
+    }
+
+    public enum Type {
+        BOOLEAN(List.of("true","false")),
+        STRING(List.of("<message>")),
+        MUSIC(List.of("music")),
+        RETURNOPTIONS(Arrays.stream(ReturnOption.values()).map(value -> value.toString()).collect(Collectors.toList())),
+        COLOR(List.copyOf(Settings.colorMap.keySet())),
+        MCCOLOR(List.of("<colorcode>")),
+        NUMBER(List.of("<number>")),
+        INVALID(null);
+        List<String> options;
+
+        Type(List<String> autoCompletions) {
+            options=autoCompletions;
+        }
+
+        public List<String> getOptions() {
+            return options;
+        }
     }
 
 }

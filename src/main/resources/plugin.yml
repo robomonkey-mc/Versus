@@ -14,3 +14,5 @@ commands:
     description: Request to duel with another player.
   spectate:
     description: Spectate a player in a duel.
+  versus:
+    description: Configure Versus.

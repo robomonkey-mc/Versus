@@ -20,6 +20,14 @@ public class MessageUtil {
     public static String BOLD = Settings.getMessage(Setting.BOLD_COLOR);
     public static String SUBTLE = Settings.getMessage(Setting.SUBTLE_COLOR);
 
+    public static void updateColors() {
+        LINE = Settings.getMessage(Setting.LINE);
+        PRIMARY = Settings.getMessage(Setting.PRIMARY_COLOR);
+        HIGHLIGHTED = Settings.getMessage(Setting.HIGHLIGHTED_COLOR);
+        BOLD = Settings.getMessage(Setting.BOLD_COLOR);
+        SUBTLE = Settings.getMessage(Setting.SUBTLE_COLOR);
+    }
+
     public static TextComponent getClickableMessage(String message, String commandText, String hoverText, String buttonText){
         String[] splitMessage = message.split("%button%", 3);
         if(splitMessage.length<2){

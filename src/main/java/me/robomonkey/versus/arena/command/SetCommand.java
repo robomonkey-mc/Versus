@@ -3,6 +3,8 @@ package me.robomonkey.versus.arena.command;
 import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.arena.*;
 import me.robomonkey.versus.command.AbstractCommand;
+import me.robomonkey.versus.settings.Setting;
+import me.robomonkey.versus.settings.Settings;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
