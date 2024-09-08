@@ -1,8 +1,10 @@
 package me.robomonkey.versus.arena.data;
 
+import me.robomonkey.versus.Versus;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.WorldCreator;
 
 public class LocationData {
     public double x;
@@ -22,8 +24,16 @@ public class LocationData {
     }
 
     public Location toLocation() {
+        ensureExists();
         World world = Bukkit.getWorld(this.world);
         Location newLocation = new Location(world, x, y, z, yaw, pitch);
         return newLocation;
+    }
+
+    public void ensureExists() {
+        if(Bukkit.getWorld(this.world)==null) {
+            Versus.log("Loading world '"+world+"'.");
+            new WorldCreator(world).createWorld();
+        }
     }
 }
