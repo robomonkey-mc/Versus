@@ -116,10 +116,13 @@ public enum Setting {
     public enum Type {
         BOOLEAN(List.of("true","false")),
         STRING(List.of("<message>")),
-        MUSIC(List.of("music")),
+        MUSIC(List.of("creative", "credits", "disc_5", "disc_11", "disc_13", "disc_blocks",
+                "disc_cat", "disc_chirp", "disc_creator", "disc_creator_music_box", "disc_far",
+                "disc_mall", "disc_mellohi", "disc_otherside", "disc_pigstep", "disc_precipice",
+                "disc_relic", "disc_stal", "disc_strad", "disc_wait", "disc_ward")),
         RETURNOPTIONS(Arrays.stream(ReturnOption.values()).map(value -> value.toString()).collect(Collectors.toList())),
         COLOR(List.copyOf(Settings.colorMap.keySet())),
-        MCCOLOR(List.of("<colorcode>")),
+        MCCOLOR(List.of("&0","&1","&2","&3","&4","&5","&6","&7","&8","&9","&a","&b","&c","&d","&e","&f")),
         NUMBER(List.of("<number>")),
         INVALID(null);
         List<String> options;

@@ -64,6 +64,7 @@ public class Settings {
     public void reloadConfig(Runnable after) {
         Bukkit.getScheduler().runTaskAsynchronously(Versus.getInstance(), () -> {
             registerConfig();
+            MessageUtil.updateColors();
             Bukkit.getScheduler().runTask(Versus.getInstance(), after);
         });
     }
