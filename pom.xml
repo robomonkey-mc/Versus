@@ -6,7 +6,7 @@
 
     <groupId>me.robomonkey</groupId>
     <artifactId>Versus</artifactId>
-    <version>1.3.3</version>
+    <version>1.4.0</version>
     <packaging>jar</packaging>
 
     <name>Versus</name>
@@ -78,6 +78,10 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>matteodev</id>
+            <url>https://www.matteodev.it/spigot/public/maven/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -102,6 +106,18 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>${spigot.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>dev.lone</groupId>
+            <artifactId>LoneLibs</artifactId>
+            <version>1.0.58</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.LoneDev6</groupId>
+            <artifactId>api-itemsadder</artifactId>
+            <version>3.6.1</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

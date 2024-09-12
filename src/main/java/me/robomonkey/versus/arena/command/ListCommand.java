@@ -1,6 +1,5 @@
 package me.robomonkey.versus.arena.command;
 
-import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.arena.Arena;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.command.AbstractCommand;
@@ -13,7 +12,7 @@ import java.util.List;
 public class ListCommand extends AbstractCommand {
 
     public ListCommand() {
-        super("list","versus.arena.list");
+        super("list", "versus.arena.list");
         setMaxArguments(1);
         setArgumentRequired(false);
         setUsage("/arena list");
@@ -22,7 +21,7 @@ public class ListCommand extends AbstractCommand {
 
     @Override
     public void callCommand(CommandSender sender, String[] args) {
-        if(ArenaManager.getInstance().getAllArenas().size() == 0) {
+        if (ArenaManager.getInstance().getAllArenas().size() == 0) {
             sender.sendMessage(MessageUtil.get("&sThere are no &pactive arenas&s currently."));
             return;
         }
@@ -38,7 +37,7 @@ public class ListCommand extends AbstractCommand {
         Location arenaLocation = arena.getCenterLocation();
         int arenaX = (int) arenaLocation.getX(), arenaY = (int) arenaLocation.getY(), arenaZ = (int) arenaLocation.getZ();
         return MessageUtil.color(
-                "&h"+arena.getName()+": " + "&sX&p "+arenaX+" &sY&p "+arenaY+" &sZ&p " + arenaZ + " &sKit: &p"+arena.getKit().getName()+"\n"
+                "&h" + arena.getName() + ": " + "&sX&p " + arenaX + " &sY&p " + arenaY + " &sZ&p " + arenaZ + " &sKit: &p" + arena.getKit().getName() + "\n"
         );
     }
 

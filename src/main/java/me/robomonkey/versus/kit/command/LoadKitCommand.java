@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class LoadKitCommand extends AbstractCommand  {
+public class LoadKitCommand extends AbstractCommand {
     KitManager kitManager = KitManager.getInstance();
 
     public LoadKitCommand() {
@@ -23,17 +23,17 @@ public class LoadKitCommand extends AbstractCommand  {
     @Override
     public void callCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
-        if(args.length<1) {
+        if (args.length < 1) {
             error(sender, "Please specify the kit to load.");
             return;
         }
         String kitName = args[0];
-        if(kitManager.contains(kitName)) {
+        if (kitManager.contains(kitName)) {
             ItemStack[] contents = kitManager.getKit(kitName).getItems();
             player.getInventory().setContents(contents);
-            sender.sendMessage(MessageUtil.get("&pYou loaded &h"+kitName+"&p."));
+            sender.sendMessage(MessageUtil.get("&pYou loaded &h" + kitName + "&p."));
         } else {
-            error(sender, "No kit named "+kitName+" exists.");
+            error(sender, "No kit named " + kitName + " exists.");
         }
     }
 

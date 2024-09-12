@@ -64,19 +64,20 @@ public enum Setting {
     NO_ARENAS_AVAILABLE("requesting.messages", Type.STRING),
     DENY_BUTTON("requesting.messages", Type.STRING),
 
-    ESSENTIALS_NICKNAMES_ENABLED("dependencies.placeholderAPI", Type.BOOLEAN);
+    ESSENTIALS_NICKNAMES_ENABLED("dependencies.placeholderAPI", Type.BOOLEAN),
+    ITEMS_ADDER_FOR_KITS("dependencies.itemsadder", Type.BOOLEAN);
 
     public Object value;
     public String path;
     public Type type;
 
     Setting(String path, Type type) {
-        this.path = path + "."+ this.toString().toLowerCase();
+        this.path = path + "." + this.toString().toLowerCase();
         this.type = type;
     }
 
     public Object getValue() {
-        if(value == null) {
+        if (value == null) {
             return getDefaultValue();
         }
         return value;
@@ -92,29 +93,30 @@ public enum Setting {
 
     /**
      * Returns whether a value was successfully set
+     *
      * @param value
      * @return
      */
     public boolean setValue(Object value) {
-       if(value.getClass() == myClass()) {
-           this.value = value;
-           return true;
-       } else {
-           return false;
-       }
+        if (value.getClass() == myClass()) {
+            this.value = value;
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public Class myClass(){
+    public Class myClass() {
         Object savedDefault = Versus.getInstance().getConfig().getDefaults().get(getPath());
         return savedDefault.getClass();
     }
 
-    public Type getType(){
+    public Type getType() {
         return this.type;
     }
 
     public enum Type {
-        BOOLEAN(List.of("true","false")),
+        BOOLEAN(List.of("true", "false")),
         STRING(List.of("<message>")),
         MUSIC(List.of("creative", "credits", "disc_5", "disc_11", "disc_13", "disc_blocks",
                 "disc_cat", "disc_chirp", "disc_creator", "disc_creator_music_box", "disc_far",
@@ -122,13 +124,13 @@ public enum Setting {
                 "disc_relic", "disc_stal", "disc_strad", "disc_wait", "disc_ward")),
         RETURNOPTIONS(Arrays.stream(ReturnOption.values()).map(value -> value.toString()).collect(Collectors.toList())),
         COLOR(List.copyOf(Settings.colorMap.keySet())),
-        MCCOLOR(List.of("&0","&1","&2","&3","&4","&5","&6","&7","&8","&9","&a","&b","&c","&d","&e","&f")),
+        MCCOLOR(List.of("&0", "&1", "&2", "&3", "&4", "&5", "&6", "&7", "&8", "&9", "&a", "&b", "&c", "&d", "&e", "&f")),
         NUMBER(List.of("<number>")),
         INVALID(null);
         List<String> options;
 
         Type(List<String> autoCompletions) {
-            options=autoCompletions;
+            options = autoCompletions;
         }
 
         public List<String> getOptions() {

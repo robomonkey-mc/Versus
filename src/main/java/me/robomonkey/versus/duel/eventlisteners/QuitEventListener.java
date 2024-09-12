@@ -1,7 +1,6 @@
 package me.robomonkey.versus.duel.eventlisteners;
 
 import me.robomonkey.versus.duel.DuelManager;
-import me.robomonkey.versus.duel.request.RequestManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,7 +13,7 @@ public class QuitEventListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        if(duelManager.isDueling(player)) {
+        if (duelManager.isDueling(player)) {
             DuelManager.getInstance().registerQuitter(player);
         }
     }

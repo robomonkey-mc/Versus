@@ -22,6 +22,7 @@ public class ArenaData {
     /**
      * <h1>Creates Arena.</h1>
      * <p>Note: Arenas handle their own verification logic.</p>
+     *
      * @param
      */
     public ArenaData(String name,

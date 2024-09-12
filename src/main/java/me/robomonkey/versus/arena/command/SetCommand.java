@@ -1,10 +1,7 @@
 package me.robomonkey.versus.arena.command;
 
-import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.arena.*;
 import me.robomonkey.versus.command.AbstractCommand;
-import me.robomonkey.versus.settings.Setting;
-import me.robomonkey.versus.settings.Settings;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -23,18 +20,18 @@ public class SetCommand extends AbstractCommand {
 
     @Override
     public void callCommand(CommandSender sender, String[] args) {
-        if(args.length<2){
+        if (args.length < 2) {
             sender.sendMessage(getUsage());
             return;
         }
         Player player = (Player) sender;
         String property = args[1];
         ArenaProperty propertyFromString = ArenaProperty.fromString(property);
-        if(propertyFromString == null) {
+        if (propertyFromString == null) {
             error(sender, "No arena property exists with that name.");
             return;
         }
-        if(ArenaBuilderCoordinator.getInstance().hasArenaBuilder(player)) {
+        if (ArenaBuilderCoordinator.getInstance().hasArenaBuilder(player)) {
             ArenaBuilder builder = ArenaBuilderCoordinator.getInstance().getArenaBuilder(player);
             builder.handleArenaEdit(propertyFromString);
         } else {
@@ -47,8 +44,8 @@ public class SetCommand extends AbstractCommand {
         ArenaManager arenaManager = ArenaManager.getInstance();
         Arena arenaFromString = arenaManager.getArena(arenaName);
 
-        if(arenaFromString == null) {
-            error(player, "No arena exists with the name '"+arenaName+"'.");
+        if (arenaFromString == null) {
+            error(player, "No arena exists with the name '" + arenaName + "'.");
             return;
         }
 
@@ -57,13 +54,13 @@ public class SetCommand extends AbstractCommand {
 
     @Override
     public List<String> callCompletionsUpdate(CommandSender sender, String[] args) {
-        if(args.length==1){
+        if (args.length == 1) {
             List<String> arenaNames = ArenaManager.getInstance().getAllArenas()
                     .stream().map(arena -> arena.getName())
                     .collect(Collectors.toList());
             return arenaNames;
         }
-        if(args.length==2){
+        if (args.length == 2) {
             List<String> propertyNames = Arrays.stream(ArenaProperty.values()).map(property -> property.toString()).collect(Collectors.toList());
             return propertyNames;
         }

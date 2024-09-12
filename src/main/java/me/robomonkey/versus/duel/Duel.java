@@ -22,6 +22,8 @@ public class Duel {
     private UUID loser;
     private boolean isPublic = Settings.is(Setting.ANNOUNCE_DUELS);
     private Countdown countdown = null;
+    private boolean fightMusicEnabled = Settings.is(Setting.FIGHT_MUSIC_ENABLED);
+    private boolean victoryMusicEnabled = Settings.is(Setting.VICTORY_MUSIC_ENABLED);
     private boolean victoryEffectsEnabled = Settings.is(Setting.VICTORY_EFFECTS_ENABLED);
     private boolean fireworksEnabled = Settings.is(Setting.FIREWORKS_ENABLED);
     private Color fireworkColor = Settings.getColor(Setting.FIREWORKS_COLOR);
@@ -29,7 +31,7 @@ public class Duel {
     private Sound fightMusic = Settings.getSong(Setting.FIGHT_MUSIC);
     private boolean blindnessEnabled = Settings.is(Setting.BLINDNESS_EFFECTS_ENABLED);
 
-    public Duel(Arena arena, Player... duelists){
+    public Duel(Arena arena, Player... duelists) {
         Collections.addAll(players, duelists);
         this.activeArena = arena;
     }
@@ -67,7 +69,7 @@ public class Duel {
     }
 
     public UUID getLoserID() {
-       return loser;
+        return loser;
     }
 
     public Player getWinner() {
@@ -78,7 +80,9 @@ public class Duel {
         return Bukkit.getPlayer(getLoserID());
     }
 
-    public boolean isPublic() { return this.isPublic; }
+    public boolean isPublic() {
+        return this.isPublic;
+    }
 
     public Sound getFightMusic() {
         return fightMusic;
@@ -88,19 +92,27 @@ public class Duel {
         return victorySong;
     }
 
+    public boolean isFightMusicEnabled() {
+        return this.fightMusicEnabled;
+    }
+
+    public boolean isVictoryMusicEnabled() {
+        return this.victoryMusicEnabled;
+    }
+
     public Color getFireworkColor() {
-        return (fireworkColor == null)? Color.ORANGE: fireworkColor;
+        return (fireworkColor == null) ? Color.ORANGE : fireworkColor;
     }
 
     public void setWinner(UUID winner) {
         this.winner = winner;
     }
 
-    public void setState(DuelState state){
+    public void setState(DuelState state) {
         this.state = state;
     }
 
-    public void end(Player winner, Player loser){
+    public void end(Player winner, Player loser) {
         this.loser = loser.getUniqueId();
         this.winner = winner.getUniqueId();
         this.setState(DuelState.ENDED);
@@ -111,9 +123,9 @@ public class Duel {
         int countdownDuration = Settings.getNumber(Setting.COUNTDOWN_DURATION);
         players.stream().forEach((player) -> EffectUtil.freezePlayer(player));
         countdown = new Countdown(countdownDuration, () -> {
-                players.stream()
-                        .forEach(EffectUtil::unfreezePlayer);
-                onCountdownExpiration.run();
+            players.stream()
+                    .forEach(EffectUtil::unfreezePlayer);
+            onCountdownExpiration.run();
         });
         countdown.setOnCount(() -> {
             String countdownMessage = Settings.getMessage(Setting.COUNTDOWN_MESSAGE, Placeholder.of("%seconds%", countdown.getSecondsRemaining()));

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class EditCommand extends AbstractCommand {
 
-    public EditCommand(){
+    public EditCommand() {
         super("edit", "versus.arena.edit");
         setPlayersOnly(true);
         setUsage("/arena edit <arenaname>");
@@ -26,16 +26,16 @@ public class EditCommand extends AbstractCommand {
         Player player = (Player) sender;
         ArenaManager arenaManager = ArenaManager.getInstance();
         Arena fromString = arenaManager.getArena(arenaName);
-        if(fromString == null){
-            error(sender, "No arena exists with the name '"+arenaName+"'.");
-        }else{
+        if (fromString == null) {
+            error(sender, "No arena exists with the name '" + arenaName + "'.");
+        } else {
             ArenaEditor.openEditingMenu(player, fromString);
         }
     }
 
     @Override
     public List<String> callCompletionsUpdate(CommandSender sender, String[] args) {
-        if(args.length==1) {
+        if (args.length == 1) {
             List<String> arenaNames = ArenaManager.getInstance().getAllArenas()
                     .stream().map(arena -> arena.getName())
                     .collect(Collectors.toList());

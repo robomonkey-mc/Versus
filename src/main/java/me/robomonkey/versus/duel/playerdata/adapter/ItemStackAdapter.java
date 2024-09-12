@@ -15,11 +15,12 @@ public class ItemStackAdapter implements JsonSerializer<ItemStack>, JsonDeserial
 
     @Override
     public ItemStack deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException {
-        Type mapType = new TypeToken<Map<String, Object>>() {}.getType();
+        Type mapType = new TypeToken<Map<String, Object>>() {
+        }.getType();
         Map<String, Object> map = Versus.getGSON().fromJson(jsonElement, mapType);
         map.putIfAbsent("v", Bukkit.getUnsafe().getDataVersion());
 
-        if(map.containsKey("meta")) {
+        if (map.containsKey("meta")) {
             Map<String, Object> itemMeta = (Map<String, Object>) map.get("meta");
             ConfigurationSerializable deserializedMeta = context.deserialize(Versus.getGSON().toJsonTree(itemMeta), ConfigurationSerializable.class);
             map.remove("meta");
@@ -33,10 +34,11 @@ public class ItemStackAdapter implements JsonSerializer<ItemStack>, JsonDeserial
 
     @Override
     public JsonElement serialize(ItemStack itemStack, Type type, JsonSerializationContext context) {
-        Type mapType = new TypeToken<Map<String, Object>>() {}.getType();
+        Type mapType = new TypeToken<Map<String, Object>>() {
+        }.getType();
         Map<String, Object> map = itemStack.serialize();
         map.putIfAbsent("v", Bukkit.getUnsafe().getDataVersion());
-        if(itemStack.hasItemMeta()) {
+        if (itemStack.hasItemMeta()) {
             JsonElement meta = context.serialize(itemStack.getItemMeta(), ConfigurationSerializable.class);
             map.put("meta", meta.getAsJsonObject());
         }

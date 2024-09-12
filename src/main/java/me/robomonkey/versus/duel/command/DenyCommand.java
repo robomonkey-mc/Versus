@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class DenyCommand extends AbstractCommand {
 
     public DenyCommand() {
-        super("deny","versus.duel");
+        super("deny", "versus.duel");
         setPlayersOnly(true);
         setPermissionRequired(false);
         setArgumentRequired(true);
@@ -24,26 +24,26 @@ public class DenyCommand extends AbstractCommand {
     public void callCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         RequestManager requestManager = RequestManager.getInstance();
-        if(!requestManager.hasIncomingRequest(player)){
-            error(sender,"You currently have no incoming requests.");
+        if (!requestManager.hasIncomingRequest(player)) {
+            error(sender, "You currently have no incoming requests.");
             return;
         }
-        if(args.length < 1) {
+        if (args.length < 1) {
             error(sender, "You must specify a player whose request you want to deny.");
             return;
         }
         String playername = args[0];
         Player requester = Bukkit.getPlayer(playername);
-        if(requester == null) {
-            error(sender, "'"+playername+"' is not online.");
+        if (requester == null) {
+            error(sender, "'" + playername + "' is not online.");
             return;
         }
-        if(requester.equals(player)) {
+        if (requester.equals(player)) {
             error(sender, "You cannot duel yourself.");
             return;
         }
-        if(requestManager.getRequest(player, requester) == null) {
-            error(sender, "You have not received a request from "+requester.getName()+".");
+        if (requestManager.getRequest(player, requester) == null) {
+            error(sender, "You have not received a request from " + requester.getName() + ".");
             return;
         }
         requestManager.denyRequest(player, requester);

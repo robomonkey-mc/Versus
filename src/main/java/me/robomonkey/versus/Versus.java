@@ -5,13 +5,13 @@ import com.google.gson.GsonBuilder;
 import com.samjakob.spigui.SpiGUI;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.arena.command.RootArenaCommand;
-import me.robomonkey.versus.settings.command.RootVersusCommand;
+import me.robomonkey.versus.dependency.Dependencies;
+import me.robomonkey.versus.duel.DuelManager;
+import me.robomonkey.versus.duel.command.RootDuelCommand;
 import me.robomonkey.versus.duel.command.RootSpectateCommand;
 import me.robomonkey.versus.duel.playerdata.adapter.ConfigurationSerializableAdapter;
 import me.robomonkey.versus.duel.playerdata.adapter.ItemStackAdapter;
 import me.robomonkey.versus.duel.playerdata.adapter.ItemStackArrayAdapter;
-import me.robomonkey.versus.duel.DuelManager;
-import me.robomonkey.versus.duel.command.RootDuelCommand;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
 import org.bstats.bukkit.Metrics;
@@ -34,16 +34,16 @@ public final class Versus extends JavaPlugin {
     public static int pluginId = 23279;
     public static SpiGUI spiGUI;
 
-    public static void log(String message){
-        Bukkit.getServer().getLogger().info(prefix+" "+message);
+    public static void log(String message) {
+        Bukkit.getServer().getLogger().info(prefix + " " + message);
     }
 
     public static void error(String message) {
-        log("Error: "+message);
+        log("Error: " + message);
     }
 
     public static Gson getGSON() {
-        if(gson == null) {
+        if (gson == null) {
             GsonBuilder builder = new GsonBuilder()
                     .setPrettyPrinting()
                     .disableHtmlEscaping()
@@ -55,7 +55,7 @@ public final class Versus extends JavaPlugin {
         return gson;
     }
 
-    public static String color(String message){
+    public static String color(String message) {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 
@@ -74,7 +74,7 @@ public final class Versus extends JavaPlugin {
         arenaManager = ArenaManager.getInstance();
         arenaManager.loadArenas();
         registerCommands();
-        DependencyTracker.refresh(getServer());
+        Dependencies.refresh(getServer());
         registerMetrics();
     }
 

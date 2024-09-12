@@ -1,11 +1,9 @@
 package me.robomonkey.versus.arena;
 
-import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
 import me.robomonkey.versus.util.EffectUtil;
 import me.robomonkey.versus.util.MessageUtil;
-import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
@@ -23,13 +21,14 @@ public class ArenaBuilder {
         return builder;
     }
 
-    public ArenaBuilder(Player builder, String name){
+    public ArenaBuilder(Player builder, String name) {
         targetArena = new Arena(name);
         this.builder = builder;
     }
+
     public void handleNextStep() {
-        currentProperty = (currentProperty == null)? ArenaProperty.CENTER_LOCATION : currentProperty.getNextProperty();
-        if(isAllPropertiesCompleted()){
+        currentProperty = (currentProperty == null) ? ArenaProperty.CENTER_LOCATION : currentProperty.getNextProperty();
+        if (isAllPropertiesCompleted()) {
             finalizeArena();
         } else {
             ArenaEditor.displayInstructionalMessage(targetArena, currentProperty, builder);
@@ -37,13 +36,13 @@ public class ArenaBuilder {
         }
     }
 
-    public void handleArenaEdit(ArenaProperty property){
+    public void handleArenaEdit(ArenaProperty property) {
         ArenaEditor.changeArenaProperty(targetArena, property, builder, () -> {
-            if(currentProperty == property) handleNextStep();
+            if (currentProperty == property) handleNextStep();
         });
     }
 
-    private void finalizeArena(){
+    private void finalizeArena() {
         builder.sendMessage(MessageUtil.get("&pYou have completed the construction of the &h" + targetArena.getName() + "&p arena!"));
         EffectUtil.playSound(builder, Sound.ENTITY_CAT_AMBIENT);
         EffectUtil.spawnFireWorks(builder.getLocation(), Settings.getColor(Setting.FIREWORKS_COLOR));
@@ -51,10 +50,9 @@ public class ArenaBuilder {
         coordinator.removeArenaBuilder(builder);
     }
 
-    private boolean isAllPropertiesCompleted(){
+    private boolean isAllPropertiesCompleted() {
         return currentProperty == null;
     }
-
 
 
 }

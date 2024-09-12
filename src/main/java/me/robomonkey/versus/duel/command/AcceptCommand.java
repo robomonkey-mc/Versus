@@ -11,7 +11,7 @@ import java.util.List;
 public class AcceptCommand extends AbstractCommand {
 
     public AcceptCommand() {
-        super("accept","versus.duel");
+        super("accept", "versus.duel");
         setUsage("/duel accept");
         setPlayersOnly(true);
         setPermissionRequired(false);
@@ -23,12 +23,12 @@ public class AcceptCommand extends AbstractCommand {
     public void callCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         RequestManager requestManager = RequestManager.getInstance();
-        if(DuelManager.getInstance().isDueling(player)) {
+        if (DuelManager.getInstance().isDueling(player)) {
             error(sender, "You cannot duel right now.");
             return;
         }
-        if(!requestManager.hasIncomingRequest(player)){
-            error(sender,"You currently have no incoming requests.");
+        if (!requestManager.hasIncomingRequest(player)) {
+            error(sender, "You currently have no incoming requests.");
             return;
         }
         try {

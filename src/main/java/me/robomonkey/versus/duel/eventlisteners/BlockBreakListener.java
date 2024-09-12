@@ -14,7 +14,7 @@ public class BlockBreakListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        if(!Settings.is(Setting.ALLOW_BLOCK_DESTRUCTION)
+        if (!Settings.is(Setting.ALLOW_BLOCK_DESTRUCTION)
                 && DuelManager.getInstance().isDueling(player)) {
             event.setCancelled(true);
         }

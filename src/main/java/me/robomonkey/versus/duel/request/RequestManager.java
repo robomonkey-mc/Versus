@@ -1,9 +1,8 @@
 package me.robomonkey.versus.duel.request;
 
-import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.arena.ArenaManager;
+import me.robomonkey.versus.dependency.PAPIUtil;
 import me.robomonkey.versus.duel.DuelManager;
-import me.robomonkey.versus.placeholderapi.PAPIUtil;
 import me.robomonkey.versus.settings.Placeholder;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
@@ -21,7 +20,7 @@ public class RequestManager {
     private static RequestManager instance;
 
     public static RequestManager getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new RequestManager();
         }
         return instance;
@@ -29,23 +28,23 @@ public class RequestManager {
 
     private Request getLatestRequest(Player player) {
         Optional<Request> optionalRequest = requestList.stream()
-                                    .filter(request -> request.contains(player))
+                .filter(request -> request.contains(player))
                 .max(Comparator.comparingLong(Request::getTimeSent));
-        return (optionalRequest.isPresent())? optionalRequest.get() : null;
+        return (optionalRequest.isPresent()) ? optionalRequest.get() : null;
     }
 
     public Request getRequest(Player requested, Player requesting) {
         Optional<Request> optionalRequest = requestList.stream()
                 .filter(request -> request.matches(requested, requesting))
                 .findFirst();
-        return (optionalRequest.isPresent())? optionalRequest.get() : null;
+        return (optionalRequest.isPresent()) ? optionalRequest.get() : null;
     }
 
     private void updateQueue() {
-        while(queue.peek()!=null && !queue.peek().arePlayersOnline()) {
+        while (queue.peek() != null && !queue.peek().arePlayersOnline()) {
             queue.pop();
         }
-        if(queue.size() > 0) {
+        if (queue.size() > 0) {
             Request latest = queue.pop();
             DuelManager.getInstance().setupDuel(latest.getRequestedPlayer(), latest.getRequestingPlayer());
         }
@@ -53,7 +52,7 @@ public class RequestManager {
 
     private void removeRequest(Player requested, Player requesting) {
         Request requestToRemove = getRequest(requested, requesting);
-        if(requestToRemove != null) requestList.remove(requestToRemove);
+        if (requestToRemove != null) requestList.remove(requestToRemove);
     }
 
     public void placeInQueue(Request request) {
@@ -61,11 +60,11 @@ public class RequestManager {
         queue.add(request);
     }
 
-    public Request getQueuedRequest(Player player){
+    public Request getQueuedRequest(Player player) {
         Optional<Request> optionalRequest = queue.stream()
                 .filter(request -> request.contains(player))
                 .findFirst();
-        return (optionalRequest.isPresent())? optionalRequest.get() : null;
+        return (optionalRequest.isPresent()) ? optionalRequest.get() : null;
     }
 
     public void cancelQueue(Player player) {
@@ -77,7 +76,7 @@ public class RequestManager {
     }
 
     public Request getFirstInQueue() {
-        if(queue.size() > 0) return queue.pop();
+        if (queue.size() > 0) return queue.pop();
         else return null;
     }
 
@@ -111,18 +110,18 @@ public class RequestManager {
     }
 
     public UUID getRequested(Player requesting) {
-        if(hasOutgoingRequest(requesting)) return getLatestRequest(requesting).getRequested();
+        if (hasOutgoingRequest(requesting)) return getLatestRequest(requesting).getRequested();
         else return null;
     }
 
     public UUID getLatestRequester(Player requested) {
-        if(hasIncomingRequest(requested)) return getLatestRequest(requested).getRequesting();
+        if (hasIncomingRequest(requested)) return getLatestRequest(requested).getRequesting();
         else return null;
     }
 
     public boolean isRequestedBy(Player requesting, Player requested) {
         return requestList.stream().anyMatch(request -> requesting.equals(request.getRequestingPlayer()) &&
-                                                        requested.equals((request.getRequestedPlayer())));
+                requested.equals((request.getRequestedPlayer())));
     }
 
 
@@ -141,11 +140,11 @@ public class RequestManager {
     public void acceptRequest(Player requested) throws PlayerOfflineException {
         Request currentRequest = getLatestRequest(requested);
         Player requester = currentRequest.getRequestingPlayer();
-        if(requester == null) {
+        if (requester == null) {
             throw new PlayerOfflineException();
         }
         removeRequest(requested, requester);
-        if(ArenaManager.getInstance().getAvailableArena() == null) {
+        if (ArenaManager.getInstance().getAvailableArena() == null) {
             requester.sendMessage(Settings.getMessage(Setting.NO_ARENAS_AVAILABLE));
             requested.sendMessage(Settings.getMessage(Setting.NO_ARENAS_AVAILABLE));
             placeInQueue(currentRequest);
@@ -156,11 +155,11 @@ public class RequestManager {
 
     public void acceptSpecificRequest(Player requested, Player requester) throws PlayerOfflineException {
         Request currentRequest = getRequest(requested, requester);
-        if(requester == null) {
+        if (requester == null) {
             throw new PlayerOfflineException();
         }
         removeRequest(requested, requester);
-        if(ArenaManager.getInstance().getAvailableArena() == null) {
+        if (ArenaManager.getInstance().getAvailableArena() == null) {
             requester.sendMessage(Settings.getMessage(Setting.NO_ARENAS_AVAILABLE));
             requested.sendMessage(Settings.getMessage(Setting.NO_ARENAS_AVAILABLE));
             placeInQueue(currentRequest);
@@ -171,7 +170,7 @@ public class RequestManager {
 
     public void denyRequest(Player requested, Player requester) {
         removeRequest(requested, requester);
-        if(requester != null) {
+        if (requester != null) {
             requester.sendMessage(Settings.getMessage(Setting.DENIED_REQUEST, Placeholder.of("%player%", PAPIUtil.getName(requested))));
             requested.sendMessage(Settings.getMessage(Setting.DENIED_REQUEST_CONFIRMATION, Placeholder.of("%player%", PAPIUtil.getName(requester))));
         }
@@ -184,8 +183,8 @@ public class RequestManager {
     }
 
     private TextComponent getRequestMessage(Player requested, Player requesting) {
-        String acceptCommand = "/duel "+requesting.getName();
-        String denyCommand = "/duel deny "+requesting.getName();
+        String acceptCommand = "/duel " + requesting.getName();
+        String denyCommand = "/duel deny " + requesting.getName();
         String acceptButtonText = Settings.getMessage(Setting.ACCEPT_BUTTON);
         String denyButtonText = Settings.getMessage(Setting.DENY_BUTTON);
         TextComponent parentButton = MessageUtil.createButton(acceptButtonText, acceptCommand, acceptCommand);

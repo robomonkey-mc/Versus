@@ -1,7 +1,8 @@
-package me.robomonkey.versus.settings.command;
+package me.robomonkey.versus;
 
-import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.command.RootCommand;
+import me.robomonkey.versus.settings.command.ConfigCommand;
+import me.robomonkey.versus.settings.command.SupportCommand;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;

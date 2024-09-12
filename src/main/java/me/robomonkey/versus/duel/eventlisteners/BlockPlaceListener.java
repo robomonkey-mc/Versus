@@ -14,7 +14,7 @@ public class BlockPlaceListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        if(!Settings.is(Setting.ALLOW_BLOCK_PLACEMENTS)
+        if (!Settings.is(Setting.ALLOW_BLOCK_PLACEMENTS)
                 && DuelManager.getInstance().isDueling(player)) {
             event.setCancelled(true);
         }

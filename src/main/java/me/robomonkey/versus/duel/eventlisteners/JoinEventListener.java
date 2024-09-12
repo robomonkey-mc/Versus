@@ -13,7 +13,7 @@ public class JoinEventListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if(!player.isDead() && duelManager.hasStoredData(player)) {
+        if (!player.isDead() && duelManager.hasStoredData(player)) {
             duelManager.restoreData(player, false);
         }
     }

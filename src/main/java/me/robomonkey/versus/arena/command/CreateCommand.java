@@ -1,15 +1,8 @@
 package me.robomonkey.versus.arena.command;
 
-import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.arena.ArenaBuilderCoordinator;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.command.AbstractCommand;
-import me.robomonkey.versus.settings.Placeholder;
-import me.robomonkey.versus.settings.Setting;
-import me.robomonkey.versus.settings.Settings;
-import me.robomonkey.versus.util.MessageUtil;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -17,8 +10,8 @@ import java.util.List;
 
 public class CreateCommand extends AbstractCommand {
 
-    public CreateCommand(){
-        super("create","versus.arena.create");
+    public CreateCommand() {
+        super("create", "versus.arena.create");
         addTabCompletion("<arenaname>");
         setUsage("/arena create <arenaname>");
         setDescription("Creates a dueling arena and initiates the arena building process.");
@@ -31,8 +24,8 @@ public class CreateCommand extends AbstractCommand {
     public void callCommand(CommandSender sender, String[] args) {
         String arenaName = args[0];
         Player player = (Player) sender;
-        if(ArenaManager.getInstance().getArena(arenaName) != null){
-            error(sender, "Another arena already exists with the name "+arenaName+".");
+        if (ArenaManager.getInstance().getArena(arenaName) != null) {
+            error(sender, "Another arena already exists with the name " + arenaName + ".");
             return;
         }
         ArenaBuilderCoordinator.getInstance().initiateArenaBuilder(player, arenaName);

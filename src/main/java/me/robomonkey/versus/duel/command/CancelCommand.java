@@ -24,16 +24,17 @@ public class CancelCommand extends AbstractCommand {
     @Override
     public void callCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
-        if(!RequestManager.getInstance().isQueued(player)) {
+        if (!RequestManager.getInstance().isQueued(player)) {
             error(sender, "You're not currently queueing for a duel.");
             return;
-        };
+        }
+        ;
         Request request = RequestManager.getInstance().getQueuedRequest(player);
         Player requestingPlayer = request.getRequestingPlayer();
         Player requestedPlayer = request.getRequestedPlayer();
         RequestManager.getInstance().cancelRequest(request);
-        if(requestingPlayer != null) requestingPlayer.sendMessage(Settings.getMessage(Setting.CANCEL_REQUEST));
-        if(requestedPlayer != null) requestedPlayer.sendMessage(Settings.getMessage(Setting.CANCEL_REQUEST));
+        if (requestingPlayer != null) requestingPlayer.sendMessage(Settings.getMessage(Setting.CANCEL_REQUEST));
+        if (requestedPlayer != null) requestedPlayer.sendMessage(Settings.getMessage(Setting.CANCEL_REQUEST));
     }
 
     @Override

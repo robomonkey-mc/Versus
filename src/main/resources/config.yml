@@ -161,7 +161,7 @@ dueling:
     #The subtitle for the text that appears on a player's screen after winning a duel.
     victory_subtitle_message: "%player%"
     #The chat message a player recieves when respawning after losing a duel.
-    duel_loss_message:  "&6Don't worry about it &c%player%."
+    duel_loss_message: "&6Don't worry about it &c%player%."
     #The chat message sent to a spectator after entering an arena.
     duel_spectate_message: "&7You are now spectating a duel between &6%player_one% &7and &6%player_two%&7."
 
@@ -212,3 +212,6 @@ dependencies:
     #Otherwise, this feature will be ignored and player names will remain unchanged.
     #Sets whether essentials nicknames replace player names in Versus chat messages.
     essentials_nicknames_enabled: true
+  itemsadder:
+    #Sets whether custom ItemsAdder items can be saved to kits.
+    items_adder_for_kits: true

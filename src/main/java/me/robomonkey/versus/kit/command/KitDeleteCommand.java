@@ -1,7 +1,6 @@
 package me.robomonkey.versus.kit.command;
 
 import me.robomonkey.versus.command.AbstractCommand;
-import me.robomonkey.versus.command.RootCommand;
 import me.robomonkey.versus.kit.Kit;
 import me.robomonkey.versus.kit.KitManager;
 import me.robomonkey.versus.util.MessageUtil;
@@ -23,17 +22,16 @@ public class KitDeleteCommand extends AbstractCommand {
 
     @Override
     public void callCommand(CommandSender sender, String[] args) {
-        Player player = (Player) sender;
-        if(args.length<1) {
+        if (args.length < 1) {
             error(sender, "Please specify the kit to delete.");
             return;
         }
         String kitName = args[0];
-        if(kitManager.contains(kitName)) {
+        if (kitManager.contains(kitName)) {
             kitManager.remove(kitName);
-            sender.sendMessage(MessageUtil.get("&pYou deleted &h"+kitName+"&p."));
+            sender.sendMessage(MessageUtil.get("&pYou deleted &h" + kitName + "&p."));
         } else {
-            error(sender, "No kit named "+kitName+" exists.");
+            error(sender, "No kit named " + kitName + " exists.");
         }
     }
 

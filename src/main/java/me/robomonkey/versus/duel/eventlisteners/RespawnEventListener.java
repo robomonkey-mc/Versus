@@ -15,9 +15,9 @@ public class RespawnEventListener implements Listener {
     @EventHandler
     public void onRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
-        if(duelManager.hasStoredData(player)) {
+        if (duelManager.hasStoredData(player)) {
             Bukkit.getScheduler().runTask(Versus.getInstance()
-                    ,() -> duelManager.restoreData(player, false));
+                    , () -> duelManager.restoreData(player, false));
         }
     }
 }

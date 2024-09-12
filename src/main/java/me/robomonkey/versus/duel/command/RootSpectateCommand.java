@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class RootSpectateCommand extends RootCommand  {
+public class RootSpectateCommand extends RootCommand {
 
     public RootSpectateCommand() {
         super("spectate", "versus.spectate");
@@ -29,26 +29,26 @@ public class RootSpectateCommand extends RootCommand  {
     @Override
     public void callCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
-        if(args.length<1) {
+        if (args.length < 1) {
             error(sender, "Specify a player.");
             return;
         }
         String playerName = args[0];
         Player selectedPlayer = Bukkit.getPlayer(playerName);
-        if(DuelManager.getInstance().isDueling(player)) {
+        if (DuelManager.getInstance().isDueling(player)) {
             error(sender, "You cannot spectate right now.");
             return;
         }
-        if(selectedPlayer == null){
-            error(sender, "'"+playerName+"' is not online.");
+        if (selectedPlayer == null) {
+            error(sender, "'" + playerName + "' is not online.");
             return;
         }
-        if(selectedPlayer.equals(player)){
+        if (selectedPlayer.equals(player)) {
             error(sender, "You can't spectate yourself");
             return;
         }
-        if(!DuelManager.getInstance().isDueling(selectedPlayer)){
-            error(sender, "'"+playerName+"' is not dueling right now.");
+        if (!DuelManager.getInstance().isDueling(selectedPlayer)) {
+            error(sender, "'" + playerName + "' is not dueling right now.");
             return;
         }
         Duel duel = DuelManager.getInstance().getDuel(selectedPlayer);

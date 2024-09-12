@@ -22,24 +22,24 @@ public class VisitCommand extends AbstractCommand {
 
     @Override
     public void callCommand(CommandSender sender, String[] args) {
-        if(args.length==0) {
+        if (args.length == 0) {
             error(sender, "Please provide an arena");
             return;
         }
         String arenaName = args[0];
         Arena target = ArenaManager.getInstance().getArena(arenaName);
         Player player = (Player) sender;
-        if(target == null) {
-            error(sender, "No arena exists with the name '"+arenaName+"'.");
+        if (target == null) {
+            error(sender, "No arena exists with the name '" + arenaName + "'.");
             return;
         }
         player.teleport(target.getCenterLocation());
-        player.sendMessage(MessageUtil.get("&sNow visiting &h"+arenaName+"&s."));
+        player.sendMessage(MessageUtil.get("&sNow visiting &h" + arenaName + "&s."));
     }
 
     @Override
     public List<String> callCompletionsUpdate(CommandSender sender, String[] args) {
-        if(args.length==1) {
+        if (args.length == 1) {
             List<String> arenaNames = ArenaManager.getInstance().getAllArenas()
                     .stream().map(arena -> arena.getName())
                     .collect(Collectors.toList());

@@ -34,37 +34,37 @@ public class RootDuelCommand extends RootCommand {
         Player player = (Player) sender;
         String playerNameRequested = args[0];
         Player requested = Bukkit.getPlayer(playerNameRequested);
-        if(requested == null) {
-            error(sender, "'"+playerNameRequested+"' is not online.");
+        if (requested == null) {
+            error(sender, "'" + playerNameRequested + "' is not online.");
             return;
         }
-        if(requested.equals(player)) {
+        if (requested.equals(player)) {
             error(sender, "You cannot duel yourself.");
             return;
         }
-        if(DuelManager.getInstance().isDueling(player)) {
+        if (DuelManager.getInstance().isDueling(player)) {
             error(sender, "You cannot duel right now.");
             return;
         }
-        if(DuelManager.getInstance().isDueling(requested) || requestManager.isQueued(requested)) {
-            error(sender, requested.getName()+" cannot duel right now.");
+        if (DuelManager.getInstance().isDueling(requested) || requestManager.isQueued(requested)) {
+            error(sender, requested.getName() + " cannot duel right now.");
             return;
         }
-        if(requestManager.hasIncomingRequest(player)
+        if (requestManager.hasIncomingRequest(player)
                 && requestManager.isRequestedBy(requested, player)) {
             try {
                 RequestManager.getInstance().acceptSpecificRequest(player, requested);
             } catch (RequestManager.PlayerOfflineException e) {
                 error(player, "The player that requested a duel is no longer online!");
             }
-           return;
+            return;
         }
-        if(requestManager.isQueued(player)) {
+        if (requestManager.isQueued(player)) {
             error(sender, "You cannot send duel requests while queueing for a duel. Type /duel cancel to quit the queue.");
             return;
         }
-        if(requestManager.isRequestedBy(player, requested)) {
-            error(sender, "Please wait for "+requested.getName()+" to respond to your first request.");
+        if (requestManager.isRequestedBy(player, requested)) {
+            error(sender, "Please wait for " + requested.getName() + " to respond to your first request.");
             return;
         }
         requestManager.sendRequest(player, requested);

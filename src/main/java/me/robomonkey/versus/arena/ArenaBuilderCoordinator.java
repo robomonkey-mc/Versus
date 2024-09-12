@@ -10,31 +10,30 @@ public class ArenaBuilderCoordinator {
 
     private static ArenaBuilderCoordinator instance;
 
-    public static ArenaBuilderCoordinator getInstance(){
-        if(instance == null){
+    public static ArenaBuilderCoordinator getInstance() {
+        if (instance == null) {
             instance = new ArenaBuilderCoordinator();
         }
         return instance;
     }
 
-    public ArenaBuilder getArenaBuilder(Player player){
+    public ArenaBuilder getArenaBuilder(Player player) {
         return arenaMap.get(player);
     }
 
-    public boolean hasArenaBuilder(Player player){
+    public boolean hasArenaBuilder(Player player) {
         return arenaMap.containsKey(player);
     }
 
-    public void initiateArenaBuilder(Player builderPlayer, String name){
+    public void initiateArenaBuilder(Player builderPlayer, String name) {
         ArenaBuilder arenaBuilder = new ArenaBuilder(builderPlayer, name);
         arenaMap.put(builderPlayer, arenaBuilder);
         arenaBuilder.handleNextStep();
     }
 
-    public void removeArenaBuilder(Player builderPlayer){
+    public void removeArenaBuilder(Player builderPlayer) {
         arenaMap.remove(builderPlayer);
     }
-
 
 
 }

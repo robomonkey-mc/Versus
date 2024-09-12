@@ -1,6 +1,7 @@
 package me.robomonkey.versus.settings;
 
 import me.robomonkey.versus.Versus;
+import me.robomonkey.versus.dependency.Dependencies;
 import me.robomonkey.versus.duel.ReturnOption;
 import me.robomonkey.versus.util.MessageUtil;
 import org.bukkit.Bukkit;
@@ -11,7 +12,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class Settings {
@@ -40,14 +44,14 @@ public class Settings {
 
     public static List<String> musicOptions = List.of("creative", "credits", "disc_5", "disc_11", "disc_13", "disc_blocks", "disc_cat", "disc_chirp", "disc_creator", "disc_creator_music_box", "disc_far", "disc_mall", "disc_mellohi", "disc_otherside", "disc_pigstep", "disc_precipice", "disc_relic", "disc_stal", "disc_strad", "disc_wait", "disc_ward");
 
-    public static Settings getInstance(){
-        if(instance==null){
+    public static Settings getInstance() {
+        if (instance == null) {
             instance = new Settings();
         }
         return instance;
     }
 
-    public Settings(){
+    public Settings() {
         registerConfig();
     }
 
@@ -55,7 +59,7 @@ public class Settings {
         plugin.saveDefaultConfig();
         reloadConfigFromFile();
         loadSettings();
-        if(!configVersion.equals(getFileConfigVersion())){
+        if (!configVersion.equals(getFileConfigVersion())) {
             Versus.log("Error: Config is outdated. Versus will now force a config update and copy all existing options.");
             updateConfig();
         }
@@ -69,17 +73,17 @@ public class Settings {
         });
     }
 
-    public static boolean is(Setting setting){
+    public static boolean is(Setting setting) {
         String key = setting.getPath();
         return (Boolean) setting.getValue();
     }
 
-    public static String getMessage(Setting setting){
+    public static String getMessage(Setting setting) {
         String message = (String) setting.getValue();
         return MessageUtil.color(message);
     }
 
-    public static String getStringVersion(Setting setting){
+    public static String getStringVersion(Setting setting) {
         return String.valueOf(setting.getValue());
     }
 
@@ -88,7 +92,7 @@ public class Settings {
         try {
             return ReturnOption.valueOf(option.toUpperCase());
         } catch (IllegalArgumentException e) {
-            Versus.log("Config option named: '"+setting.toString().toLowerCase()+"' is not set properly. " +
+            Versus.log("Config option named: '" + setting.toString().toLowerCase() + "' is not set properly. " +
                     "Please review config.yml file.");
             return ReturnOption.SPAWN;
         }
@@ -96,7 +100,7 @@ public class Settings {
 
     public static Color getColor(Setting setting) {
         String colorStr = (String) setting.getValue();
-        if(colorMap.containsKey(colorStr)) {
+        if (colorMap.containsKey(colorStr)) {
             return colorMap.get(colorStr);
         } else {
             String newKey = colorMap.keySet().stream()
@@ -117,17 +121,17 @@ public class Settings {
         }
     }
 
-    public static String getMessage(Setting setting, Placeholder... placeholders){
+    public static String getMessage(Setting setting, Placeholder... placeholders) {
         String message = (String) setting.getValue();
-        for(Placeholder placeholder: placeholders) {
+        for (Placeholder placeholder : placeholders) {
             message = message.replaceAll(placeholder.holder, placeholder.replacement);
         }
         return MessageUtil.color(message);
     }
 
-    public static String getDefaultMessage(Setting setting, Placeholder... placeholders){
+    public static String getDefaultMessage(Setting setting, Placeholder... placeholders) {
         String message = (String) setting.getDefaultValue();
-        for(Placeholder placeholder: placeholders) {
+        for (Placeholder placeholder : placeholders) {
             message = message.replaceAll(placeholder.holder, placeholder.replacement);
         }
         return MessageUtil.color(message);
@@ -137,11 +141,11 @@ public class Settings {
         return config.getStringList(setting.getPath());
     }
 
-    public static int getNumber(Setting setting){
+    public static int getNumber(Setting setting) {
         return (int) setting.getValue();
     }
 
-    public static <T> T get(Setting setting, Class<T> type){
+    public static <T> T get(Setting setting, Class<T> type) {
         return (T) setting.getValue();
     }
 
@@ -154,26 +158,26 @@ public class Settings {
         return true;
     }
 
-    private void loadSettings(){
+    private void loadSettings() {
         Setting[] settings = Setting.values();
         reloadConfigFromFile();
         boolean shouldUpdate = false;
-        for(Setting setting: settings){
+        for (Setting setting : settings) {
             try {
                 loadSetting(setting);
             } catch (Exception e) {
                 shouldUpdate = true;
             }
         }
-        if(shouldUpdate) updateConfig();
+        if (shouldUpdate) updateConfig();
     }
 
-    private void reloadConfigFromFile(){
+    private void reloadConfigFromFile() {
         File file = new File(plugin.getDataFolder(), "config.yml");
         config = YamlConfiguration.loadConfiguration(file);
     }
 
-    private void saveConfigToFile(){
+    private void saveConfigToFile() {
         File file = new File(plugin.getDataFolder(), "config.yml");
         try {
             config.save(file);
@@ -182,12 +186,12 @@ public class Settings {
         }
     }
 
-    private void updateConfig(){
+    private void updateConfig() {
         Versus.log("Updating plugin config...");
         plugin.saveResource("config.yml", true);
         reloadConfigFromFile();
         Setting[] settings = Setting.values();
-        for(Setting setting: settings){
+        for (Setting setting : settings) {
             saveSetting(setting);
         }
         saveConfigToFile();
@@ -200,6 +204,7 @@ public class Settings {
 
     /**
      * Saves all setting to the config, saves the config to the file, and reloads certain classes as necessary.
+     *
      * @return A list of all settings changed.
      */
     public void saveSettingsChanges(Consumer<List<Setting>> after) {
@@ -208,7 +213,7 @@ public class Settings {
                 unsavedSettingChanges.keySet().stream().forEach(setting -> {
                     String key = setting.getPath();
                     Object value = unsavedSettingChanges.get(setting);
-                    Versus.log("Changing "+setting.toString()+" to "+value.toString());
+                    Versus.log("Changing " + setting.toString() + " to " + value.toString());
                     setting.setValue(value);
                     config.set(key, value);
                     saveConfigToFile();
@@ -217,6 +222,7 @@ public class Settings {
                 Bukkit.getScheduler().runTask(Versus.getInstance(), () -> after.accept(changedCommands));
                 unsavedSettingChanges.clear();
                 MessageUtil.updateColors();
+                Dependencies.refresh(Bukkit.getServer());
             } catch (Exception e) {
                 e.printStackTrace();
                 Bukkit.getScheduler().runTask(Versus.getInstance(), () -> after.accept(null));
@@ -226,14 +232,14 @@ public class Settings {
 
     private void loadSetting(Setting setting) throws Exception {
         String key = setting.getPath();
-        if(!config.isSet(key) || config.get(key) == null) {
-            Versus.error("The config option: '"+key+"' is not in the config.");
+        if (!config.isSet(key) || config.get(key) == null) {
+            Versus.error("The config option: '" + key + "' is not in the config.");
             throw new Exception("Key is not set in config");
         }
         Object configValue = config.get(key);
         Boolean successful = setting.setValue(configValue);
         if (!successful) {
-            Versus.error("The config option named '"+key+"' is not set to a proper value. For " +
+            Versus.error("The config option named '" + key + "' is not set to a proper value. For " +
                     "example, you may be passing in a number when text is expected, or a true/false value " +
                     "where a number is expected. Please check your config.yml for any improper bindings.");
         }
@@ -242,13 +248,14 @@ public class Settings {
     /**
      * Attempts to convert value into an appropriate object.
      * Returns null if unsuccessful.
-     * @param value The string value of the setting.
+     *
+     * @param value   The string value of the setting.
      * @param setting The setting in question.
      * @return The new value, returned as a generic object.
      */
     public static Object tryConvertFromString(String value, Setting setting) {
         Object newValue;
-        switch(setting.getType()) {
+        switch (setting.getType()) {
             case NUMBER:
                 try {
                     newValue = Integer.parseInt(value);
@@ -257,7 +264,7 @@ public class Settings {
                 }
                 break;
             case BOOLEAN:
-                if(value.equals("true")) {
+                if (value.equals("true")) {
                     newValue = true;
                 } else if (value.equals("false")) {
                     newValue = false;
@@ -272,7 +279,7 @@ public class Settings {
         return newValue;
     }
 
-    public void saveSetting(Setting setting){
+    public void saveSetting(Setting setting) {
         String key = setting.getPath();
         Object value = setting.getValue();
         config.set(key, value);
@@ -280,7 +287,7 @@ public class Settings {
     }
 
     private String getFileConfigVersion() {
-        return config.isSet("config-version")? config.getString("config-version"): "0.0";
+        return config.isSet("config-version") ? config.getString("config-version") : "0.0";
     }
 
 }

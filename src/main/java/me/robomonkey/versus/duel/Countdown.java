@@ -1,8 +1,6 @@
 package me.robomonkey.versus.duel;
 
 import me.robomonkey.versus.Versus;
-import me.robomonkey.versus.util.EffectUtil;
-import me.robomonkey.versus.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -41,18 +39,18 @@ public class Countdown {
     public void initiateCountdown() {
         initialTime = System.currentTimeMillis();
         countdown = Bukkit.getScheduler().runTaskTimer(Versus.getInstance(),
-                        count(),
-                        0,
-                        20);
+                count(),
+                0,
+                20);
     }
 
     private Runnable count() {
         return () -> {
-            if(getSecondsRemaining() == 0) {
+            if (getSecondsRemaining() == 0) {
                 finishCountdown();
                 return;
             }
-            if(onCount != null) onCount.run();
+            if (onCount != null) onCount.run();
             secondsRemaining--;
         };
     }
@@ -62,7 +60,7 @@ public class Countdown {
         onCountdownEnd.run();
     }
 
-    public void cancel(){
+    public void cancel() {
         countdown.cancel();
     }
 }

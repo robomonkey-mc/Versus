@@ -1,8 +1,5 @@
 package me.robomonkey.versus.command;
 
-import com.samjakob.spigui.menu.SGMenu;
-import com.samjakob.spigui.toolbar.SGToolbarButtonType;
-import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
 import me.robomonkey.versus.util.MessageUtil;
@@ -43,7 +40,7 @@ public abstract class AbstractCommand {
 
     public static void error(CommandSender sender, String message) {
         String errorPrefix = Settings.getMessage(Setting.ERROR_PREFIX);
-        sender.sendMessage(errorPrefix+message);
+        sender.sendMessage(errorPrefix + message);
     }
 
     public String getCommand() {
@@ -170,6 +167,7 @@ public abstract class AbstractCommand {
     public void setArgumentRequired(boolean argumentRequired) {
         this.argumentRequired = argumentRequired;
     }
+
     /**
      * Sets the maximum number of arguments for tab completion. -1 is the default value and will
      * allow infinite arguments.
@@ -197,16 +195,16 @@ public abstract class AbstractCommand {
     private String getHelpFromChildren() {
         String help = "";
         Iterator<AbstractCommand> branchIter = getBranches().iterator();
-        while(branchIter.hasNext()) {
+        while (branchIter.hasNext()) {
             AbstractCommand branch = branchIter.next();
-            help = help + MessageUtil.color("&p"+branch.getUsage()+":&s "+branch.getDescription()) + "\n";
+            help = help + MessageUtil.color("&p" + branch.getUsage() + ":&s " + branch.getDescription()) + "\n";
         }
         return MessageUtil.LINE + "\n" + help + MessageUtil.LINE;
     }
 
     String getHelp() {
-        if(isLeaf() || isAutonomous()) {
-            return MessageUtil.color("&p"+getUsage()+":&s "+getDescription());
+        if (isLeaf() || isAutonomous()) {
+            return MessageUtil.color("&p" + getUsage() + ":&s " + getDescription());
         } else {
             return getHelpFromChildren();
         }
@@ -214,7 +212,7 @@ public abstract class AbstractCommand {
 
     List<String> getBuiltinCompletionOptions(CommandSender sender) {
         List<String> allowedCompletions = getBranches().stream()
-                .filter(branch -> !branch.isPermissionRequired() ||sender.hasPermission(branch.getPermission()))
+                .filter(branch -> !branch.isPermissionRequired() || sender.hasPermission(branch.getPermission()))
                 .map(branch -> branch.getCommand())
                 .collect(Collectors.toList());
         if (sender.hasPermission(this.getPermission())) allowedCompletions.addAll(additionalCompletions);
@@ -225,13 +223,13 @@ public abstract class AbstractCommand {
         List<String> emptyList = new ArrayList<>();
         List<String> completions = getBuiltinCompletionOptions(sender);
         List<String> additionalCompletions = callCompletionsUpdate(sender, args);
-        if(additionalCompletions!= null) {
+        if (additionalCompletions != null) {
             completions.addAll(additionalCompletions);
         }
         if (args.length == 1 || isLeaf()) {
-            if(!shouldTabComplete(args)) return emptyList;
-            String lastArg = args[args.length-1];
-            if(staticTabComplete) return completions;
+            if (!shouldTabComplete(args)) return emptyList;
+            String lastArg = args[args.length - 1];
+            if (staticTabComplete) return completions;
             completions = completions.stream()
                     .filter(completion -> completion.toLowerCase().contains(lastArg.toLowerCase()))
                     .collect(Collectors.toList());
@@ -248,61 +246,60 @@ public abstract class AbstractCommand {
 
     public String buildArgs(String[] args, int startInclusive, int endExclusive) {
         StringBuilder argsBuilder = new StringBuilder();
-        for(int index = startInclusive; index < endExclusive; index++) {
+        for (int index = startInclusive; index < endExclusive; index++) {
             String nextPart = args[index];
             argsBuilder.append(nextPart);
-            if (index!=endExclusive-1) {
+            if (index != endExclusive - 1) {
                 argsBuilder.append(" ");
             }
         }
         return argsBuilder.toString();
     }
 
-    void dispatchCommand(CommandSender sender, String[] args){
-        if(permissionRequired && !sender.hasPermission(permission)){
+    void dispatchCommand(CommandSender sender, String[] args) {
+        if (permissionRequired && !sender.hasPermission(permission)) {
             sender.sendMessage(permissionErrorMessage);
             return;
         }
-        if(isPlayersOnly() && !(sender instanceof Player)){
+        if (isPlayersOnly() && !(sender instanceof Player)) {
             sender.sendMessage(improperSenderErrorMessage);
             return;
         }
-        if(args.length == 0 && !argumentRequired) {
+        if (args.length == 0 && !argumentRequired) {
             callCommand(sender, args);
             return;
         } else if (args.length == 0) {
             sender.sendMessage(getHelp());
             return;
-        }
-        else if (args.length < minArguments) {
+        } else if (args.length < minArguments) {
             sender.sendMessage(getHelp());
             return;
         }
         String firstArg = args[0];
-        if(isLeaf()) {
+        if (isLeaf()) {
             callCommand(sender, args);
             return;
         }
         AbstractCommand branchFromName = getBranchFromName(firstArg);
         if (branchFromName == null) {
-            if(autonomous) callCommand(sender, args);
-            else error(sender, firstArg+" is not a command. Type /"+command+" for help.");
+            if (autonomous) callCommand(sender, args);
+            else error(sender, firstArg + " is not a command. Type /" + command + " for help.");
         } else {
             branchFromName.dispatchCommand(sender, Arrays.copyOfRange(args, 1, args.length));
         }
     }
 
     /**
-     <h1>Calls this specific subcommand</h1>
-     <p>This only includes relevant sub arguments. Don't worry about handling permissions
-     or dispatching to subcommands. That is already handled by the AbstractCommand superclass</p>
+     * <h1>Calls this specific subcommand</h1>
+     * <p>This only includes relevant sub arguments. Don't worry about handling permissions
+     * or dispatching to subcommands. That is already handled by the AbstractCommand superclass</p>
      */
     public abstract void callCommand(CommandSender sender, String[] args);
 
     /**
-     <h1>Notifies all commands that a tab completions update has occured.</h1>
-     <p>Upon recieving the update, child classes can run setTabCompletions() or addTabCompletion() to update
-     if necessary.</p>
+     * <h1>Notifies all commands that a tab completions update has occured.</h1>
+     * <p>Upon recieving the update, child classes can run setTabCompletions() or addTabCompletion() to update
+     * if necessary.</p>
      */
     public abstract List<String> callCompletionsUpdate(CommandSender sender, String[] args);
 

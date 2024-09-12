@@ -17,11 +17,12 @@ public class JsonUtil {
 
     /**
      * Obtains a named file in a plugin's data folder. If the file does not exist, it will be created and then returned.
-     * @param plugin The plugin folder the data file should inhabit.
+     *
+     * @param plugin   The plugin folder the data file should inhabit.
      * @param fileName The name of the file.
      * @return A named file in the plugin's data folder.
      */
-    public static File getDataFile(Plugin plugin, String fileName){
+    public static File getDataFile(Plugin plugin, String fileName) {
         plugin.getDataFolder().mkdir();
         File file = new File(plugin.getDataFolder(), fileName);
         try {
@@ -33,9 +34,8 @@ public class JsonUtil {
     }
 
     /**
-     *
      * @param object the object to be written
-     * @param file the file to be written on
+     * @param file   the file to be written on
      * @throws IOException
      */
     public static <T> void writeObject(Type type, T object, File file) throws IOException {
@@ -46,7 +46,8 @@ public class JsonUtil {
     }
 
     public static <T> void writeObjectList(List<T> list, File file) throws IOException {
-        Type listType = new TypeToken<List<T>>(){}.getType();
+        Type listType = new TypeToken<List<T>>() {
+        }.getType();
         Gson gson = new Gson();
         Writer writer = new FileWriter(file, false);
         gson.toJson(list, listType, writer);
@@ -54,7 +55,6 @@ public class JsonUtil {
     }
 
     /**
-     *
      * @param type the classtype to be read
      * @param file the file to be read from
      * @throws IOException
@@ -67,7 +67,8 @@ public class JsonUtil {
     }
 
     public static <T> ArrayList<T> readObjectList(Class<T> type, File file) throws IOException {
-        Type listType = new TypeToken<ArrayList<T>>(){}.getType();
+        Type listType = new TypeToken<ArrayList<T>>() {
+        }.getType();
         Gson gson = new Gson();
         Reader reader = new FileReader(file);
         ArrayList<T> fetchedList = gson.fromJson(reader, listType);

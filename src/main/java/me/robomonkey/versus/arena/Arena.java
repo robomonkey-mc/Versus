@@ -1,11 +1,9 @@
 package me.robomonkey.versus.arena;
 
-import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.arena.data.ArenaData;
 import me.robomonkey.versus.duel.Duel;
 import me.robomonkey.versus.kit.Kit;
 import me.robomonkey.versus.kit.KitManager;
-import me.robomonkey.versus.util.MessageUtil;
 import org.bukkit.Location;
 
 import java.util.ArrayList;

@@ -10,12 +10,12 @@ public enum ArenaProperty {
 
     private String friendlyString;
 
-    ArenaProperty(String friendlyVersion){
+    ArenaProperty(String friendlyVersion) {
         friendlyString = friendlyVersion;
     }
 
     public ArenaProperty getNextProperty() {
-        switch(this) {
+        switch (this) {
             case CENTER_LOCATION:
                 return SPAWN_LOCATION_ONE;
             case SPAWN_LOCATION_ONE:
@@ -30,7 +30,7 @@ public enum ArenaProperty {
     }
 
     public String getExplanation() {
-        switch(this) {
+        switch (this) {
             case CENTER_LOCATION:
                 return "Select the center of the arena, often located in the middle of both duelists.";
             case SPAWN_LOCATION_ONE:
@@ -51,17 +51,17 @@ public enum ArenaProperty {
         try {
             ArenaProperty fromString = ArenaProperty.valueOf(propertyName.toUpperCase());
             return fromString;
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return null;
         }
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return super.toString().toLowerCase();
     }
 
-    public String toFriendlyString(){
+    public String toFriendlyString() {
         return friendlyString;
     }
 }

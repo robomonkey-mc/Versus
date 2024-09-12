@@ -19,13 +19,13 @@ public class SaveCommand extends AbstractCommand {
     public void callCommand(CommandSender sender, String[] args) {
         sender.sendMessage(MessageUtil.get("&sSaving all changes to Versus config..."));
         Settings.getInstance().saveSettingsChanges(allChanged -> {
-            if(allChanged == null) {
+            if (allChanged == null) {
                 error(sender, "Failed to save config changes.");
                 return;
             }
             sender.sendMessage(MessageUtil.get("&sSuccessfully saved all changes.\n&sChanged the following settings:"));
             allChanged.forEach(setting -> sender
-                    .sendMessage(MessageUtil.get("&7&l■ &p&o"+setting.toString().toLowerCase())));
+                    .sendMessage(MessageUtil.get("&7&l■ &p&o" + setting.toString().toLowerCase())));
         });
     }
 

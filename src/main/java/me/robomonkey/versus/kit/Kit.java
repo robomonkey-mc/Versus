@@ -1,12 +1,9 @@
 package me.robomonkey.versus.kit;
 
-import me.robomonkey.versus.Versus;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Objects;
 
 public class Kit {
     private ItemStack displayItem;
@@ -43,7 +40,7 @@ public class Kit {
         this.items = items;
     }
 
-    public Inventory getView(){
+    public Inventory getView() {
         Inventory view = Bukkit.createInventory(null, 54, getName());
         view.setContents(items);
         return view;

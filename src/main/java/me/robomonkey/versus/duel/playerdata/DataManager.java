@@ -12,7 +12,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class DataManager {
     private Map<UUID, PlayerData> dataMap;
@@ -46,6 +48,7 @@ public class DataManager {
 
     /**
      * Returns an array of itemstacks saved in Versus json file if available, otherwise returns null.
+     *
      * @return An array of itemstacks last associated with that player.
      */
     public PlayerData get(Player player) {
@@ -57,7 +60,8 @@ public class DataManager {
     }
 
     public void saveDataMap() {
-        Type playerDataMapType = new TypeToken<Map<UUID, PlayerData>>(){}.getType();
+        Type playerDataMapType = new TypeToken<Map<UUID, PlayerData>>() {
+        }.getType();
         try {
             FileWriter writer = new FileWriter(dataFile);
             inventoryGSON.toJson(dataMap, playerDataMapType, writer);
@@ -72,10 +76,11 @@ public class DataManager {
         Versus.log("Loading playerdata from inventory.json");
         Bukkit.getScheduler().runTaskAsynchronously(Versus.getInstance(), () -> {
             try {
-                Type playerDataMapType = new TypeToken<Map<UUID, PlayerData>>(){}.getType();
+                Type playerDataMapType = new TypeToken<Map<UUID, PlayerData>>() {
+                }.getType();
                 FileReader reader = new FileReader(dataFile);
                 Map<UUID, PlayerData> loadedMap = inventoryGSON.fromJson(reader, playerDataMapType);
-                if(loadedMap != null) {
+                if (loadedMap != null) {
                     dataMap = loadedMap;
                     Versus.log("Playerdata loaded successfully from file.");
                 }
