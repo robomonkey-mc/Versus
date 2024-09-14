@@ -195,7 +195,10 @@ public class DuelManager {
     private void stopDuel(Duel duel) {
         if (duel.isActive()) return;
         arenaManager.removeDuel(duel);
-        duel.getPlayers().stream().filter(Player::isOnline).forEach(Player::stopAllSounds);
+        duel.getPlayers().stream().filter(Player::isOnline).forEach(player -> {
+            player.stopSound(duel.getFightMusic());
+            player.stopSound(duel.getVictorySong());
+        });
         Player loser = duel.getLoser();
         Player winner = duel.getWinner();
         unregisterFromDuel(loser);

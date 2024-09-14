@@ -76,6 +76,7 @@ public final class Versus extends JavaPlugin {
         registerCommands();
         Dependencies.refresh(getServer());
         registerMetrics();
+
     }
 
     @Override
