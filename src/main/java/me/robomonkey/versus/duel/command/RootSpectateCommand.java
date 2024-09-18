@@ -3,12 +3,13 @@ package me.robomonkey.versus.duel.command;
 import me.robomonkey.versus.command.RootCommand;
 import me.robomonkey.versus.duel.Duel;
 import me.robomonkey.versus.duel.DuelManager;
+import me.robomonkey.versus.settings.Error;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import me.robomonkey.versus.settings.Error;
+
 import java.util.List;
 import java.util.stream.Collectors;
 

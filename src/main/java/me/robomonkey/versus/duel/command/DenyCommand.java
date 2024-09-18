@@ -4,7 +4,6 @@ import me.robomonkey.versus.command.AbstractCommand;
 import me.robomonkey.versus.duel.request.RequestManager;
 import me.robomonkey.versus.settings.Error;
 import me.robomonkey.versus.settings.Lang;
-import me.robomonkey.versus.settings.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

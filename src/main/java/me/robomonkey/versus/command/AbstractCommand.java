@@ -1,12 +1,9 @@
 package me.robomonkey.versus.command;
 
-import me.robomonkey.versus.Versus;
-import me.robomonkey.versus.settings.*;
 import me.robomonkey.versus.settings.Error;
+import me.robomonkey.versus.settings.*;
 import me.robomonkey.versus.util.MessageUtil;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.*;
