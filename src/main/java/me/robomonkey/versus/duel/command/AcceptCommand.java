@@ -3,8 +3,11 @@ package me.robomonkey.versus.duel.command;
 import me.robomonkey.versus.command.AbstractCommand;
 import me.robomonkey.versus.duel.DuelManager;
 import me.robomonkey.versus.duel.request.RequestManager;
+import me.robomonkey.versus.settings.Lang;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import me.robomonkey.versus.settings.Error;
 
 import java.util.List;
 
@@ -12,11 +15,9 @@ public class AcceptCommand extends AbstractCommand {
 
     public AcceptCommand() {
         super("accept", "versus.duel");
-        setUsage("/duel accept");
         setPlayersOnly(true);
         setPermissionRequired(false);
         setArgumentRequired(false);
-        setDescription("Accepts the most recent request to duel.");
     }
 
     @Override
@@ -24,17 +25,17 @@ public class AcceptCommand extends AbstractCommand {
         Player player = (Player) sender;
         RequestManager requestManager = RequestManager.getInstance();
         if (DuelManager.getInstance().isDueling(player)) {
-            error(sender, "You cannot duel right now.");
+            error(sender, Error.CANNOT_DUEL);
             return;
         }
         if (!requestManager.hasIncomingRequest(player)) {
-            error(sender, "You currently have no incoming requests.");
+            error(sender, Error.NO_INCOMING_REQUESTS);
             return;
         }
         try {
             requestManager.acceptRequest(player);
         } catch (RequestManager.PlayerOfflineException e) {
-            error(player, "The player that requested a duel is no longer online!");
+            error(player, Error.PLAYER_NO_LONGER_ONLINE);
         }
     }
 

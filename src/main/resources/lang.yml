@@ -9,6 +9,53 @@
 #                                                         |___/     ||
 ##====================================================================\
 
-#This file provides extra configuration settings for admin-facing plugin messages
-#or error messages not included in config.yml.
+#This file provides extra language / messsage configuration settings for admin-facing plugin messages
+#or error messages deemed beyond the scope of config.yml.
+
+#NOTE: Restart or reload server in order to affect changes to this file.
+
+commands:
+  general:
+    specify_a_player_error: "You must specify a player."
+    is_not_online_error: "%player% is not online."
+  duel:
+    name: "duel"
+    description: "Sends a duel request."
+    usage: "/duel <player>"
+    duel_self_error: "You cannot duel yourself."
+    no_incoming_requests_error: "You currently have no incoming requests."
+    not_received_request_error: "You have not recieved a request from %player%."
+    cannot_duel_error: "%player% cannot duel right now."
+    player_no_longer_online_error: "The player that requested a duel is no longer online!"
+    duel_while_queueing_error: "You cannot send duel requests while queueing for a duel. Type /duel cancel to quit the queue."
+    wait_for_response_error: "Please wait for %player% to respond to your first request."
+    accept:
+      name: "accept"
+      usage: "/duel accept"
+      description: "Accepts the most recent request to duel."
+    cancel:
+      name: "cancel"
+      usage: "/duel cancel"
+      description: "Cancels a request to duel."
+      not_queueing_error: "You're not currently queueing for a duel."
+    deny:
+      name: "deny"
+      usage: "/duel deny <player>"
+      description: "Denies a player's request to duel."
+  spectate:
+    description: "Spectates a player in their current duel."
+    name: "spectate"
+    usage: "/spectate <player>"
+    spectating_while_dueling_error: "You cannot spectate right now."
+    spectate_yourself_error: "You can't spectate yourself."
+    is_not_dueling_error: "'%player%' is not dueling right now."
+
+
+
+
+
+
+
+
+
 

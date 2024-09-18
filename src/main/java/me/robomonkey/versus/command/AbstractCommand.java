@@ -1,9 +1,12 @@
 package me.robomonkey.versus.command;
 
-import me.robomonkey.versus.settings.Setting;
-import me.robomonkey.versus.settings.Settings;
+import me.robomonkey.versus.Versus;
+import me.robomonkey.versus.settings.*;
+import me.robomonkey.versus.settings.Error;
 import me.robomonkey.versus.util.MessageUtil;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -14,6 +17,7 @@ public abstract class AbstractCommand {
     public static String permissionErrorMessage = errorPrefix + Settings.getMessage(Setting.NO_PERMISSION_MESSAGE);
     public static String improperSenderErrorMessage = errorPrefix + Settings.getMessage(Setting.ONLY_PLAYERS_MESSAGE);
     String command;
+    String originalCommand;
     String permission;
     private String usage = "";
     private String description = "";
@@ -26,25 +30,52 @@ public abstract class AbstractCommand {
     private int maxArguments = -1;
     private int minArguments = 0;
     private boolean autonomous = false;
+    private AbstractCommand parent = null;
 
     public AbstractCommand(String name, String permission) {
         this.permission = permission;
         this.command = name;
+        this.originalCommand = name;
+        if(Lang.has(this)) loadFromYAML();
     }
 
     public AbstractCommand(String name, String permission, AbstractCommand... branches) {
         this.permission = permission;
         this.command = name;
+        if(Lang.has(this)) loadFromYAML();
         Arrays.stream(branches).forEach(branch -> this.branches.add(branch));
     }
 
-    public static void error(CommandSender sender, String message) {
+    void loadFromYAML() {
+        YAMLCommand abstractCommandYAML = Lang.of(this);
+        this.command = abstractCommandYAML.get("name");
+        this.usage = abstractCommandYAML.get("usage");
+        this.description = abstractCommandYAML.get("description");
+    }
+
+    public void error(CommandSender sender, String message) {
         String errorPrefix = Settings.getMessage(Setting.ERROR_PREFIX);
+        sender.sendMessage(errorPrefix + message);
+    }
+
+    public void error(CommandSender sender, Error error) {
+        String errorPrefix = Settings.getMessage(Setting.ERROR_PREFIX);
+        String message = Lang.get(error);
+        sender.sendMessage(errorPrefix + message);
+    }
+
+    public void error(CommandSender sender, Error error, String subject) {
+        String errorPrefix = Settings.getMessage(Setting.ERROR_PREFIX);
+        String message = Lang.get(error, Placeholder.of("%player%", subject));
         sender.sendMessage(errorPrefix + message);
     }
 
     public String getCommand() {
         return command;
+    }
+
+    public String getOriginalCommand() {
+        return originalCommand;
     }
 
     public boolean isAutonomous() {
@@ -128,6 +159,13 @@ public abstract class AbstractCommand {
 
     public void addBranches(AbstractCommand... newBranch) {
         branches.addAll(Arrays.asList(newBranch));
+        branches.forEach(branch -> {
+            branch.parent = this;
+        });
+    }
+
+    public AbstractCommand getParent() {
+        return this.parent;
     }
 
     public void setPermission(String permission) {

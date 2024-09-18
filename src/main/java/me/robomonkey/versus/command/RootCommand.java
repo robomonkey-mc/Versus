@@ -1,6 +1,7 @@
 package me.robomonkey.versus.command;
 
 import me.robomonkey.versus.Versus;
+import me.robomonkey.versus.settings.Lang;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,6 +14,17 @@ public abstract class RootCommand extends AbstractCommand implements CommandExec
     public RootCommand(String command, String permission) {
         super(command, permission);
         this.registerCommand();
+        if(Lang.has(this)) {
+            loadFromYAML();
+        }
+    }
+
+    @Override
+    void loadFromYAML() {
+        super.loadFromYAML();
+        String commandAlias = Lang.of(this).get("name");
+        Versus.getInstance().getCommand(command)
+                .setAliases(List.of(commandAlias));
     }
 
     private void registerCommand() {

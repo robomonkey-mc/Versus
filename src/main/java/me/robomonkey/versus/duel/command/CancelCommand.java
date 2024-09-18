@@ -3,6 +3,8 @@ package me.robomonkey.versus.duel.command;
 import me.robomonkey.versus.command.AbstractCommand;
 import me.robomonkey.versus.duel.request.Request;
 import me.robomonkey.versus.duel.request.RequestManager;
+import me.robomonkey.versus.settings.Error;
+import me.robomonkey.versus.settings.Lang;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
 import org.bukkit.command.CommandSender;
@@ -15,17 +17,15 @@ public class CancelCommand extends AbstractCommand {
     public CancelCommand() {
         super("cancel", "versus.duel");
         setArgumentRequired(false);
-        setUsage("/duel cancel");
         setPermissionRequired(false);
         setPlayersOnly(true);
-        setDescription("Cancels a request to duel.");
     }
 
     @Override
     public void callCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         if (!RequestManager.getInstance().isQueued(player)) {
-            error(sender, "You're not currently queueing for a duel.");
+            error(sender, Error.NOT_QUEUING);
             return;
         }
         ;

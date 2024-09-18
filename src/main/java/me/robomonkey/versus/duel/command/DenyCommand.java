@@ -2,6 +2,9 @@ package me.robomonkey.versus.duel.command;
 
 import me.robomonkey.versus.command.AbstractCommand;
 import me.robomonkey.versus.duel.request.RequestManager;
+import me.robomonkey.versus.settings.Error;
+import me.robomonkey.versus.settings.Lang;
+import me.robomonkey.versus.settings.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -16,8 +19,6 @@ public class DenyCommand extends AbstractCommand {
         setPlayersOnly(true);
         setPermissionRequired(false);
         setArgumentRequired(true);
-        setUsage("/duel deny <player>");
-        setDescription("Denies a player's request to duel.");
     }
 
     @Override
@@ -25,25 +26,25 @@ public class DenyCommand extends AbstractCommand {
         Player player = (Player) sender;
         RequestManager requestManager = RequestManager.getInstance();
         if (!requestManager.hasIncomingRequest(player)) {
-            error(sender, "You currently have no incoming requests.");
+            error(sender, Lang.get(Error.NO_INCOMING_REQUESTS));
             return;
         }
         if (args.length < 1) {
-            error(sender, "You must specify a player whose request you want to deny.");
+            error(sender, Lang.get(Error.SPECIFY_A_PLAYER));
             return;
         }
         String playername = args[0];
         Player requester = Bukkit.getPlayer(playername);
         if (requester == null) {
-            error(sender, "'" + playername + "' is not online.");
+            error(sender, Error.PLAYER_NO_LONGER_ONLINE, playername);
             return;
         }
         if (requester.equals(player)) {
-            error(sender, "You cannot duel yourself.");
+            error(sender, Error.DUEL_SELF);
             return;
         }
         if (requestManager.getRequest(player, requester) == null) {
-            error(sender, "You have not received a request from " + requester.getName() + ".");
+            error(sender, Error.NOT_RECIEVED_REQUEST);
             return;
         }
         requestManager.denyRequest(player, requester);
