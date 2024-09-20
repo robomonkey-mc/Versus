@@ -40,7 +40,7 @@ public abstract class AbstractCommand {
         this.permission = permission;
         this.command = name;
         if(Lang.has(this)) loadFromYAML();
-        Arrays.stream(branches).forEach(branch -> this.branches.add(branch));
+        addBranches(branches);
     }
 
     void loadFromYAML() {
