@@ -1,2 +1,4 @@
-package me.robomonkey.versus.gui;public class DuelGUI {
+package me.robomonkey.versus.gui;
+
+public class DuelGUI {
 }
