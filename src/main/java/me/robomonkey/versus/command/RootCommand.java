@@ -7,29 +7,30 @@ import org.bukkit.command.*;
 
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
 
 public abstract class RootCommand extends AbstractCommand implements CommandExecutor, TabCompleter {
 
     public RootCommand(String command, String permission) {
         super(command, permission);
         if(Lang.has(this)) {
-            reflectChangeCommandName();
+            rename();
             loadFromYAML();
         }
         this.registerCommand();
     }
 
-    private void reflectChangeCommandName() {
+    private void rename() {
         String newName = Lang.of(this).get("name");
+        if(newName.equals(this.getOriginalCommand())) return;
         Command command = Bukkit.getPluginCommand(originalCommand);
         try {
             Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
             commandMapField.setAccessible(true);
             SimpleCommandMap commandMap = (SimpleCommandMap) commandMapField.get(Bukkit.getServer());
             commandMap.register(newName, "versus", command);
+            Versus.error("Added alias to the command /"+getOriginalCommand()+": /"+newName+".");
         } catch (Exception e) {
-            Versus.error("Failed to add custom name to "+command.getName()+".");
+            Versus.error("Failed to add custom alias to the command '"+command.getName()+"'.");
         }
     }
 

@@ -1,12 +1,12 @@
 #====================================================================\
-#  ______      _                _____      _   _   _                ||
+#  ______      _                _____      _   _   _                 ||
 #|  ____|    | |              / ____|    | | | | (_)                ||
 #| |__  __  _| |_ _ __ __ _  | (___   ___| |_| |_ _ _ __   __ _ ___ ||
 #|  __| \ \/ / __| '__/ _` |  \___ \ / _ \ __| __| | '_ \ / _` / __|||
 #| |____ >  <| |_| | | (_| |  ____) |  __/ |_| |_| | | | | (_| \__ \||
 #|______/_/\_\\__|_|  \__,_| |_____/ \___|\__|\__|_|_| |_|\__, |___/||
-#                                                         __/ |     ||
-#                                                         |___/     ||
+#                                                         __/ |      ||
+#                                                         |___/      ||
 ##====================================================================\
 
 #This file provides extra language / messsage configuration settings for admin-facing plugin messages
@@ -15,40 +15,69 @@
 #NOTE: Restart or reload server in order to affect changes to this file.
 
 commands:
+#All language options for user-facing commands. Currently, admin-facing commands like /arena or /kit are not configurable.
+#Note: The prefix preceding each error message is defined in config.yml by "error-prefix". (Default: "&cError: &4")
+#---   Each error message here, therefore, does not contain the prefix, but rather the event-specific text following the prefix.
   general:
-    #The error a player recieves when they..
+    #The error a player receives when they fail to specify a player for a command.
     specify_a_player_error: "You must specify a player."
+    #The error a player recieves when they attempt to reference a player that's not online.
     is_not_online_error: "%player% is not online."
+
+  #The language styling for the /duel command.
   duel:
+    #An alternate name or 'alias' for the /duel command. Set to "duel" by default.
+    #Example: name: "fight" --> Players can now type /fight in addition to /duel.
     name: "duel"
     description: "Sends a duel request."
     usage: "/duel <player>"
+    #The message a player receives when they attempt to duel themselves."
     duel_self_error: "You cannot duel yourself."
+    #The message a player receives when they attempt to accept a duel request, but they have no incoming requests.
     no_incoming_requests_error: "You currently have no incoming requests."
+    #The message a player receives when they attempt to accept a duel request from a specific player that has not requested them.
     not_received_request_error: "You have not recieved a request from %player%."
+    #The message a player receives when they attempt to duel a player that is actively dueling.
     cannot_duel_error: "%player% cannot duel right now."
+    #The message a player recieves when they attempt to accept a request from a player who's no longer online.
     player_no_longer_online_error: "The player that requested a duel is no longer online!"
+    #The message a player receives when attempting to request a duel while in a queue.
     duel_while_queueing_error: "You cannot send duel requests while queueing for a duel. Type /duel cancel to quit the queue."
+    #The message a player receives when they spam a duel request.
     wait_for_response_error: "Please wait for %player% to respond to your first request."
+    #Specific options for the /duel accept subcommand.
     accept:
+      #The name of the '/duel accept' subcommand. Set to 'accept' by default.
       name: "accept"
       usage: "/duel accept"
       description: "Accepts the most recent request to duel."
+    #Specific options for the /duel cancel subcommand.
     cancel:
+      #The name of the '/duel cancel' subcommand. Set to 'cancel' by default.
       name: "cancel"
       usage: "/duel cancel"
       description: "Cancels a request to duel."
+      #The error a player receives when they attempt to exit a queue they are not currently in.
       not_queueing_error: "You're not currently queueing for a duel."
+    #Specific options for the /duel deny subcommand.
     deny:
+      #The name of the '/duel deny' subcommand. Set to 'deny' by default.
       name: "deny"
       usage: "/duel deny <player>"
       description: "Denies a player's request to duel."
+
+  #The language styling for the /spectate command.
   spectate:
-    description: "Spectates a player in their current duel."
+    #An alternate name or 'alias' for the /duel command. Set to "duel" by default.
+    #Example: name: "watch" --> Players can now type /watch in addition to /spectate.
     name: "spectate"
+    description: "Spectates a player in their current duel."
     usage: "/spectate <player>"
+    #The message a player receives after typing /spectate while dueling.
     spectating_while_dueling_error: "You cannot spectate right now."
+    #The message a player receives when attempting to spectate oneself.
     spectate_yourself_error: "You can't spectate yourself."
+    #The message a player receives when attempting to spectate a player that is not currently dueling.
     is_not_dueling_error: "'%player%' is not dueling right now."
 
 

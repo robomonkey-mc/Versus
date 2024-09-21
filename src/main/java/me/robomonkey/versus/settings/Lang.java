@@ -4,7 +4,6 @@ import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.command.AbstractCommand;
 import me.robomonkey.versus.util.MessageUtil;
 import org.apache.commons.io.FileUtils;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -17,19 +16,20 @@ public class Lang {
 
     public static File file;
     public static YamlConfiguration config;
-
+    private static final String FILE_PATH = "lang.yml";
+    
     public static void load() {
-        file = new File(Versus.getInstance().getDataFolder(), "lang.yml");
+        file = new File(Versus.getInstance().getDataFolder(), FILE_PATH);
         if(!file.exists()) {
-            Versus.getInstance().saveResource("lang.yml", false);
+            Versus.getInstance().saveResource(FILE_PATH, false);
         }
         config = YamlConfiguration.loadConfiguration(file);
         verifyUpdated();
     }
 
     private static void verifyUpdated() {
-        InputStream defaultLangStream = Versus.getInstance().getResource("lang.yml");
-        File defaultLangFile = new File("lang.yml");
+        InputStream defaultLangStream = Versus.getInstance().getResource(FILE_PATH);
+        File defaultLangFile = new File(FILE_PATH);
         try {
             FileUtils.copyInputStreamToFile(defaultLangStream, defaultLangFile);
         } catch (IOException e) {
@@ -48,12 +48,16 @@ public class Lang {
     private static void updateConfig() {
         Versus.log("Updating lang.yml file to include new options.");
         Map<String, Object> currentValues = config.getValues(true);
-        Versus.getInstance().saveResource("lang.yml", true);
-        // file = new File(Versus.getInstance().getDataFolder(), "lang.yml");
-        // config = YamlConfiguration.loadConfiguration(file);
-        // currentValues.entrySet().stream().forEach(entry -> {
-        //    config.set(entry.getKey(), entry.getValue());
-        // });
+        Versus.getInstance().saveResource(FILE_PATH, true);
+        file = new File(Versus.getInstance().getDataFolder(), FILE_PATH);
+        config = YamlConfiguration.loadConfiguration(new File(Versus.getInstance().getDataFolder(), FILE_PATH));
+        currentValues.entrySet().stream().forEach(entry -> {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(!config.isConfigurationSection(key) && value != null) {
+                config.set(entry.getKey(), value);
+            }
+        });
         saveToFile();
     }
 
@@ -63,14 +67,6 @@ public class Lang {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static String get(String path) {
-        return config.getString(path);
-    }
-
-    public static String get(Error error) {
-        return config.getString(error.getPath());
     }
 
     public static String get(String key, Placeholder... placeholders) {

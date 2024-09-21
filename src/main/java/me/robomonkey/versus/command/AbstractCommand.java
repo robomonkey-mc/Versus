@@ -43,7 +43,6 @@ public abstract class AbstractCommand {
     }
 
     void loadFromYAML() {
-        Versus.log("Loading "+this.originalCommand);
         YAMLCommand abstractCommandYAML = Lang.of(this);
         this.command = abstractCommandYAML.get("name");
         this.usage = abstractCommandYAML.get("usage");
