@@ -35,7 +35,7 @@ public class RootSpectateCommand extends RootCommand {
         String playerName = args[0];
         Player selectedPlayer = Bukkit.getPlayer(playerName);
         if (DuelManager.getInstance().isDueling(player)) {
-            error(sender, Error.SPECTATE_WHILE_DUELING);
+            error(sender, Error.SPECTATING_WHILE_DUELING);
             return;
         }
         if (selectedPlayer == null) {

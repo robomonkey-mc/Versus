@@ -12,6 +12,7 @@ import me.robomonkey.versus.duel.command.RootSpectateCommand;
 import me.robomonkey.versus.duel.playerdata.adapter.ConfigurationSerializableAdapter;
 import me.robomonkey.versus.duel.playerdata.adapter.ItemStackAdapter;
 import me.robomonkey.versus.duel.playerdata.adapter.ItemStackArrayAdapter;
+import me.robomonkey.versus.settings.Lang;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
 import org.bstats.bukkit.Metrics;
@@ -69,6 +70,7 @@ public final class Versus extends JavaPlugin {
         log("Versus has been enabled!");
         instance = this;
         Settings.getInstance().registerConfig();
+        Lang.load();
         spiGUI = new SpiGUI(this);
         duelManager = DuelManager.getInstance();
         arenaManager = ArenaManager.getInstance();

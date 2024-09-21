@@ -24,7 +24,7 @@ public class CancelCommand extends AbstractCommand {
     public void callCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         if (!RequestManager.getInstance().isQueued(player)) {
-            error(sender, Error.NOT_QUEUING);
+            error(sender, Error.NOT_QUEUEING);
             return;
         }
         ;

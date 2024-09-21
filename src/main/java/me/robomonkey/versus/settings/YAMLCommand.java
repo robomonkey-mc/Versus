@@ -12,12 +12,7 @@ public class YAMLCommand {
 
     public String get(String key) {
         ConfigurationSection currSection = section;
-        String value = currSection.getString(key);
-        while (value == null) {
-            currSection = currSection.getParent();
-            value = currSection.getString(key);
-        }
-        return value;
+        return currSection.getString(key);
     }
 
     public String get(String key, Placeholder... placeholders) {

@@ -2,34 +2,40 @@ package me.robomonkey.versus.command;
 
 import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.settings.Lang;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.Bukkit;
+import org.bukkit.command.*;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 public abstract class RootCommand extends AbstractCommand implements CommandExecutor, TabCompleter {
 
     public RootCommand(String command, String permission) {
         super(command, permission);
-        this.registerCommand();
         if(Lang.has(this)) {
+            reflectChangeCommandName();
             loadFromYAML();
+        }
+        this.registerCommand();
+    }
+
+    private void reflectChangeCommandName() {
+        String newName = Lang.of(this).get("name");
+        Command command = Bukkit.getPluginCommand(originalCommand);
+        try {
+            Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+            commandMapField.setAccessible(true);
+            SimpleCommandMap commandMap = (SimpleCommandMap) commandMapField.get(Bukkit.getServer());
+            commandMap.register(newName, "versus", command);
+        } catch (Exception e) {
+            Versus.error("Failed to add custom name to "+command.getName()+".");
         }
     }
 
-    @Override
-    void loadFromYAML() {
-        super.loadFromYAML();
-        String commandAlias = Lang.of(this).get("name");
-        Versus.getInstance().getCommand(command)
-                .setAliases(List.of(commandAlias));
-    }
-
     private void registerCommand() {
-        Versus.getInstance().getCommand(command).setExecutor(this);
-        Versus.getInstance().getCommand(command).setTabCompleter(this);
+        Versus.getInstance().getCommand(originalCommand).setExecutor(this);
+        Versus.getInstance().getCommand(originalCommand).setTabCompleter(this);
     }
 
     public RootCommand(String command, String permission, List<String> tabCompletions) {

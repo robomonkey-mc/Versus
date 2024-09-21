@@ -16,6 +16,7 @@
 
 commands:
   general:
+    #The error a player recieves when they..
     specify_a_player_error: "You must specify a player."
     is_not_online_error: "%player% is not online."
   duel:

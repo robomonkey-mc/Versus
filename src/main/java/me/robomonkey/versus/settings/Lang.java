@@ -3,10 +3,13 @@ package me.robomonkey.versus.settings;
 import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.command.AbstractCommand;
 import me.robomonkey.versus.util.MessageUtil;
+import org.apache.commons.io.FileUtils;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,19 +18,25 @@ public class Lang {
     public static File file;
     public static YamlConfiguration config;
 
-    static {
-        load();
-    }
-
     public static void load() {
-        verify();
         file = new File(Versus.getInstance().getDataFolder(), "lang.yml");
+        if(!file.exists()) {
+            Versus.getInstance().saveResource("lang.yml", false);
+        }
         config = YamlConfiguration.loadConfiguration(file);
         verifyUpdated();
     }
 
     private static void verifyUpdated() {
-        Set<String> keys = config.getDefaults().getKeys(true);
+        InputStream defaultLangStream = Versus.getInstance().getResource("lang.yml");
+        File defaultLangFile = new File("lang.yml");
+        try {
+            FileUtils.copyInputStreamToFile(defaultLangStream, defaultLangFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        YamlConfiguration defaultYamlConfig = YamlConfiguration.loadConfiguration(defaultLangFile);
+        Set<String> keys = defaultYamlConfig.getKeys(true);
         for(String key: keys) {
             if (!config.contains(key)) {
                 updateConfig();
@@ -38,13 +47,13 @@ public class Lang {
 
     private static void updateConfig() {
         Versus.log("Updating lang.yml file to include new options.");
-        Map<String, Object> currentValues = config.getDefaults().getValues(true);
+        Map<String, Object> currentValues = config.getValues(true);
         Versus.getInstance().saveResource("lang.yml", true);
-        file = new File(Versus.getInstance().getDataFolder(), "lang.yml");
-        config = YamlConfiguration.loadConfiguration(file);
-        currentValues.entrySet().stream().forEach(entry -> {
-            config.set(entry.getKey(), entry.getValue());
-        });
+        // file = new File(Versus.getInstance().getDataFolder(), "lang.yml");
+        // config = YamlConfiguration.loadConfiguration(file);
+        // currentValues.entrySet().stream().forEach(entry -> {
+        //    config.set(entry.getKey(), entry.getValue());
+        // });
         saveToFile();
     }
 
@@ -54,10 +63,6 @@ public class Lang {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static void verify() {
-        Versus.getInstance().saveResource("lang.yml", false);
     }
 
     public static String get(String path) {
@@ -85,22 +90,21 @@ public class Lang {
     }
 
     public static YAMLCommand of(AbstractCommand command) {
-        String key = command.getOriginalCommand();
+        return new YAMLCommand(config.getConfigurationSection("commands."+getKey(command)));
+    }
+
+    private static String getKey(AbstractCommand command) {
+        StringBuilder keyBuilder = new StringBuilder() ;
+        keyBuilder.append(command.getOriginalCommand());
         AbstractCommand currParent = command.getParent();
         while(currParent != null) {
-            key = currParent.getCommand() + ".";
+            keyBuilder.insert(0, currParent.getOriginalCommand() + ".");
             currParent = currParent.getParent();
         }
-        return new YAMLCommand(config.getConfigurationSection("commands."+key));
+        return keyBuilder.toString();
     }
 
     public static boolean has(AbstractCommand command) {
-        String key = command.getCommand();
-        AbstractCommand currParent = command.getParent();
-        while(currParent != null) {
-            key = currParent.getCommand() + ".";
-            currParent = currParent.getParent();
-        }
-        return config.isConfigurationSection("commands."+key);
+        return config.isConfigurationSection("commands."+getKey(command));
     }
 }

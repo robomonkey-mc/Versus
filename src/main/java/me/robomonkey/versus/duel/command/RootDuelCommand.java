@@ -63,7 +63,7 @@ public class RootDuelCommand extends RootCommand {
             return;
         }
         if (requestManager.isRequestedBy(player, requested)) {
-            error(sender, Error.WAIT_FOR_RESPONSE);
+            error(sender, Error.WAIT_FOR_RESPONSE, requested.getName());
             return;
         }
         requestManager.sendRequest(player, requested);

@@ -1,5 +1,6 @@
 package me.robomonkey.versus.command;
 
+import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.settings.Error;
 import me.robomonkey.versus.settings.*;
 import me.robomonkey.versus.util.MessageUtil;
@@ -33,17 +34,16 @@ public abstract class AbstractCommand {
         this.permission = permission;
         this.command = name;
         this.originalCommand = name;
-        if(Lang.has(this)) loadFromYAML();
     }
 
     public AbstractCommand(String name, String permission, AbstractCommand... branches) {
         this.permission = permission;
         this.command = name;
-        if(Lang.has(this)) loadFromYAML();
         addBranches(branches);
     }
 
     void loadFromYAML() {
+        Versus.log("Loading "+this.originalCommand);
         YAMLCommand abstractCommandYAML = Lang.of(this);
         this.command = abstractCommandYAML.get("name");
         this.usage = abstractCommandYAML.get("usage");
@@ -68,6 +68,7 @@ public abstract class AbstractCommand {
     }
 
     public String getCommand() {
+        Versus.log(originalCommand+"'s nickname is "+command+".");
         return command;
     }
 
@@ -158,6 +159,9 @@ public abstract class AbstractCommand {
         branches.addAll(Arrays.asList(newBranch));
         branches.forEach(branch -> {
             branch.parent = this;
+            if (Lang.has(branch)) {
+                branch.loadFromYAML();
+            }
         });
     }
 

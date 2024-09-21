@@ -43,7 +43,7 @@ public class DenyCommand extends AbstractCommand {
             return;
         }
         if (requestManager.getRequest(player, requester) == null) {
-            error(sender, Error.NOT_RECIEVED_REQUEST);
+            error(sender, Error.NOT_RECEIVED_REQUEST);
             return;
         }
         requestManager.denyRequest(player, requester);
