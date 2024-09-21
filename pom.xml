@@ -6,7 +6,7 @@
 
     <groupId>me.robomonkey</groupId>
     <artifactId>Versus</artifactId>
-    <version>1.4.1</version>
+    <version>1.5</version>
     <packaging>jar</packaging>
 
     <name>Versus</name>

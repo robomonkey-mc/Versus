@@ -26,7 +26,7 @@ commands:
 
   #The language styling for the /duel command.
   duel:
-    #An alternate name or 'alias' for the /duel command. Set to "duel" by default.
+    #*EXPERIMENTAL* An alternate name or 'alias' for the /duel command. Set to "duel" by default.
     #Example: name: "fight" --> Players can now type /fight in addition to /duel.
     name: "duel"
     description: "Sends a duel request."
@@ -68,7 +68,7 @@ commands:
 
   #The language styling for the /spectate command.
   spectate:
-    #An alternate name or 'alias' for the /duel command. Set to "duel" by default.
+    #*EXPERIMENTAL* An alternate name or 'alias' for the /spectate command. Set to "spectate" by default.
     #Example: name: "watch" --> Players can now type /watch in addition to /spectate.
     name: "spectate"
     description: "Spectates a player in their current duel."

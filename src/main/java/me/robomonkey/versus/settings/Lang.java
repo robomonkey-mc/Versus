@@ -3,12 +3,12 @@ package me.robomonkey.versus.settings;
 import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.command.AbstractCommand;
 import me.robomonkey.versus.util.MessageUtil;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,10 +30,10 @@ public class Lang {
     private static void verifyUpdated() {
         InputStream defaultLangStream = Versus.getInstance().getResource(FILE_PATH);
         File defaultLangFile = new File(FILE_PATH);
-        try {
-            FileUtils.copyInputStreamToFile(defaultLangStream, defaultLangFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        try (OutputStream output = new FileOutputStream(defaultLangFile)) {
+            defaultLangStream.transferTo(output);
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
         }
         YamlConfiguration defaultYamlConfig = YamlConfiguration.loadConfiguration(defaultLangFile);
         Set<String> keys = defaultYamlConfig.getKeys(true);

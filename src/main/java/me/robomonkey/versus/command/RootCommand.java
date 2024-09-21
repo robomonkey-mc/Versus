@@ -28,7 +28,7 @@ public abstract class RootCommand extends AbstractCommand implements CommandExec
             commandMapField.setAccessible(true);
             SimpleCommandMap commandMap = (SimpleCommandMap) commandMapField.get(Bukkit.getServer());
             commandMap.register(newName, "versus", command);
-            Versus.error("Added alias to the command /"+getOriginalCommand()+": /"+newName+".");
+            Versus.log("Added alias to the command /"+getOriginalCommand()+": /"+newName+".");
         } catch (Exception e) {
             Versus.error("Failed to add custom alias to the command '"+command.getName()+"'.");
         }
