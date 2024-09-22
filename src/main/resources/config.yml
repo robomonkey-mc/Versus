@@ -71,20 +71,37 @@ dueling:
     permission_required_to_duel: false
 
     #Sets where winners return to after a duel.
-    #Options include: 'spectate' , 'spawn' , and 'previous'
+    #Options include: 'spectate' , 'spawn' , 'previous', and 'custom'.
     #Typing anything else will default to 'spawn'.
     #'spectate' returns winners to the spectator area.
     #'spawn' returns winners to their spawnpoint.
     #'previous' returns winners to their previous location.
+    #'custom' returns winners to a custom location, configured in the section below.
     return_winners: 'spectate'
+    #This setting only takes effect if 'return_winners' is set to 'custom'.
+    winner_return_location:
+      x: 0
+      y: 0
+      z: 0
+      world: "world"
+
 
     #Sets where losers return to after a duel.
-    #Options include: 'spectate' , 'spawn' , and 'previous'
+    #Options include: 'spectate' , 'spawn' , and 'previous', and 'custom'.
     #Typing anything else will default to 'spawn'.
     #'spectate' returns losers to the spectator area.
     #'spawn' returns losers to their spawnpoint.
     #'previous' returns losers to their previous location.
+    #'custom' returns winners to a custom location, configured in the section below.
     return_losers: 'spawn'
+    #This setting only takes effect if 'return_losers' is set to 'custom'.
+    loser_return_location:
+      x: 0
+      y: 0
+      z: 0
+      world: "world"
+
+
 
     #Sets whether players respawn instantly after losing a duel, skipping the respawn screen.
     instant_respawn: false

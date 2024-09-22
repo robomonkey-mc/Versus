@@ -31,8 +31,8 @@ public final class Versus extends JavaPlugin {
     private ArenaManager arenaManager;
     private DuelManager duelManager;
     private static Versus instance;
-    public static String prefix = "[Versus]";
-    public static int pluginId = 23279;
+    private final static String prefix = "[Versus]";
+    private static final int pluginId = 23279;
     public static SpiGUI spiGUI;
 
     public static void log(String message) {

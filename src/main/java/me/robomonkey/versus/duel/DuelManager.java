@@ -92,11 +92,11 @@ public class DuelManager {
         player.setLevel(data.xpLevel);
         player.setExp(data.xpProgress);
         player.getInventory().setContents(data.items);
-        ReturnOption returnOption = isWinner ? Settings.getReturnOption(Setting.RETURN_WINNERS) : Settings.getReturnOption(Setting.RETURN_LOSERS);
-        restoreLocation(player, returnOption, data);
+        restoreLocation(player, data, isWinner);
     }
 
-    private void restoreLocation(Player player, ReturnOption returnOption, PlayerData data) {
+    private void restoreLocation(Player player, PlayerData data, Boolean isWinner) {
+        ReturnOption returnOption = isWinner ? Settings.getReturnOption(Setting.RETURN_WINNERS) : Settings.getReturnOption(Setting.RETURN_LOSERS);
         switch (returnOption) {
             case SPAWN:
                 player.teleport(player.getWorld().getSpawnLocation());
@@ -109,15 +109,27 @@ public class DuelManager {
                 if (respawnArena == null) player.teleport(player.getWorld().getSpawnLocation());
                 else player.teleport(respawnArena.getSpectateLocation());
                 break;
+            case CUSTOM:
+                Location customLocation = isWinner ? Settings.getLocation(Setting.WINNER_RETURN_LOCATION): Settings.getLocation(Setting.LOSER_RETURN_LOCATION);
+                if(customLocation == null) {
+                    Versus.log("Custom respawn location is improperly formatted. "+player.getName()+" will return to their previous location, instead.");
+                    player.teleport(data.previousLocation.toLocation());
+                    return;
+                }
+                player.teleport(customLocation);
+
+
+
         }
     }
 
     public void setupDuel(Player playerOne, Player playerTwo) {
         Duel newDuel = createNewDuel(playerOne, playerTwo);
+        newDuel.getPlayers().stream().forEach((player) -> dataManager.save(player, newDuel.getArena()));
         playerOne.teleport(newDuel.getArena().getSpawnLocationOne());
         playerTwo.teleport(newDuel.getArena().getSpawnLocationTwo());
         newDuel.getPlayers().stream().forEach((player) -> {
-            dataManager.save(player, newDuel.getArena());
+            dataManager.update(player, DataManager.DataType.INVENTORY);
             dataManager.saveDataMap();
             groomForDuel(player);
         });
@@ -136,7 +148,7 @@ public class DuelManager {
     public void announceDuelStart(Duel duel) {
         String announcementMessage = Settings.getMessage(Setting.DUEL_START_ANNOUNCEMENT,
                 Placeholder.of("%player_one%", PAPIUtil.getName(duel.getPlayers().get(0))),
-                Placeholder.of("%player_two%", PAPIUtil.getName(duel.getPlayers().get(0))));
+                Placeholder.of("%player_two%", PAPIUtil.getName(duel.getPlayers().get(1))));
         String commandText = "/spectate " + duel.getPlayers().get(0).getName();
         TextComponent announcement;
         try {
@@ -145,7 +157,7 @@ public class DuelManager {
             Versus.log("Config.yml option 'duel_start_announcement' is improperly configured. Please review. Using default value...");
             announcementMessage = Settings.getDefaultMessage(Setting.DUEL_START_ANNOUNCEMENT,
                     Placeholder.of("%player_one%", PAPIUtil.getName(duel.getPlayers().get(0))),
-                    Placeholder.of("%player_two%", PAPIUtil.getName(duel.getPlayers().get(0))));
+                    Placeholder.of("%player_two%", PAPIUtil.getName(duel.getPlayers().get(1))));
             announcement = MessageUtil.getClickableMessageBetween(announcementMessage, commandText, commandText, "%button%");
         }
         Bukkit.spigot().broadcast(announcement);
