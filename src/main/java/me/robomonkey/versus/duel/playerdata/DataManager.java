@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.arena.Arena;
+import me.robomonkey.versus.arena.data.LocationData;
 import me.robomonkey.versus.util.JsonUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -15,11 +16,19 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class DataManager {
     private Map<UUID, PlayerData> dataMap;
     private File dataFile;
     private Gson inventoryGSON;
+
+    public enum DataType {
+        LOCATION,
+        INVENTORY
+    }
 
     public DataManager() {
         dataMap = new HashMap<>();
@@ -31,6 +40,23 @@ public class DataManager {
         PlayerData data = new PlayerData(player, currentArena);
         dataMap.put(player.getUniqueId(), data);
     }
+
+    /**
+     * Updates the player data map if Player is a key in that map.
+     * NOTE: Does not update JSON, only live memory data storage.
+     */
+    public void update(Player player, DataType type) {
+        PlayerData data = get(player);
+        if (data == null) return;
+        if (type == DataType.LOCATION) {
+            data.previousLocation = new LocationData(player.getLocation());
+        }
+        if (type == DataType.INVENTORY) {
+            data.items = player.getInventory().getContents();
+        }
+    }
+
+
 
     private void remove(UUID id) {
         dataMap.remove(id);
@@ -47,9 +73,9 @@ public class DataManager {
     }
 
     /**
-     * Returns an array of itemstacks saved in Versus json file if available, otherwise returns null.
+     * Returns a Playerdata object associated with player
      *
-     * @return An array of itemstacks last associated with that player.
+     * @return Returns a Playerdata object associated with player
      */
     public PlayerData get(Player player) {
         return dataMap.get(player.getUniqueId());

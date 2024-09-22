@@ -114,10 +114,11 @@ public class DuelManager {
 
     public void setupDuel(Player playerOne, Player playerTwo) {
         Duel newDuel = createNewDuel(playerOne, playerTwo);
+        newDuel.getPlayers().stream().forEach((player) -> dataManager.save(player, newDuel.getArena()));
         playerOne.teleport(newDuel.getArena().getSpawnLocationOne());
         playerTwo.teleport(newDuel.getArena().getSpawnLocationTwo());
         newDuel.getPlayers().stream().forEach((player) -> {
-            dataManager.save(player, newDuel.getArena());
+            dataManager.update(player, DataManager.DataType.INVENTORY);
             dataManager.saveDataMap();
             groomForDuel(player);
         });
@@ -136,7 +137,7 @@ public class DuelManager {
     public void announceDuelStart(Duel duel) {
         String announcementMessage = Settings.getMessage(Setting.DUEL_START_ANNOUNCEMENT,
                 Placeholder.of("%player_one%", PAPIUtil.getName(duel.getPlayers().get(0))),
-                Placeholder.of("%player_two%", PAPIUtil.getName(duel.getPlayers().get(0))));
+                Placeholder.of("%player_two%", PAPIUtil.getName(duel.getPlayers().get(1))));
         String commandText = "/spectate " + duel.getPlayers().get(0).getName();
         TextComponent announcement;
         try {
@@ -145,7 +146,7 @@ public class DuelManager {
             Versus.log("Config.yml option 'duel_start_announcement' is improperly configured. Please review. Using default value...");
             announcementMessage = Settings.getDefaultMessage(Setting.DUEL_START_ANNOUNCEMENT,
                     Placeholder.of("%player_one%", PAPIUtil.getName(duel.getPlayers().get(0))),
-                    Placeholder.of("%player_two%", PAPIUtil.getName(duel.getPlayers().get(0))));
+                    Placeholder.of("%player_two%", PAPIUtil.getName(duel.getPlayers().get(1))));
             announcement = MessageUtil.getClickableMessageBetween(announcementMessage, commandText, commandText, "%button%");
         }
         Bukkit.spigot().broadcast(announcement);
