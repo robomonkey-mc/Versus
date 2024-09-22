@@ -6,11 +6,8 @@ import me.robomonkey.versus.duel.ReturnOption;
 import me.robomonkey.versus.util.MessageUtil;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;

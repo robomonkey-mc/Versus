@@ -3,12 +3,9 @@ package me.robomonkey.versus.settings;
 import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.command.AbstractCommand;
 import me.robomonkey.versus.util.MessageUtil;
-import org.apache.commons.io.IOUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.Map;
 import java.util.Set;
 
