@@ -3,5 +3,6 @@ package me.robomonkey.versus.duel;
 public enum ReturnOption {
     SPECTATE,
     SPAWN,
-    PREVIOUS
+    PREVIOUS,
+    CUSTOM
 }

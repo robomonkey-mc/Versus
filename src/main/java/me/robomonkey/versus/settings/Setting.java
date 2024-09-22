@@ -30,9 +30,11 @@ public enum Setting {
     DUEL_SPECTATE_MESSAGE("dueling.messages", Type.STRING),
 
     RETURN_WINNERS("dueling.mechanics", Type.RETURNOPTIONS),
+    WINNER_RETURN_LOCATION("dueling.mechanics", Type.LOCATION),
     INSTANT_RESPAWN("dueling.mechanics", Type.BOOLEAN),
     PERMISSION_REQUIRED_TO_DUEL("dueling.mechanics", Type.BOOLEAN),
     RETURN_LOSERS("dueling.mechanics", Type.RETURNOPTIONS),
+    LOSER_RETURN_LOCATION("dueling.mechanics", Type.LOCATION),
     BLOCKED_COMMANDS("dueling.mechanics", Type.INVALID),
     ALLOW_BLOCK_PLACEMENTS("dueling.mechanics", Type.BOOLEAN),
     COUNTDOWN_DURATION("dueling.mechanics", Type.NUMBER),
@@ -118,6 +120,7 @@ public enum Setting {
     public enum Type {
         BOOLEAN(List.of("true", "false")),
         STRING(List.of("<message>")),
+        LOCATION(List.of("<x> <y> <z> <world name>")),
         MUSIC(List.of("creative", "credits", "disc_5", "disc_11", "disc_13", "disc_blocks",
                 "disc_cat", "disc_chirp", "disc_creator", "disc_creator_music_box", "disc_far",
                 "disc_mall", "disc_mellohi", "disc_otherside", "disc_pigstep", "disc_precipice",

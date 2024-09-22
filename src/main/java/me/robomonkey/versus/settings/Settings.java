@@ -4,18 +4,17 @@ import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.dependency.Dependencies;
 import me.robomonkey.versus.duel.ReturnOption;
 import me.robomonkey.versus.util.MessageUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Sound;
+import org.bukkit.*;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class Settings {
@@ -83,8 +82,36 @@ public class Settings {
         return MessageUtil.color(message);
     }
 
+    /**
+     * Returns location if it exists, else returns null;
+     * @param setting
+     * @return
+     */
+    public static Location getLocation(Setting setting) {
+        ConfigurationSection section = (ConfigurationSection) setting.getValue();
+        Double x = section.getDouble("x");
+        Double y = section.getDouble("y");
+        Double z = section.getDouble("z");
+        String worldName = section.getString("world");
+        if(worldName == null || z == null || y == null || z == null) {
+            Versus.error("Improperly formatted location at '"+setting.toString().toLowerCase()+"' in config.yml.");
+            return null;
+        }
+        World world = Bukkit.getServer().getWorld(worldName);
+        if(world == null) {
+            Versus.error("Improperly formatted location at '"+setting.toString().toLowerCase()+"' in config.yml. \n"+
+                         worldName+" is not a world!");
+            return null;
+        }
+        return new Location(world, x, y, z);
+    }
+
     public static String getStringVersion(Setting setting) {
         return String.valueOf(setting.getValue());
+    }
+
+    public static <T> T getDefaultValue(Setting setting) {
+        return (T) setting.getDefaultValue();
     }
 
     public static ReturnOption getReturnOption(Setting setting) {
@@ -213,11 +240,13 @@ public class Settings {
                 unsavedSettingChanges.keySet().stream().forEach(setting -> {
                     String key = setting.getPath();
                     Object value = unsavedSettingChanges.get(setting);
-                    Versus.log("Changing " + setting.toString() + " to " + value.toString());
+                    if(setting.getType() == Setting.Type.LOCATION) value = parseLocationFromCLI(value);
+                    if(value == null) return;
+                    Versus.log("Changing " + setting + " to " + value);
                     setting.setValue(value);
                     config.set(key, value);
-                    saveConfigToFile();
                 });
+                saveConfigToFile();
                 List<Setting> changedCommands = List.copyOf(unsavedSettingChanges.keySet());
                 Bukkit.getScheduler().runTask(Versus.getInstance(), () -> after.accept(changedCommands));
                 unsavedSettingChanges.clear();
@@ -228,6 +257,30 @@ public class Settings {
                 Bukkit.getScheduler().runTask(Versus.getInstance(), () -> after.accept(null));
             }
         });
+    }
+
+    /**
+     * Converts a string like '1 2 3 world' into a Map which can easily be saved as a ConfigurationSection.
+     * @param location
+     * @return Returns null if unsuccessful
+     */
+    private Map<String, Object> parseLocationFromCLI(Object location) {
+        if((location instanceof String) == false) return null;
+        String locationArgument = (String) location;
+        String[] arguments = locationArgument.split(" ");
+
+        if (arguments.length < 4) return null;
+        Double x = Double.parseDouble(arguments[0]);
+        Double y = Double.parseDouble(arguments[1]);
+        Double z = Double.parseDouble(arguments[2]);
+        String worldName = arguments[3];
+
+        LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>();
+        linkedHashMap.put("x", x);
+        linkedHashMap.put("y", y);
+        linkedHashMap.put("z", z);
+        linkedHashMap.put("world", worldName);
+        return linkedHashMap;
     }
 
     private void loadSetting(Setting setting) throws Exception {
