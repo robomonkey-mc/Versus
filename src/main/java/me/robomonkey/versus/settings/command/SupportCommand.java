@@ -11,6 +11,9 @@ import org.bukkit.command.CommandSender;
 import java.util.List;
 
 public class SupportCommand extends AbstractCommand {
+
+    public static final String DISCORD_LINK = "https://discord.gg/M7vJCAN2kb";
+
     public SupportCommand() {
         super("support", null);
         setUsage("/versus support");
@@ -23,7 +26,7 @@ public class SupportCommand extends AbstractCommand {
     public void callCommand(CommandSender sender, String[] args) {
         TextComponent message = new TextComponent(MessageUtil.get("&sJoin our &b&ldiscord!"));
         String hoverText = MessageUtil.get("&sClick here!");
-        message.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/eBfcVpSw"));
+        message.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, DISCORD_LINK));
         message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hoverText).create()));
         sender.spigot().sendMessage(message);
     }
