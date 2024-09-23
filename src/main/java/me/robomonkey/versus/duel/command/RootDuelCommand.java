@@ -3,8 +3,8 @@ package me.robomonkey.versus.duel.command;
 import me.robomonkey.versus.command.RootCommand;
 import me.robomonkey.versus.duel.DuelManager;
 import me.robomonkey.versus.duel.request.RequestManager;
-import me.robomonkey.versus.settings.Setting;
-import me.robomonkey.versus.settings.Settings;
+import me.robomonkey.versus.settings.Error;
+import me.robomonkey.versus.settings.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -19,8 +19,6 @@ public class RootDuelCommand extends RootCommand {
         setPermissionRequired(Settings.is(Setting.PERMISSION_REQUIRED_TO_DUEL));
         setPlayersOnly(true);
         setArgumentRequired(true);
-        setUsage("/duel <player>");
-        setDescription("Sends a duel request.");
         addBranches(new DenyCommand(),
                 new CancelCommand(),
                 new AcceptCommand());
@@ -35,19 +33,20 @@ public class RootDuelCommand extends RootCommand {
         String playerNameRequested = args[0];
         Player requested = Bukkit.getPlayer(playerNameRequested);
         if (requested == null) {
-            error(sender, "'" + playerNameRequested + "' is not online.");
+            error(sender, Lang.get(Error.IS_NOT_ONLINE,
+                Placeholder.of("%player%", playerNameRequested)));
             return;
         }
         if (requested.equals(player)) {
-            error(sender, "You cannot duel yourself.");
+            error(sender, Lang.get(Error.DUEL_SELF));
             return;
         }
         if (DuelManager.getInstance().isDueling(player)) {
-            error(sender, "You cannot duel right now.");
+            error(sender, Lang.get(Error.CANNOT_DUEL));
             return;
         }
         if (DuelManager.getInstance().isDueling(requested) || requestManager.isQueued(requested)) {
-            error(sender, requested.getName() + " cannot duel right now.");
+            error(sender, Error.CANNOT_DUEL);
             return;
         }
         if (requestManager.hasIncomingRequest(player)
@@ -55,16 +54,16 @@ public class RootDuelCommand extends RootCommand {
             try {
                 RequestManager.getInstance().acceptSpecificRequest(player, requested);
             } catch (RequestManager.PlayerOfflineException e) {
-                error(player, "The player that requested a duel is no longer online!");
+                error(player, Error.PLAYER_NO_LONGER_ONLINE);
             }
             return;
         }
         if (requestManager.isQueued(player)) {
-            error(sender, "You cannot send duel requests while queueing for a duel. Type /duel cancel to quit the queue.");
+            error(sender, Error.DUEL_WHILE_QUEUEING);
             return;
         }
         if (requestManager.isRequestedBy(player, requested)) {
-            error(sender, "Please wait for " + requested.getName() + " to respond to your first request.");
+            error(sender, Error.WAIT_FOR_RESPONSE, requested.getName());
             return;
         }
         requestManager.sendRequest(player, requested);

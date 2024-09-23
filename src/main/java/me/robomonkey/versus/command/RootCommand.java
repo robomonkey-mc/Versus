@@ -1,23 +1,42 @@
 package me.robomonkey.versus.command;
 
 import me.robomonkey.versus.Versus;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import me.robomonkey.versus.settings.Lang;
+import org.bukkit.Bukkit;
+import org.bukkit.command.*;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 public abstract class RootCommand extends AbstractCommand implements CommandExecutor, TabCompleter {
 
     public RootCommand(String command, String permission) {
         super(command, permission);
+        if(Lang.has(this)) {
+            rename();
+            loadFromYAML();
+        }
         this.registerCommand();
     }
 
+    private void rename() {
+        String newName = Lang.of(this).get("name");
+        if(newName.equals(this.getOriginalCommand())) return;
+        Command command = Bukkit.getPluginCommand(originalCommand);
+        try {
+            Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+            commandMapField.setAccessible(true);
+            SimpleCommandMap commandMap = (SimpleCommandMap) commandMapField.get(Bukkit.getServer());
+            commandMap.register(newName, "versus", command);
+            Versus.log("Added alias to the command /"+getOriginalCommand()+": /"+newName+".");
+        } catch (Exception e) {
+            Versus.error("Failed to add custom alias to the command '"+command.getName()+"'.");
+        }
+    }
+
     private void registerCommand() {
-        Versus.getInstance().getCommand(command).setExecutor(this);
-        Versus.getInstance().getCommand(command).setTabCompleter(this);
+        Versus.getInstance().getCommand(originalCommand).setExecutor(this);
+        Versus.getInstance().getCommand(originalCommand).setTabCompleter(this);
     }
 
     public RootCommand(String command, String permission, List<String> tabCompletions) {

@@ -22,6 +22,7 @@ config-version: 1.0
 #-----------------------------------------------------------------------------------------------------------------------------
 # aqua, black, blue, gray, green, lime, orange, purple, red, silver, teal, white, and yellow.
 
+# Note: Go to lang.yml for extra-detailed message configuration options like admin messages or error messages.
 
 
 

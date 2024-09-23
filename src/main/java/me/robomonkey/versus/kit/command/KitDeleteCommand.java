@@ -5,7 +5,6 @@ import me.robomonkey.versus.kit.Kit;
 import me.robomonkey.versus.kit.KitManager;
 import me.robomonkey.versus.util.MessageUtil;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.stream.Collectors;

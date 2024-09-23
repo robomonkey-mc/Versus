@@ -3,6 +3,7 @@ package me.robomonkey.versus;
 import me.robomonkey.versus.command.RootCommand;
 import me.robomonkey.versus.settings.command.ConfigCommand;
 import me.robomonkey.versus.settings.command.SupportCommand;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class RootVersusCommand extends RootCommand {
         enforcePermissionRulesForChildren();
         setPlayersOnly(true);
         setMaxArguments(1);
+        Command cmd;
     }
 
     @Override
