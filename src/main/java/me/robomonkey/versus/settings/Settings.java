@@ -2,7 +2,6 @@ package me.robomonkey.versus.settings;
 
 import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.dependency.Dependencies;
-import me.robomonkey.versus.duel.ReturnOption;
 import me.robomonkey.versus.util.MessageUtil;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;

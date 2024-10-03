@@ -40,7 +40,7 @@
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>me.robomonkey</shadedPattern>
+                            <shadedPattern>me.robomonkey.bstats</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

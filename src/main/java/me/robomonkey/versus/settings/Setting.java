@@ -1,7 +1,6 @@
 package me.robomonkey.versus.settings;
 
 import me.robomonkey.versus.Versus;
-import me.robomonkey.versus.duel.ReturnOption;
 
 import java.util.Arrays;
 import java.util.List;
