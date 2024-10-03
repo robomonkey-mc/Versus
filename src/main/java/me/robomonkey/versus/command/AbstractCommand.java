@@ -67,7 +67,6 @@ public abstract class AbstractCommand {
     }
 
     public String getCommand() {
-        Versus.log(originalCommand+"'s nickname is "+command+".");
         return command;
     }
 

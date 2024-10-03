@@ -32,7 +32,6 @@ public class LocationData {
 
     public void ensureExists() {
         if (Bukkit.getWorld(this.world) == null) {
-            Versus.log("Loading world '" + world + "'.");
             new WorldCreator(world).createWorld();
         }
     }
