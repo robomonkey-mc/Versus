@@ -12,6 +12,11 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Optional;
 
 public class DuelOptions {
+
+    public static DuelOptions DEFAULT = new DuelOptions(null, null, false, 20, false);
+
+    //TODO FIX: Currently, since DEFAULT is instantiated when DuelOptions.java is first loaded, changes to default dueling
+    // options won't propagate when updated live.
     private boolean fightMusicEnabled = Settings.is(Setting.FIGHT_MUSIC_ENABLED);
     private boolean victoryMusicEnabled = Settings.is(Setting.VICTORY_MUSIC_ENABLED);
     private boolean victoryEffectsEnabled = Settings.is(Setting.VICTORY_EFFECTS_ENABLED);

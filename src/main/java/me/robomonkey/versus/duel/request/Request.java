@@ -1,5 +1,6 @@
 package me.robomonkey.versus.duel.request;
 
+import me.robomonkey.versus.duel.options.DuelOptions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -9,14 +10,16 @@ public class Request {
     private UUID requested;
     private UUID requesting;
     private Long timecode;
+    private DuelOptions options;
 
-    public Request(UUID requested, UUID requesting) {
+    public Request(UUID requested, UUID requesting, DuelOptions options) {
         this.requested = requested;
         this.requesting = requesting;
         this.timecode = System.currentTimeMillis();
+        this.options = options;
     }
 
-    public Request(Player requested, Player requesting) {
+    public Request(Player requested, Player requesting, DuelOptions options) {
         this.requested = requested.getUniqueId();
         this.requesting = requesting.getUniqueId();
     }
