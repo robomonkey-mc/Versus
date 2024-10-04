@@ -3,6 +3,7 @@ package me.robomonkey.versus.duel.request;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.dependency.PAPIUtil;
 import me.robomonkey.versus.duel.DuelManager;
+import me.robomonkey.versus.duel.options.Bet;
 import me.robomonkey.versus.settings.Placeholder;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;

@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.arena.Arena;
 import me.robomonkey.versus.arena.data.LocationData;
+import me.robomonkey.versus.duel.Duel;
 import me.robomonkey.versus.util.JsonUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -24,7 +25,7 @@ public class DataManager {
 
     public enum DataType {
         LOCATION,
-        INVENTORY
+        INVENTORY,
     }
 
     public DataManager() {
@@ -33,8 +34,8 @@ public class DataManager {
         inventoryGSON = Versus.getGSON();
     }
 
-    public void save(Player player, Arena currentArena) {
-        PlayerData data = new PlayerData(player, currentArena);
+    public void save(Player player, Duel duel) {
+        PlayerData data = new PlayerData(player, duel);
         dataMap.put(player.getUniqueId(), data);
     }
 

@@ -1,6 +1,7 @@
 package me.robomonkey.versus.duel;
 
 import me.robomonkey.versus.arena.Arena;
+import me.robomonkey.versus.duel.options.DuelOptions;
 import me.robomonkey.versus.settings.Placeholder;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
@@ -16,24 +17,15 @@ import java.util.UUID;
 
 public class Duel {
     private final ArrayList<Player> players = new ArrayList<>();
-    private final Arena activeArena;
     private DuelState state = DuelState.IDLE;
     private UUID winner;
     private UUID loser;
-    private boolean isPublic = Settings.is(Setting.ANNOUNCE_DUELS);
     private Countdown countdown = null;
-    private boolean fightMusicEnabled = Settings.is(Setting.FIGHT_MUSIC_ENABLED);
-    private boolean victoryMusicEnabled = Settings.is(Setting.VICTORY_MUSIC_ENABLED);
-    private boolean victoryEffectsEnabled = Settings.is(Setting.VICTORY_EFFECTS_ENABLED);
-    private boolean fireworksEnabled = Settings.is(Setting.FIREWORKS_ENABLED);
-    private Color fireworkColor = Settings.getColor(Setting.FIREWORKS_COLOR);
-    private Sound victorySong = Settings.getSong(Setting.VICTORY_MUSIC);
-    private Sound fightMusic = Settings.getSong(Setting.FIGHT_MUSIC);
-    private boolean blindnessEnabled = Settings.is(Setting.BLINDNESS_EFFECTS_ENABLED);
+    private DuelOptions options;
 
-    public Duel(Arena arena, Player... duelists) {
+    public Duel(DuelOptions options, Player... duelists) {
         Collections.addAll(players, duelists);
-        this.activeArena = arena;
+        this.options = options;
     }
 
     public ArrayList<Player> getPlayers() {
@@ -41,7 +33,7 @@ public class Duel {
     }
 
     public Arena getArena() {
-        return this.activeArena;
+        return this.options.getArena();
     }
 
     public Countdown getCountdown() {
@@ -54,14 +46,6 @@ public class Duel {
 
     public boolean isActive() {
         return (state == DuelState.ACTIVE || state == DuelState.COUNTDOWN);
-    }
-
-    public boolean isFireworksEnabled() {
-        return fireworksEnabled;
-    }
-
-    public boolean isVictoryEffectsEnabled() {
-        return victoryEffectsEnabled;
     }
 
     public UUID getWinnerID() {
@@ -78,30 +62,6 @@ public class Duel {
 
     public Player getLoser() {
         return Bukkit.getPlayer(getLoserID());
-    }
-
-    public boolean isPublic() {
-        return this.isPublic;
-    }
-
-    public Sound getFightMusic() {
-        return fightMusic;
-    }
-
-    public Sound getVictorySong() {
-        return victorySong;
-    }
-
-    public boolean isFightMusicEnabled() {
-        return this.fightMusicEnabled;
-    }
-
-    public boolean isVictoryMusicEnabled() {
-        return this.victoryMusicEnabled;
-    }
-
-    public Color getFireworkColor() {
-        return (fireworkColor == null) ? Color.ORANGE : fireworkColor;
     }
 
     public void setWinner(UUID winner) {
@@ -149,10 +109,15 @@ public class Duel {
                 Placeholder.of("%player_one%", getPlayers().get(0).getName()),
                 Placeholder.of("%player_two%", getPlayers().get(1).getName()));
         player.sendMessage(spectateMessage);
-        player.teleport(activeArena.getSpectateLocation());
+        player.teleport(getArena().getSpectateLocation());
     }
 
+    public DuelOptions options() {
+        return this.options;
+    }
+
+
     public void removeFromSpectating(Player player) {
-        player.teleport(activeArena.getSpectateLocation());
+        player.teleport(getArena().getSpectateLocation());
     }
 }
