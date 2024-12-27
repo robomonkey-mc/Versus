@@ -18,7 +18,6 @@ public class RootVersusCommand extends RootCommand {
         enforcePermissionRulesForChildren();
         setPlayersOnly(true);
         setMaxArguments(1);
-        Command cmd;
     }
 
     @Override

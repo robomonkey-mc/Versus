@@ -41,7 +41,7 @@ public class ItemsBet implements Bet {
     }
 
     @Override
-    public void punish(Player player) {
+    public void penalize(Player player) {
         //TODO: NOTE this can be exploited if players don't have their items removed initially
         List<ItemStack> betItems = itemsMap.get(player.getUniqueId());
         betItems.forEach((item) -> player.getInventory().removeItem(item));

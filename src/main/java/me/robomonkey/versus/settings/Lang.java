@@ -2,7 +2,9 @@ package me.robomonkey.versus.settings;
 
 import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.command.AbstractCommand;
+import me.robomonkey.versus.duel.DuelOption;
 import me.robomonkey.versus.util.MessageUtil;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
@@ -11,8 +13,8 @@ import java.util.Set;
 
 public class Lang {
 
-    public static File file;
-    public static YamlConfiguration config;
+    private static File file;
+    private static YamlConfiguration config;
     private static final String FILE_PATH = "lang.yml";
     
     public static void load() {
@@ -97,7 +99,7 @@ public class Lang {
         return keyBuilder.toString();
     }
 
-    public static boolean has(AbstractCommand command) {
+    public static boolean hasCommand(AbstractCommand command) {
         return config.isConfigurationSection("commands."+getKey(command));
     }
 }

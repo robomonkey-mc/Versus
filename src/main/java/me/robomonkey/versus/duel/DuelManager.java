@@ -22,7 +22,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -86,7 +85,7 @@ public class DuelManager {
         player.getInventory().setContents(data.items);
         restoreLocation(player, data, isWinner);
         if(isWinner) bet.reward(player);
-        else bet.punish(player);
+        else bet.penalize(player);
     }
 
     private void restoreLocation(Player player, PlayerData data, Boolean isWinner) {

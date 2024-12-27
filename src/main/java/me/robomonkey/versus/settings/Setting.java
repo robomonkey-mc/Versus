@@ -65,6 +65,10 @@ public enum Setting {
     NO_ARENAS_AVAILABLE("requesting.messages", Type.STRING),
     DENY_BUTTON("requesting.messages", Type.STRING),
 
+    DISABLED_TEXT("requesting.menu", Type.STRING),
+    ENABLED_TEXT("requesting.menu", Type.STRING),
+    MAX_LINE_LENGTH("requesting.menu", Type.NUMBER),
+
     ESSENTIALS_NICKNAMES_ENABLED("dependencies.placeholderAPI", Type.BOOLEAN),
     ITEMS_ADDER_FOR_KITS("dependencies.itemsadder", Type.BOOLEAN);
 

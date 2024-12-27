@@ -21,7 +21,7 @@ public interface Bet {
      * Punishes a bet after a duel has completed.
      * @param player Player that bet should collect from.
      */
-    public void punish(Player player);
+    public void penalize(Player player);
 
     /**
      * Determines whether a player can make this bet.

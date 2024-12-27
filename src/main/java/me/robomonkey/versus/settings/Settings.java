@@ -1,17 +1,24 @@
 package me.robomonkey.versus.settings;
 
+import com.samjakob.spigui.buttons.SGButton;
+import com.samjakob.spigui.item.ItemBuilder;
 import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.dependency.Dependencies;
+import me.robomonkey.versus.duel.DuelOption;
 import me.robomonkey.versus.util.MessageUtil;
+import net.kyori.adventure.platform.facet.Facet;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class Settings {
 
@@ -19,6 +26,8 @@ public class Settings {
     FileConfiguration config;
     final static String configVersion = "1.0";
     private static Settings instance;
+    private static final String DUEL_OPTIONS_KEY = "requesting.options";
+    private static final String DUEL_MENU_KEY = "requesting.menu";
     private Map<Setting, Object> unsavedSettingChanges = new HashMap<>();
 
     public static Map<String, Color> colorMap = Map.ofEntries(
@@ -209,6 +218,34 @@ public class Settings {
         }
     }
 
+    public static ConfigurationSection getButtonConfigSection(String name) {
+        return instance.config.getConfigurationSection(DUEL_MENU_KEY).getConfigurationSection(name);
+    }
+
+    public static SGButton getButton(String key) {
+        ConfigurationSection buttonConfiguration = Settings.getButtonConfigSection(key);
+        String displayName = MessageUtil.color(buttonConfiguration.getString("title"));
+        String description = MessageUtil.color(buttonConfiguration.getString("description"));
+        List<String> lore = MessageUtil.loreTokenize(description, Settings.getNumber(Setting.MAX_LINE_LENGTH));
+        String material = buttonConfiguration.getString("item");
+        boolean enchanted = buttonConfiguration.getBoolean("enchanted");
+        Material matchedMaterial = Material.matchMaterial(material);
+        if (matchedMaterial == null) {
+            matchedMaterial = Material.matchMaterial(buttonConfiguration.getDefaultSection().getString("material"));
+        }
+        return new SGButton(new ItemBuilder(matchedMaterial)
+            .flag(enchanted? ItemFlag.HIDE_ENCHANTS: null)
+            .name(displayName)
+            .lore(lore)
+            .enchant(enchanted? Enchantment.LUCK: null, 1)
+            .build());
+    }
+
+    public static SGButton getButton(DuelOption option) {
+        String name = option.toString().toLowerCase();
+        return getButton(name);
+    }
+
     private void updateConfig() {
         Versus.log("Updating plugin config...");
         plugin.saveResource("config.yml", true);
@@ -326,6 +363,32 @@ public class Settings {
                 break;
         }
         return newValue;
+    }
+
+    public static void toggleDuelOption(DuelOption option, boolean newState) {
+        final String fullKey = DUEL_OPTIONS_KEY + option.toString().toLowerCase();
+        instance.config.set(fullKey, newState);
+    }
+
+
+    public static void setEnabledDuelOptions(List<DuelOption> options) {
+        ConfigurationSection duelOptionsSection = instance.config.getConfigurationSection(DUEL_OPTIONS_KEY);
+        Arrays.stream(DuelOption.values()).forEach(option -> {
+            duelOptionsSection.set(option.toString().toLowerCase(), options.contains(option));
+        });
+    }
+
+    public static List<DuelOption> getEnabledDuelOptions() {
+        ConfigurationSection duelOptionsSection = instance.config.getConfigurationSection(DUEL_OPTIONS_KEY);
+        return Arrays.stream(DuelOption.values()).filter((option) -> {
+            String name = option.toString().toLowerCase();
+            return duelOptionsSection.getBoolean(name);
+        }).collect(Collectors.toList());
+    }
+
+    public boolean isDuelOptionEnabled(DuelOption option) {
+        final String fullKey = DUEL_OPTIONS_KEY + option.toString().toLowerCase();
+        return config.getBoolean(fullKey);
     }
 
     public void saveSetting(Setting setting) {

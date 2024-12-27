@@ -22,7 +22,7 @@ config-version: 1.0
 #-----------------------------------------------------------------------------------------------------------------------------
 # aqua, black, blue, gray, green, lime, orange, purple, red, silver, teal, white, and yellow.
 
-# Note: Go to lang.yml for extra-detailed message configuration options like admin messages or error messages.
+# [IMPORTANT]: Go to lang.yml for extra-detailed message and menu configuration options.
 
 
 
@@ -212,6 +212,96 @@ requesting:
     no_arenas_available: "&6You've been placed in a queue. Please wait until an arena is available."
     #The chat message sent to a player after cancelling a queue to duel.
     cancel_request: "&6You're no longer queueing for a duel."
+  menu:
+    title:
+    max_line_length: 15
+    menu_enabled: false
+    disabled_text:
+    enabled_text:
+      options:
+        select_kit:
+          enabled: true
+          default:
+        select_arena:
+          enabled: true
+        use_own_inventory:
+          enabled:
+        item_betting:
+          enabled:
+        economy_betting:
+          enabled:
+        custom_health:
+          enabled:
+        random_items:
+          enabled:
+      buttons:
+        placeholder_button:
+          title:
+          item:
+          description:
+          enchanted:
+        exit_menu_button:
+          title:
+          item:
+          description:
+          enchanted:
+        confirm_button:
+          title:
+          item:
+          description:
+          enchanted:
+        cancel_button:
+          title:
+          item:
+          description:
+          enchanted:
+        forward_button:
+          title:
+          item:
+          description:
+          enchanted:
+        back_button:
+          title:
+          item:
+          description:
+          enchanted:
+        select_kit:
+          title:
+          item:
+          description:
+          enchanted:
+        select_arena:
+          title:
+          item:
+          description:
+          enchanted:
+          submenu:
+            arena_display_button:
+        use_own_inventory:
+          title:
+          item:
+          description:
+          enchanted:
+        item_betting:
+          title:
+          item:
+          description:
+          enchanted:
+        economy_betting:
+          title:
+          item:
+          description:
+          enchanted:
+        custom_health:
+          title:
+          item:
+          description:
+          enchanted:
+        random_items:
+          title:
+          item:
+          description:
+          enchanted:
 
 
 

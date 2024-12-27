@@ -21,7 +21,7 @@ public class CurrencyBet implements Bet{
     }
 
     @Override
-    public void punish(Player player) {
+    public void penalize(Player player) {
         //remove amount from player's bank
     }
 

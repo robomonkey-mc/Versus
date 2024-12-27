@@ -9,8 +9,10 @@ import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.util.MessageUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.stream.IntStream;
 
@@ -20,6 +22,7 @@ public class KitSelectionGUI {
     private Player viewer;
     private Kit selectedKit;
     private SGMenu mainMenu;
+
     private static SGButton EMPTY = new SGButton(new ItemBuilder(Material.WHITE_STAINED_GLASS_PANE).name(" ").build());
 
     public KitSelectionGUI(Player viewer, BiConsumer<Kit, Player> onSelect) {
@@ -92,18 +95,44 @@ public class KitSelectionGUI {
 
     public void openViewingGUI(Kit kit) {
         SGMenu viewingGUI = Versus.spiGUI.create("Viewing " + kit.getName(), 6);
+        viewingGUI.setBlockDefaultInteractions(false);
+
+        Versus.log("set to "+viewingGUI.areDefaultInteractionsBlocked());
         IntStream.range(45, 54).forEach(index -> {
             viewingGUI.setButton(index, EMPTY);
         });
         ItemStack exitIcon = new ItemBuilder(Material.BARRIER).amount(1)
-                .name("&c&lExit")
+                .name("&c&lSave and exit")
                 .lore("&7Return to viewing all kits.").build();
-        SGButton exitButton = new SGButton(exitIcon).withListener(inventoryClickEvent -> this.open());
+        SGButton exitButton = new SGButton(exitIcon).withListener(inventoryClickEvent -> {
+            inventoryClickEvent.setResult(Event.Result.DENY);
+            updateKit(viewingGUI, kit);
+            this.open();
+        });
         viewingGUI.setButton(49, exitButton);
         for (int index = 0; index < kit.getItems().length; index++) {
             SGButton itemButton = new SGButton(kit.getItems()[index]);
+            itemButton.withListener((event) -> {
+                event.setResult(Event.Result.ALLOW);
+            });
             viewingGUI.setButton(index, itemButton);
         }
         viewer.openInventory(viewingGUI.getInventory());
+    }
+
+    public void updateKit(SGMenu viewingMenu, Kit selectedKit) {
+        viewingMenu.refreshInventory(viewer);
+        ItemStack[] newItems = new ItemStack[41];
+        ItemStack[] guiContents = viewingMenu.getInventory().getContents();
+        for (int index = 0; index < 41; index++) {
+            newItems[index] = guiContents[index];
+        }
+        if(!selectedKit.getItems().equals(newItems)) {
+            Versus.log("Items are different.");
+            Versus.log(Arrays.deepToString(selectedKit.getItems()));
+            Versus.log(Arrays.deepToString(newItems));
+            selectedKit.setItems(newItems);
+            kitManager.update(selectedKit);
+        }
     }
 }

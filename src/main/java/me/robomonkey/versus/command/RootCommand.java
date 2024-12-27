@@ -12,7 +12,7 @@ public abstract class RootCommand extends AbstractCommand implements CommandExec
 
     public RootCommand(String command, String permission) {
         super(command, permission);
-        if(Lang.has(this)) {
+        if(Lang.hasCommand(this)) {
             rename();
             loadFromYAML();
         }

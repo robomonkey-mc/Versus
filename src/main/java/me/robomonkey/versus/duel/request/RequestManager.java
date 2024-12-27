@@ -3,7 +3,7 @@ package me.robomonkey.versus.duel.request;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.dependency.PAPIUtil;
 import me.robomonkey.versus.duel.DuelManager;
-import me.robomonkey.versus.duel.options.Bet;
+import me.robomonkey.versus.duel.options.DuelOptions;
 import me.robomonkey.versus.settings.Placeholder;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
@@ -47,7 +47,7 @@ public class RequestManager {
         }
         if (queue.size() > 0) {
             Request latest = queue.pop();
-            DuelManager.getInstance().setupDuel(latest.getRequestedPlayer(), latest.getRequestingPlayer());
+            DuelManager.getInstance().setupDuel(latest.getRequestedPlayer(), latest.getRequestingPlayer(), latest.getOptions());
         }
     }
 
@@ -127,7 +127,8 @@ public class RequestManager {
 
 
     public void sendRequest(Player requesting, Player requested) {
-        requestList.add(new Request(requested, requesting));
+        //TODO CHANGE THIS FROM DEFAULT, ADD LOGIC FOR SETTING DUEL OPTIONS
+        requestList.add(new Request(requested, requesting, DuelOptions.DEFAULT));
         String sentRequestMessage = Settings.getMessage(Setting.SENT_REQUEST, new Placeholder("%player%", PAPIUtil.getName(requested)));
         String requestNotification = Settings.getMessage(Setting.REQUEST_NOTIFICATION, new Placeholder("%player%", PAPIUtil.getName(requesting)));
 
@@ -150,7 +151,7 @@ public class RequestManager {
             requested.sendMessage(Settings.getMessage(Setting.NO_ARENAS_AVAILABLE));
             placeInQueue(currentRequest);
         } else {
-            DuelManager.getInstance().setupDuel(requester, requested);
+            DuelManager.getInstance().setupDuel(requester, requested, currentRequest.getOptions());
         }
     }
 
@@ -165,7 +166,7 @@ public class RequestManager {
             requested.sendMessage(Settings.getMessage(Setting.NO_ARENAS_AVAILABLE));
             placeInQueue(currentRequest);
         } else {
-            DuelManager.getInstance().setupDuel(requester, requested);
+            DuelManager.getInstance().setupDuel(requester, requested, currentRequest.getOptions());
         }
     }
 

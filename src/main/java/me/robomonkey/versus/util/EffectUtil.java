@@ -28,6 +28,10 @@ public class EffectUtil {
         player.playSound(player.getLocation(), sound, Float.POSITIVE_INFINITY, 1F);
     }
 
+    public static void playSound(Player player, Sound sound, float pitch) {
+        player.playSound(player.getLocation(), sound, Float.POSITIVE_INFINITY, pitch);
+    }
+
     public static void spawnFireWorks(Location loc, int amount, Integer power, Color color) {
         Firework firework = (Firework) loc.getWorld().spawnEntity(loc, FIREWORK_TYPE);
         FireworkMeta fireworkMeta = firework.getFireworkMeta();

@@ -26,7 +26,7 @@ public class EXPBet implements Bet {
     }
 
     @Override
-    public void punish(Player player) {
+    public void penalize(Player player) {
         int currLevel = player.getLevel();
         float currProgress = player.getExp();
         player.setExp(currProgress - progress);

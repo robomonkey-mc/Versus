@@ -1,6 +1,5 @@
 package me.robomonkey.versus.command;
 
-import me.robomonkey.versus.Versus;
 import me.robomonkey.versus.settings.Error;
 import me.robomonkey.versus.settings.*;
 import me.robomonkey.versus.util.MessageUtil;
@@ -157,7 +156,7 @@ public abstract class AbstractCommand {
         branches.addAll(Arrays.asList(newBranch));
         branches.forEach(branch -> {
             branch.parent = this;
-            if (Lang.has(branch)) {
+            if (Lang.hasCommand(branch)) {
                 branch.loadFromYAML();
             }
         });

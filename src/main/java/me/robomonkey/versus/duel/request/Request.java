@@ -32,6 +32,10 @@ public class Request {
         this.timecode = timecode;
     }
 
+    public DuelOptions getOptions() {
+        return this.options;
+    }
+
     public UUID getRequested() {
         return requested;
     }

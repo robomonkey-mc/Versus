@@ -59,10 +59,8 @@ public class KitData {
         return loadedKits;
     }
 
-    /**
-     * Saves a true or false passiveState for a player in the passive.yml data folder.
-     */
     public void saveKit(Kit kit) {
+        Versus.log("Saving kit.");
         ConfigurationSection kitSection = kitsData.createSection(kit.getName());
         kitSection.set("Name", kit.getName());
         kitSection.set("DisplayItem", kit.getDisplayItem());

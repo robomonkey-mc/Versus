@@ -9,6 +9,7 @@ import me.robomonkey.versus.dependency.Dependencies;
 import me.robomonkey.versus.duel.DuelManager;
 import me.robomonkey.versus.duel.command.RootDuelCommand;
 import me.robomonkey.versus.duel.command.RootSpectateCommand;
+import me.robomonkey.versus.duel.command.TestCommand;
 import me.robomonkey.versus.duel.playerdata.adapter.ConfigurationSerializableAdapter;
 import me.robomonkey.versus.duel.playerdata.adapter.ItemStackAdapter;
 import me.robomonkey.versus.duel.playerdata.adapter.ItemStackArrayAdapter;
@@ -93,6 +94,7 @@ public final class Versus extends JavaPlugin {
         new RootVersusCommand();
         new RootDuelCommand();
         new RootSpectateCommand();
+        new TestCommand();
     }
 
     private void registerMetrics() {

@@ -9,11 +9,11 @@ import org.bukkit.command.CommandSender;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class KitDeleteCommand extends AbstractCommand {
+public class DeleteKitCommand extends AbstractCommand {
 
     KitManager kitManager = KitManager.getInstance();
 
-    public KitDeleteCommand() {
+    public DeleteKitCommand() {
         super("deletekit", "versus.kit.delete");
         setUsage("/arena deletekit <name>");
         setDescription("Deletes a kit of a given name.");

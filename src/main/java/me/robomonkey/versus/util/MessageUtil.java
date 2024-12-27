@@ -8,6 +8,9 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MessageUtil {
 
     /**
@@ -122,6 +125,20 @@ public class MessageUtil {
     public static String get(String message) {
         message = (Settings.is(Setting.PREFIX_ENABLED)) ? Settings.getMessage(Setting.PREFIX) + message : message;
         return color(message);
+    }
+
+    public static List<String> loreTokenize(String bigLore, int maxLength) {
+        String[] words = bigLore.split(" ");
+        List<String> all = new ArrayList<>();
+        StringBuilder current = new StringBuilder();
+        for (String word : words) {
+            if (word.length() + current.length() > maxLength) {
+                all.add(current.toString());
+                current = new StringBuilder();
+            }
+            current.append(" ").append(word);
+        }
+        return all;
     }
 
     public static String error(String message) {

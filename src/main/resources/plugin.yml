@@ -16,3 +16,5 @@ commands:
     description: Spectate a player in a duel.
   versus:
     description: Configure Versus.
+  testCommand:
+    description: Test features.
