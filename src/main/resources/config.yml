@@ -253,11 +253,6 @@ requesting:
         enabled: false
         default: '20'
 
-      #Sets whether players are able to enable random items for a duel.
-      random_items:
-        enabled: false
-        default: false
-
     #Options for button styling, appearance in the /duel menu.
     buttons:
       placeholder_button:
@@ -318,11 +313,6 @@ requesting:
         description:
         enchanted:
       custom_health:
-        title:
-        item:
-        description:
-        enchanted:
-      random_items:
         title:
         item:
         description:

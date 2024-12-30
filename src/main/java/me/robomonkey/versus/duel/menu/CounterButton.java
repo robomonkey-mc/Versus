@@ -2,34 +2,35 @@ package me.robomonkey.versus.duel.menu;
 
 import com.samjakob.spigui.buttons.SGButton;
 import com.samjakob.spigui.item.ItemBuilder;
-import me.robomonkey.versus.settings.Setting;
-import me.robomonkey.versus.settings.Settings;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class ToggleButton extends SGButton {
+public class CounterButton extends SGButton {
     /**
      * Creates an SGButton with the specified {@link ItemStack} as it's 'icon' in the inventory.
      *
      * @param icon The desired 'icon' for the SGButton.
      */
 
-    private final String ENABLED_TEXT = Settings.getMessage(Setting.ENABLED_TEXT);
-    private final String DISABLED_TEXT = Settings.getMessage(Setting.DISABLED_TEXT);
-    private boolean value;
+    private int value;
+    private int min;
+    private int max;
     private Runnable refreshFunction;
 
-    public ToggleButton(ItemBuilder icon, boolean startingValue) {
+    public CounterButton(ItemBuilder icon, int startingValue, int maxInclusive, int minInclusive) {
         super(withExtraLore(icon,
-                startingValue ? Settings.getMessage(Setting.ENABLED_TEXT) : Settings.getMessage(Setting.DISABLED_TEXT))
+                ""+startingValue)
                 .get());
         this.value = startingValue;
+        this.min = minInclusive;
+        this.max = maxInclusive;
 
-        String newToggleLore = value? ENABLED_TEXT: DISABLED_TEXT;
         ItemBuilder builder = new ItemBuilder(getIcon());
         List<String> replacementLore = builder.getLore();
-        replacementLore.add(newToggleLore);
+        replacementLore.add(""+value);
         builder.lore(replacementLore);
         setIcon(builder.get());
     }
@@ -39,16 +40,19 @@ public class ToggleButton extends SGButton {
         return icon;
     }
 
-    public boolean getValue() {
+    public int getValue() {
         return this.value;
     }
 
-    public void toggle() {
-        value = !value;
-        String newToggleLore = value? ENABLED_TEXT: DISABLED_TEXT;
+    public void click(InventoryClickEvent event) {
+        if (event.getClick() == ClickType.RIGHT) {
+            if (value >= min) value = value - 1;
+        } else if (event.getClick() == ClickType.LEFT) {
+            if (value <= max) value = value + 1;
+        };
         ItemBuilder builder = new ItemBuilder(getIcon());
         List<String> replacementLore = builder.getLore();
-        replacementLore.set(replacementLore.size() - 1, newToggleLore);
+        replacementLore.set(replacementLore.size() - 1, ""+value);
         builder.lore(replacementLore);
         setIcon(builder.get());
     }
