@@ -26,7 +26,7 @@ public class Settings {
     FileConfiguration config;
     final static String configVersion = "1.0";
     private static Settings instance;
-    private static final String DUEL_OPTIONS_KEY = "requesting.options";
+    private static final String DUEL_OPTIONS_KEY = "requesting.menu.options";
     private static final String DUEL_MENU_KEY = "requesting.menu";
     private Map<Setting, Object> unsavedSettingChanges = new HashMap<>();
 
@@ -366,29 +366,39 @@ public class Settings {
     }
 
     public static void toggleDuelOption(DuelOption option, boolean newState) {
-        final String fullKey = DUEL_OPTIONS_KEY + option.toString().toLowerCase();
-        instance.config.set(fullKey, newState);
+        instance.config.set(getDuelOptionsKey(option), newState);
     }
 
+    // Returns the config key that determines whether a duel option is enabled.
+    private static String getDuelOptionsKey(DuelOption option) {
+        final String fullKey = DUEL_OPTIONS_KEY + "." + option.toString().toLowerCase() + ".enabled";
+        return fullKey;
+    }
 
     public static void setEnabledDuelOptions(List<DuelOption> options) {
-        ConfigurationSection duelOptionsSection = instance.config.getConfigurationSection(DUEL_OPTIONS_KEY);
         Arrays.stream(DuelOption.values()).forEach(option -> {
-            duelOptionsSection.set(option.toString().toLowerCase(), options.contains(option));
+            boolean optionEnabled = options.contains(option);
+            instance.config.set(getDuelOptionsKey(option), optionEnabled);
         });
     }
 
     public static List<DuelOption> getEnabledDuelOptions() {
-        ConfigurationSection duelOptionsSection = instance.config.getConfigurationSection(DUEL_OPTIONS_KEY);
-        return Arrays.stream(DuelOption.values()).filter((option) -> {
-            String name = option.toString().toLowerCase();
-            return duelOptionsSection.getBoolean(name);
-        }).collect(Collectors.toList());
+        return Arrays.stream(DuelOption.values())
+                .filter((option) -> instance.config.getBoolean(getDuelOptionsKey(option)))
+                .collect(Collectors.toList());
+    }
+
+    public static Object getDefaultValue(DuelOption option) {
+        final String defaultOptionKey = DUEL_OPTIONS_KEY + "." + option.toString().toLowerCase() + ".default";
+        return instance.config.get(defaultOptionKey);
     }
 
     public boolean isDuelOptionEnabled(DuelOption option) {
-        final String fullKey = DUEL_OPTIONS_KEY + option.toString().toLowerCase();
-        return config.getBoolean(fullKey);
+        return config.getBoolean(getDuelOptionsKey(option));
+    }
+
+    public static boolean isMenuEnabled() {
+        return (Boolean) Setting.MENU_ENABLED.getValue();
     }
 
     public void saveSetting(Setting setting) {

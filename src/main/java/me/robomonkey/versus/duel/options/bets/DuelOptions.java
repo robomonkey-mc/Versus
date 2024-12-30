@@ -1,15 +1,11 @@
-package me.robomonkey.versus.duel.options;
+package me.robomonkey.versus.duel.options.bets;
 
 import me.robomonkey.versus.arena.Arena;
-import me.robomonkey.versus.kit.Kit;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
 import org.bukkit.Color;
 import org.bukkit.Sound;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Optional;
 
 public class DuelOptions {
 
@@ -32,6 +28,7 @@ public class DuelOptions {
     private double maxHealth = 0;
     private boolean local = false;
     private ItemStack[] kit;
+    private boolean useInventory = false;
     private Arena arena;
 
     public DuelOptions(ItemStack[] kit, Bet bet, boolean destructibleArena, double maxHealth, boolean local) {
@@ -40,6 +37,10 @@ public class DuelOptions {
         this.destructibleArena = destructibleArena;
         this.maxHealth = maxHealth;
         this.local = local;
+    }
+
+    public void setUseInventory(boolean useInventory) {
+        this.useInventory = useInventory;
     }
 
     public boolean isLocal() {

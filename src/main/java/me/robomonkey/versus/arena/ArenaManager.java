@@ -66,7 +66,7 @@ public class ArenaManager {
     }
 
     public void loadArenas() {
-        List<ArenaData> loaded = new ArrayList<>();
+        List<ArenaData> loaded;
         dataFile = JsonUtil.getDataFile(plugin, "arena.json");
         try {
             Type arenaListType = new TypeToken<List<ArenaData>>() {

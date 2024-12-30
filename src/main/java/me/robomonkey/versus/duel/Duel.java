@@ -1,13 +1,12 @@
 package me.robomonkey.versus.duel;
 
 import me.robomonkey.versus.arena.Arena;
-import me.robomonkey.versus.duel.options.DuelOptions;
+import me.robomonkey.versus.duel.options.bets.DuelOptions;
 import me.robomonkey.versus.settings.Placeholder;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
 import me.robomonkey.versus.util.EffectUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
@@ -27,6 +26,8 @@ public class Duel {
         Collections.addAll(players, duelists);
         this.options = options;
     }
+
+    // Getters
 
     public ArrayList<Player> getPlayers() {
         return this.players;
@@ -64,6 +65,12 @@ public class Duel {
         return Bukkit.getPlayer(getLoserID());
     }
 
+    public DuelOptions options() {
+        return this.options;
+    }
+
+    // Setters
+
     public void setWinner(UUID winner) {
         this.winner = winner;
     }
@@ -71,6 +78,8 @@ public class Duel {
     public void setState(DuelState state) {
         this.state = state;
     }
+
+    // Methods
 
     public void end(Player winner, Player loser) {
         this.loser = loser.getUniqueId();
@@ -111,11 +120,6 @@ public class Duel {
         player.sendMessage(spectateMessage);
         player.teleport(getArena().getSpectateLocation());
     }
-
-    public DuelOptions options() {
-        return this.options;
-    }
-
 
     public void removeFromSpectating(Player player) {
         player.teleport(getArena().getSpectateLocation());

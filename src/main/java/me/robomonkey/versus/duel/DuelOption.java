@@ -10,11 +10,17 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public enum DuelOption {
-    CUSTOM_HEALTH,
-    SELECT_KIT,
-    USE_OWN_KIT,
-    RANDOM_ITEMS,
-    ITEM_BETTING,
-    ECONOMY_BETTING,
-    SELECT_ARENA,
+    CUSTOM_HEALTH(false),
+    SELECT_KIT(false),
+    USE_OWN_KIT(true),
+    RANDOM_ITEMS(false),
+    ITEM_BETTING(false),
+    ECONOMY_BETTING(false),
+    SELECT_ARENA(false);
+
+    public boolean toggleable;
+
+    DuelOption(boolean toggleable) {
+        this.toggleable = toggleable;
+    }
 }

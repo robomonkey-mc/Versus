@@ -2,6 +2,7 @@ package me.robomonkey.versus.arena.data;
 
 import com.google.gson.annotations.Expose;
 import org.bukkit.Location;
+import org.bukkit.Material;
 
 public class ArenaData {
     @Expose
@@ -18,6 +19,9 @@ public class ArenaData {
     public boolean enabled;
     @Expose
     public String kit;
+    //TODO We need to recreate the ArenaData class to enable upversioning from previous shapes of ArenaData that don't include icon.
+    @Expose
+    public Material icon;
 
     /**
      * <h1>Creates Arena.</h1>

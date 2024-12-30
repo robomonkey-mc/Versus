@@ -1,4 +1,4 @@
-package me.robomonkey.versus.duel.options;
+package me.robomonkey.versus.duel.options.bets;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -50,7 +50,6 @@ public class ItemsBet implements Bet {
     @Override
     public boolean canBet(Player player) {
         return true;
-
     }
 
     @Override

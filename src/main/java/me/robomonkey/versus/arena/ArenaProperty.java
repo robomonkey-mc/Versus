@@ -5,7 +5,8 @@ public enum ArenaProperty {
     SPAWN_LOCATION_ONE("first spawn location"),
     SPAWN_LOCATION_TWO("second spawn location"),
     SPECTATE_LOCATION("location for spectators"),
-    KIT("kit for players");
+    KIT("kit for players"),
+    ICON("icon for menus");
 
 
     private String friendlyString;
@@ -24,6 +25,8 @@ public enum ArenaProperty {
                 return SPECTATE_LOCATION;
             case SPECTATE_LOCATION:
                 return KIT;
+            case KIT:
+                return ICON;
             default:
                 return null;
         }
@@ -42,6 +45,8 @@ public enum ArenaProperty {
                         " completing a duel.";
             case KIT:
                 return "This determines the inventory players will have upon entering a duel in this arena.";
+            case ICON:
+                return "This determines how the arena will appear in the /duel menu.";
             default:
                 return "";
         }

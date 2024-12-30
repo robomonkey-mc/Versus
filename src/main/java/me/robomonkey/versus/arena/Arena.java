@@ -5,11 +5,13 @@ import me.robomonkey.versus.duel.Duel;
 import me.robomonkey.versus.kit.Kit;
 import me.robomonkey.versus.kit.KitManager;
 import org.bukkit.Location;
+import org.bukkit.Material;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Arena {
+    //TODO maybe add an arena icon so that they can be effectively displayed in the menu? UGH
     public static Arena empty = null;
     private final String name;
     private final List<Duel> activeDuels;
@@ -19,6 +21,7 @@ public class Arena {
     private Location spectateLocation;
     private boolean enabled = false;
     private Kit kit;
+    private Material icon;
 
     /**
      * <h1>Creates Arena.</h1>
@@ -34,6 +37,10 @@ public class Arena {
 
     public String getName() {
         return name;
+    }
+
+    public Material getIcon() {
+        return icon;
     }
 
     public Kit getKit() {
@@ -98,6 +105,10 @@ public class Arena {
         verifySelf();
     }
 
+    public void setIcon(Material icon) {
+        this.icon = icon;
+    }
+
     public void addDuel(Duel activeDuel) {
         this.activeDuels.add(activeDuel);
     }
@@ -129,6 +140,7 @@ public class Arena {
         newArena.setLocationProperty(ArenaProperty.SPAWN_LOCATION_TWO, jsonArena.spawnLocationTwo.toLocation());
         newArena.setLocationProperty(ArenaProperty.SPECTATE_LOCATION, jsonArena.spectateLocation.toLocation());
         newArena.setKit(KitManager.getInstance().getKit(jsonArena.kit));
+        newArena.setIcon(jsonArena.icon);
         return newArena;
     }
 

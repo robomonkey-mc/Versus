@@ -1,9 +1,8 @@
 package me.robomonkey.versus.duel.playerdata;
 
-import me.robomonkey.versus.arena.Arena;
 import me.robomonkey.versus.arena.data.LocationData;
 import me.robomonkey.versus.duel.Duel;
-import me.robomonkey.versus.duel.options.Bet;
+import me.robomonkey.versus.duel.options.bets.Bet;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

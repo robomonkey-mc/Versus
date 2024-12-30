@@ -7,7 +7,6 @@ import me.robomonkey.versus.settings.Settings;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class ToggleButton extends SGButton {
     /**
@@ -15,19 +14,26 @@ public class ToggleButton extends SGButton {
      *
      * @param icon The desired 'icon' for the SGButton.
      */
+
     private final String ENABLED_TEXT = Settings.getMessage(Setting.ENABLED_TEXT);
     private final String DISABLED_TEXT = Settings.getMessage(Setting.DISABLED_TEXT);
-
+    private SGButton button;
     private boolean value;
     private Runnable refreshFunction;
 
-    public ToggleButton(ItemBuilder icon, boolean startingValue, Runnable refresh) {
+    public ToggleButton(ItemBuilder icon, boolean startingValue,) {
         super(withExtraLore(icon,
                 startingValue ? Settings.getMessage(Setting.ENABLED_TEXT) : Settings.getMessage(Setting.DISABLED_TEXT))
                 .get());
         this.value = startingValue;
-        this.refreshFunction = refreshFunction;
-        withListener((inventoryClickEvent) -> toggle());
+        this.button = button;
+
+        String newToggleLore = value? ENABLED_TEXT: DISABLED_TEXT;
+        ItemBuilder builder = new ItemBuilder(button.getIcon());
+        List<String> replacementLore = builder.getLore();
+        replacementLore.add(newToggleLore);
+        builder.lore(replacementLore);
+        button.setIcon(builder.get());
     }
 
     private static ItemBuilder withExtraLore(ItemBuilder icon, String lore) {
@@ -42,12 +48,11 @@ public class ToggleButton extends SGButton {
     public void toggle() {
         value = !value;
         String newToggleLore = value? ENABLED_TEXT: DISABLED_TEXT;
-        ItemBuilder builder = new ItemBuilder(getIcon());
+        ItemBuilder builder = new ItemBuilder(button.getIcon());
         List<String> replacementLore = builder.getLore();
         replacementLore.set(replacementLore.size() - 1, newToggleLore);
         builder.lore(replacementLore);
-        setIcon(builder.get());
-        refreshFunction.run();
+        button.setIcon(builder.get());
     }
 
 

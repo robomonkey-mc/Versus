@@ -2,6 +2,8 @@ package me.robomonkey.versus.duel.command;
 
 import me.robomonkey.versus.command.RootCommand;
 import me.robomonkey.versus.duel.DuelManager;
+import me.robomonkey.versus.duel.menu.MainDuelMenu;
+import me.robomonkey.versus.duel.options.bets.DuelOptions;
 import me.robomonkey.versus.duel.request.RequestManager;
 import me.robomonkey.versus.settings.Error;
 import me.robomonkey.versus.settings.*;
@@ -10,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class RootDuelCommand extends RootCommand {
@@ -66,7 +69,14 @@ public class RootDuelCommand extends RootCommand {
             error(sender, Error.WAIT_FOR_RESPONSE, requested.getName());
             return;
         }
-        requestManager.sendRequest(player, requested);
+        if (Settings.isMenuEnabled()) {
+            Consumer<DuelOptions> onMenuCompletion = (options) -> requestManager.sendRequest(player, requested, options);
+            MainDuelMenu menu = new MainDuelMenu(player, onMenuCompletion);
+            menu.open();
+        } else {
+            requestManager.sendRequest(player, requested, DuelOptions.DEFAULT);
+        }
+
     }
 
     @Override

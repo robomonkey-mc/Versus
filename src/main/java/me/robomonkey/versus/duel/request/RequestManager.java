@@ -3,7 +3,7 @@ package me.robomonkey.versus.duel.request;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.dependency.PAPIUtil;
 import me.robomonkey.versus.duel.DuelManager;
-import me.robomonkey.versus.duel.options.DuelOptions;
+import me.robomonkey.versus.duel.options.bets.DuelOptions;
 import me.robomonkey.versus.settings.Placeholder;
 import me.robomonkey.versus.settings.Setting;
 import me.robomonkey.versus.settings.Settings;
@@ -97,10 +97,6 @@ public class RequestManager {
                 .findFirst().isPresent();
     }
 
-    public boolean anyPlayersQueued() {
-        return queue.size() > 0;
-    }
-
     public boolean contains(Player player) {
         return isQueued(player) || getLatestRequest(player) != null;
     }
@@ -125,18 +121,18 @@ public class RequestManager {
                 requested.equals((request.getRequestedPlayer())));
     }
 
-
-    public void sendRequest(Player requesting, Player requested) {
+    public void sendRequest(Player requesting, Player requested, DuelOptions options) {
         //TODO CHANGE THIS FROM DEFAULT, ADD LOGIC FOR SETTING DUEL OPTIONS
-        requestList.add(new Request(requested, requesting, DuelOptions.DEFAULT));
-        String sentRequestMessage = Settings.getMessage(Setting.SENT_REQUEST, new Placeholder("%player%", PAPIUtil.getName(requested)));
-        String requestNotification = Settings.getMessage(Setting.REQUEST_NOTIFICATION, new Placeholder("%player%", PAPIUtil.getName(requesting)));
+        requestList.add(new Request(requested, requesting, options));
+        String outgoingRequestMessage = Settings.getMessage(Setting.SENT_REQUEST, new Placeholder("%player%", PAPIUtil.getName(requested)));
+        String incomingRequestMessage = Settings.getMessage(Setting.REQUEST_NOTIFICATION, new Placeholder("%player%", PAPIUtil.getName(requesting)));
 
-        requesting.sendMessage(sentRequestMessage);
+        requesting.sendMessage(outgoingRequestMessage);
+
         TextComponent requestMessage = getRequestMessage(requested, requesting);
-        requested.sendMessage(requestNotification);
-        EffectUtil.playSound(requested, Sound.ENTITY_EXPERIENCE_ORB_PICKUP);
+        requested.sendMessage(incomingRequestMessage);
         requested.spigot().sendMessage(requestMessage);
+        EffectUtil.playSound(requested, Sound.ENTITY_EXPERIENCE_ORB_PICKUP);
     }
 
     public void acceptRequest(Player requested) throws PlayerOfflineException {

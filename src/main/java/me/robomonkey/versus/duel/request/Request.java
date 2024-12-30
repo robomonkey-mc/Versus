@@ -1,6 +1,6 @@
 package me.robomonkey.versus.duel.request;
 
-import me.robomonkey.versus.duel.options.DuelOptions;
+import me.robomonkey.versus.duel.options.bets.DuelOptions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

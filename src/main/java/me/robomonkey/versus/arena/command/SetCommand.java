@@ -48,7 +48,6 @@ public class SetCommand extends AbstractCommand {
             error(player, "No arena exists with the name '" + arenaName + "'.");
             return;
         }
-
         ArenaEditor.changeArenaProperty(arenaFromString, property, player);
     }
 

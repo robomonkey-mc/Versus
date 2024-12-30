@@ -213,95 +213,120 @@ requesting:
     #The chat message sent to a player after cancelling a queue to duel.
     cancel_request: "&6You're no longer queueing for a duel."
   menu:
-    title:
+    #Sets the title of the main '/duel' menu.
+    title: 'Dueling %player%.'
+    #Sets the maximum number of characters per line in a menu icon's description.
     max_line_length: 15
+    #Sets whether the main dueling menu is enabled.
     menu_enabled: false
+    #Sets the item description for when a toggleable duel option is disabled.
     disabled_text:
+    #Sets the item description for when a toggleable duel option is enabled.
     enabled_text:
-      options:
-        select_kit:
-          enabled: true
-          default:
-        select_arena:
-          enabled: true
-        use_own_inventory:
-          enabled:
-        item_betting:
-          enabled:
-        economy_betting:
-          enabled:
-        custom_health:
-          enabled:
-        random_items:
-          enabled:
-      buttons:
-        placeholder_button:
-          title:
-          item:
-          description:
-          enchanted:
-        exit_menu_button:
-          title:
-          item:
-          description:
-          enchanted:
-        confirm_button:
-          title:
-          item:
-          description:
-          enchanted:
-        cancel_button:
-          title:
-          item:
-          description:
-          enchanted:
-        forward_button:
-          title:
-          item:
-          description:
-          enchanted:
-        back_button:
-          title:
-          item:
-          description:
-          enchanted:
-        select_kit:
-          title:
-          item:
-          description:
-          enchanted:
-        select_arena:
-          title:
-          item:
-          description:
-          enchanted:
-          submenu:
-            arena_display_button:
-        use_own_inventory:
-          title:
-          item:
-          description:
-          enchanted:
-        item_betting:
-          title:
-          item:
-          description:
-          enchanted:
-        economy_betting:
-          title:
-          item:
-          description:
-          enchanted:
-        custom_health:
-          title:
-          item:
-          description:
-          enchanted:
-        random_items:
-          title:
-          item:
-          description:
-          enchanted:
+
+    #Options players are able to configure when setting up a duel in the duel menu.
+    options:
+      #Sets whether players are able to select kits in the duel menu.
+      select_kit:
+        enabled: true
+        default:
+
+      #Sets whether players are able to select arenas in the duel menu.
+      select_arena:
+        enabled: true
+
+      #Sets whether players are able to opt to use their own inventory in the duel menu.
+      use_own_inventory:
+        enabled: true
+        default: false
+
+      #Sets whether players are able to bet with items in the duel menu.
+      item_betting:
+        enabled: true
+
+      #Sets whether players are able to bet with in-game currency.
+      economy_betting:
+        enabled: false
+
+      #Sets whether players are able to set a custom health for duels.
+      custom_health:
+        enabled: false
+        default: '20'
+
+      #Sets whether players are able to enable random items for a duel.
+      random_items:
+        enabled: false
+        default: false
+
+    #Options for button styling, appearance in the /duel menu.
+    buttons:
+      placeholder_button:
+        title:
+        item:
+        description:
+        enchanted:
+      exit_menu_button:
+        title:
+        item:
+        description:
+        enchanted:
+      confirm_button:
+        title:
+        item:
+        description:
+        enchanted:
+      cancel_button:
+        title:
+        item:
+        description:
+        enchanted:
+      forward_button:
+        title:
+        item:
+        description:
+        enchanted:
+      back_button:
+        title:
+        item:
+        description:
+        enchanted:
+      select_kit:
+        title:
+        item:
+        description:
+        enchanted:
+      select_arena:
+        title:
+        item:
+        description:
+        enchanted:
+        submenu:
+          arena_display_button:
+      use_own_inventory:
+        title:
+        item:
+        description:
+        enchanted:
+      item_betting:
+        title:
+        item:
+        description:
+        enchanted:
+      economy_betting:
+        title:
+        item:
+        description:
+        enchanted:
+      custom_health:
+        title:
+        item:
+        description:
+        enchanted:
+      random_items:
+        title:
+        item:
+        description:
+        enchanted:
 
 
 

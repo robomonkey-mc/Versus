@@ -68,6 +68,7 @@ public enum Setting {
     DISABLED_TEXT("requesting.menu", Type.STRING),
     ENABLED_TEXT("requesting.menu", Type.STRING),
     MAX_LINE_LENGTH("requesting.menu", Type.NUMBER),
+    MENU_ENABLED("requesting.menu", Type.BOOLEAN),
 
     ESSENTIALS_NICKNAMES_ENABLED("dependencies.placeholderAPI", Type.BOOLEAN),
     ITEMS_ADDER_FOR_KITS("dependencies.itemsadder", Type.BOOLEAN);

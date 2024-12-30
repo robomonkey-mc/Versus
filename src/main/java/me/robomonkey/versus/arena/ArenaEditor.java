@@ -4,8 +4,10 @@ import me.robomonkey.versus.kit.Kit;
 import me.robomonkey.versus.kit.KitSelectionGUI;
 import me.robomonkey.versus.util.MessageUtil;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 
@@ -42,6 +44,13 @@ public class ArenaEditor {
             kitGUI.open();
             return;
         }
+        if (property == ArenaProperty.ICON) {
+            Material chosenMaterial = player.getInventory().getItemInMainHand().getType();
+            targetArena.setIcon(chosenMaterial);
+            player.sendMessage(MessageUtil.get("&sSet the " + property.toFriendlyString() + " for " + targetArena.getName() + "."));
+            after.run();
+            return;
+        }
         targetArena.setLocationProperty(property, player.getLocation());
         player.sendMessage(MessageUtil.get("&sSet the " + property.toFriendlyString() + " for " + targetArena.getName() + "."));
         after.run();
@@ -53,6 +62,12 @@ public class ArenaEditor {
                 changeKit(targetArena, player, kit);
             });
             kitGUI.open();
+            return;
+        }
+        if (property == ArenaProperty.ICON) {
+            Material chosenMaterial = player.getInventory().getItemInMainHand().getType();
+            targetArena.setIcon(chosenMaterial);
+            player.sendMessage(MessageUtil.get("&sSet the " + property.toFriendlyString() + " for " + targetArena.getName() + "."));
             return;
         }
         targetArena.setLocationProperty(property, player.getLocation());

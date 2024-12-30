@@ -1,4 +1,4 @@
-package me.robomonkey.versus.duel.options;
+package me.robomonkey.versus.duel.options.bets;
 
 import org.bukkit.entity.Player;
 
@@ -38,7 +38,6 @@ public class EXPBet implements Bet {
         return player.getLevel() >= level && player.getExp() >= progress;
     }
 
-    @Override
     public boolean hasRewardedAll() {
         return false;
     }

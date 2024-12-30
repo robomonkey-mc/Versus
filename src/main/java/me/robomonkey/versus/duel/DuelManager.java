@@ -5,8 +5,8 @@ import me.robomonkey.versus.arena.Arena;
 import me.robomonkey.versus.arena.ArenaManager;
 import me.robomonkey.versus.dependency.PAPIUtil;
 import me.robomonkey.versus.duel.eventlisteners.*;
-import me.robomonkey.versus.duel.options.Bet;
-import me.robomonkey.versus.duel.options.DuelOptions;
+import me.robomonkey.versus.duel.options.bets.Bet;
+import me.robomonkey.versus.duel.options.bets.DuelOptions;
 import me.robomonkey.versus.duel.playerdata.DataManager;
 import me.robomonkey.versus.duel.playerdata.PlayerData;
 import me.robomonkey.versus.duel.request.RequestManager;
@@ -44,27 +44,17 @@ public class DuelManager {
         registerListeners();
     }
 
-    public static DuelManager getInstance() {
-        if (instance == null) {
-            new DuelManager();
-        }
-        return instance;
-    }
-
-    public void unregisterFromDuel(Player player) {
-        duelistMap.remove(player.getUniqueId());
-    }
-
-    private void removeDuel(Duel duel) {
-        duelistMap.values().removeIf(value -> value.equals(duel));
-    }
+    // Getters
 
     public Duel getDuel(Player player) {
         return duelistMap.get(player.getUniqueId());
     }
 
-    public void registerQuitter(Player quitter) {
-        quitter.setHealth(0);
+    public static DuelManager getInstance() {
+        if (instance == null) {
+            new DuelManager();
+        }
+        return instance;
     }
 
     public boolean hasStoredData(Player player) {
@@ -75,43 +65,7 @@ public class DuelManager {
         return duelistMap.containsKey(player.getUniqueId());
     }
 
-    public void restoreData(Player player, boolean isWinner) {
-        if (!player.isOnline()) return;
-        if (!dataManager.contains(player)) return;
-        PlayerData data = dataManager.extractData(player);
-        Bet bet = data.bet;
-        player.setLevel(data.xpLevel);
-        player.setExp(data.xpProgress);
-        player.getInventory().setContents(data.items);
-        restoreLocation(player, data, isWinner);
-        if(isWinner) bet.reward(player);
-        else bet.penalize(player);
-    }
-
-    private void restoreLocation(Player player, PlayerData data, Boolean isWinner) {
-        ReturnOption returnOption = isWinner ? Settings.getReturnOption(Setting.RETURN_WINNERS) : Settings.getReturnOption(Setting.RETURN_LOSERS);
-        switch (returnOption) {
-            case SPAWN:
-                player.teleport(player.getWorld().getSpawnLocation());
-                break;
-            case PREVIOUS:
-                player.teleport(data.previousLocation.toLocation());
-                break;
-            case SPECTATE:
-                Arena respawnArena = arenaManager.getArena(data.arenaName);
-                if (respawnArena == null) player.teleport(player.getWorld().getSpawnLocation());
-                else player.teleport(respawnArena.getSpectateLocation());
-                break;
-            case CUSTOM:
-                Location customLocation = isWinner ? Settings.getLocation(Setting.WINNER_RETURN_LOCATION): Settings.getLocation(Setting.LOSER_RETURN_LOCATION);
-                if(customLocation == null) {
-                    Versus.log("Custom respawn location is improperly formatted. "+player.getName()+" will return to their previous location, instead.");
-                    player.teleport(data.previousLocation.toLocation());
-                    return;
-                }
-                player.teleport(customLocation);
-        }
-    }
+    // Start Duel Methods
 
     public void setupDuel(Player playerOne, Player playerTwo, DuelOptions options) {
         Arena availableArena = arenaManager.getAvailableArena();
@@ -163,60 +117,6 @@ public class DuelManager {
         Bukkit.spigot().broadcast(announcement);
     }
 
-    public void announceDuelEnd(Duel duel) {
-        if (duel.getWinner() == null || duel.getLoser() == null) return;
-        String announcementMessage = Settings.getMessage(Setting.DUEL_END_ANNOUNCEMENT,
-                Placeholder.of("%winner%", PAPIUtil.getName(duel.getWinner())),
-                Placeholder.of("%loser%", PAPIUtil.getName(duel.getLoser())));
-        Bukkit.broadcastMessage(announcementMessage);
-    }
-
-    /**
-     * Only call after checking that ensuring that the player is currently in a duel with duelManager.duelFromPlayer(..);
-     */
-    public void registerDuelistDeath(Player loser, boolean fakeDeath) {
-        Duel currentDuel = getDuel(loser);
-        if (currentDuel.getState() == DuelState.COUNTDOWN) {
-            undoCountdown(currentDuel);
-        }
-        if (fakeDeath) {
-            restoreData(loser, false);
-            resetAttributes(loser);
-        }
-        if (currentDuel.isActive()) {
-            registerDuelCompletion(loser, currentDuel);
-        }
-    }
-
-    private void registerDuelCompletion(Player loser, Duel duel) {
-        Optional<Player> optionalWinner = duel.getPlayers().stream().filter(player -> !player.equals(loser)).findFirst();
-        if (!optionalWinner.isPresent()) return;
-        Player winner = optionalWinner.get();
-        duel.end(winner, loser);
-        stopDuel(duel);
-    }
-
-    private void stopDuel(Duel duel) {
-        if (duel.isActive()) return;
-        arenaManager.removeDuel(duel);
-        duel.getPlayers().stream().filter(Player::isOnline).forEach(player -> {
-            player.stopSound(duel.options().getFightMusic());
-            player.stopSound(duel.options().getVictorySong());
-        });
-        Player loser = duel.getLoser();
-        Player winner = duel.getWinner();
-        unregisterFromDuel(loser);
-        if (duel.options().isPublic()) {
-            announceDuelEnd(duel);
-        }
-        if (winner != null) {
-            renderWinEffects(winner, duel);
-        }
-        if (loser != null) {
-            renderLossEffects(loser);
-        }
-    }
-
     private void commenceDuel(Duel duel) {
         duel.setState(DuelState.ACTIVE);
         handleStartEffects(duel);
@@ -258,6 +158,88 @@ public class DuelManager {
                 .forEach(listener -> Bukkit.getPluginManager().registerEvents(listener, Versus.getInstance()));
     }
 
+    // End Duel Methods
+
+    public void unregisterFromDuel(Player player) {
+        duelistMap.remove(player.getUniqueId());
+    }
+
+    private void removeDuel(Duel duel) {
+        duelistMap.values().removeIf(value -> value.equals(duel));
+    }
+
+    public void registerQuitter(Player quitter) {
+        quitter.setHealth(0);
+    }
+
+    public void restoreData(Player player, boolean isWinner) {
+        if (!player.isOnline()) return;
+        if (!dataManager.contains(player)) return;
+        PlayerData data = dataManager.extractData(player);
+        Bet bet = data.bet;
+        player.setLevel(data.xpLevel);
+        player.setExp(data.xpProgress);
+        player.getInventory().setContents(data.items);
+        restoreLocation(player, data, isWinner);
+        if(isWinner) bet.reward(player);
+        else bet.penalize(player);
+    }
+
+    private void restoreLocation(Player player, PlayerData data, Boolean isWinner) {
+        ReturnOption returnOption = isWinner ? Settings.getReturnOption(Setting.RETURN_WINNERS) : Settings.getReturnOption(Setting.RETURN_LOSERS);
+        switch (returnOption) {
+            case SPAWN:
+                player.teleport(player.getWorld().getSpawnLocation());
+                break;
+            case PREVIOUS:
+                player.teleport(data.previousLocation.toLocation());
+                break;
+            case SPECTATE:
+                Arena respawnArena = arenaManager.getArena(data.arenaName);
+                if (respawnArena == null) player.teleport(player.getWorld().getSpawnLocation());
+                else player.teleport(respawnArena.getSpectateLocation());
+                break;
+            case CUSTOM:
+                Location customLocation = isWinner ? Settings.getLocation(Setting.WINNER_RETURN_LOCATION): Settings.getLocation(Setting.LOSER_RETURN_LOCATION);
+                if(customLocation == null) {
+                    Versus.log("Custom respawn location is improperly formatted. "+player.getName()+" will return to their previous location, instead.");
+                    player.teleport(data.previousLocation.toLocation());
+                    return;
+                }
+                player.teleport(customLocation);
+        }
+    }
+
+    public void announceDuelEnd(Duel duel) {
+        if (duel.getWinner() == null || duel.getLoser() == null) return;
+        String announcementMessage = Settings.getMessage(Setting.DUEL_END_ANNOUNCEMENT,
+                Placeholder.of("%winner%", PAPIUtil.getName(duel.getWinner())),
+                Placeholder.of("%loser%", PAPIUtil.getName(duel.getLoser())));
+        Bukkit.broadcastMessage(announcementMessage);
+    }
+
+    public void registerDuelistDeath(Player loser, boolean fakeDeath) {
+        Duel currentDuel = getDuel(loser);
+        if (currentDuel.getState() == DuelState.COUNTDOWN) {
+            undoCountdown(currentDuel);
+        }
+        if (fakeDeath) {
+            restoreData(loser, false);
+            resetAttributes(loser);
+        }
+        if (currentDuel.isActive()) {
+            registerDuelCompletion(loser, currentDuel);
+        }
+    }
+
+    private void registerDuelCompletion(Player loser, Duel duel) {
+        Optional<Player> optionalWinner = duel.getPlayers().stream().filter(player -> !player.equals(loser)).findFirst();
+        if (!optionalWinner.isPresent()) return;
+        Player winner = optionalWinner.get();
+        duel.end(winner, loser);
+        stopDuel(duel);
+    }
+
     private void undoCountdown(Duel duel) {
         duel.cancelCountdown();
         duel.getPlayers().forEach(EffectUtil::unfreezePlayer);
@@ -269,6 +251,27 @@ public class DuelManager {
         resetAttributes(player);
         removeDuel(duel);
         RequestManager.getInstance().notifyDuelCompletion();
+    }
+
+    private void stopDuel(Duel duel) {
+        if (duel.isActive()) return;
+        arenaManager.removeDuel(duel);
+        duel.getPlayers().stream().filter(Player::isOnline).forEach(player -> {
+            player.stopSound(duel.options().getFightMusic());
+            player.stopSound(duel.options().getVictorySong());
+        });
+        Player loser = duel.getLoser();
+        Player winner = duel.getWinner();
+        unregisterFromDuel(loser);
+        if (duel.options().isPublic()) {
+            announceDuelEnd(duel);
+        }
+        if (winner != null) {
+            renderWinEffects(winner, duel);
+        }
+        if (loser != null) {
+            renderLossEffects(loser);
+        }
     }
 
     private void resetAttributes(Player player) {

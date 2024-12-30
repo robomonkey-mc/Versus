@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
+//TODO Delete this file!!!
 public class TestCommand extends RootCommand {
     public TestCommand() {
         super("testCommand", "");
