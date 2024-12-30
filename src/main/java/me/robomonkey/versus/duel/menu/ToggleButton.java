@@ -21,7 +21,7 @@ public class ToggleButton extends SGButton {
     private boolean value;
     private Runnable refreshFunction;
 
-    public ToggleButton(ItemBuilder icon, boolean startingValue,) {
+    public ToggleButton(ItemBuilder icon, boolean startingValue) {
         super(withExtraLore(icon,
                 startingValue ? Settings.getMessage(Setting.ENABLED_TEXT) : Settings.getMessage(Setting.DISABLED_TEXT))
                 .get());
